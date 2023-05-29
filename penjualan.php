@@ -10,7 +10,10 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
-    
+     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
     <!-- Bootstrap core CSS -->
 <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,6 +31,8 @@
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
+        .input-group-append {
+        cursor: pointer;
       }
     </style>
 
@@ -102,7 +107,7 @@
         <h1 class="h2">Pembelian</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Tambah Data</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"data-bs-target="#exampleModal">Tambah Data</button>
           </div>
           <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
             <span data-feather="calendar"></span>
@@ -119,9 +124,9 @@
               <th scope="col">No.</th>
               <th scope="col">tanggal</th>
               <th scope="col">Nama Barang</th>
-              <th scope="col">Harga Beli</th>
-              <th scope="col">jumlah</th>
-              <th scope="col">kwitansi</th>
+              <th scope="col">Jumlah</th>
+              <th scope="col">Harga Terjual</th>
+              <th scope="col">Kategori</th>
               <th scope="col">Aksi</th>
             </tr>
           </thead>
@@ -143,6 +148,42 @@
         </table>
       </div>
     </main>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Penjualan</h5>
+                <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Nama Pembeli</label>
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="nama pembeli">
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="text" class="form-control" id="datepicker" placeholder="Tanggal">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="kode barang">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Jumlah</label>
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="jumlah">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Hargaa Jual</label>
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="harga terjual">
+            </div>
+              </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-sm btn-outline-primary">Simpan</button>
+              </div>
+          </div>
+        </div>
+    </div>
   </div>
 </div>
 
@@ -152,5 +193,11 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
 
     <script src="js/dashboard.js"></script>
+
+    <script>
+      $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap5'
+        });
+    </script>
   </body>
 </html>
