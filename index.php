@@ -1,108 +1,88 @@
 <?php 
-//session_start();
+	session_start();
 
-	//if(!isset($_SESSION['admin'])){
-	//	header("location: login.php");
-		//exit;
-	//}
+	require 'config.php';
+	if(isset($_POST['login'])){
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+
+		$cekdata = mysqli_query($config, "SELECT * FROM user where username='$username' and password='$password'");
+		
+		$hitung = mysqli_num_rows($cekdata);
+
+		if($hitung>0){
+			$_SESSION['log'] = 'true';
+			echo '<script>alert("Login Sukses");window.location="dashboard.php"</script>';
+		}	else {
+			echo '<script>alert("Login Gagal");history.go(-1);</script>';
+		}
+
+
+	}
+
+	if(!isset($_SESSION['log'])){
+
+	} else{
+		header('location:dashboard.php');
+	}
 
  ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>mario</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Login Toko Sararaholi Jaya</title>
 
-	<link href="css/style.css" rel="stylesheet">
-
-	<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
-	
-
-	<style>
-	      .bd-placeholder-img {
-	        font-size: 1.125rem;
-	        text-anchor: middle;
-	        -webkit-user-select: none;
-	        -moz-user-select: none;
-	        user-select: none;
-	      }
-
-	      @media (min-width: 768px) {
-	        .bd-placeholder-img-lg {
-	          font-size: 3.5rem;
-	        }
-	      }
-	</style>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
 </head>
 
-<body>
-	<main>
-		<h1 class="visually-hidden">Sidebars examples</h1>
-		<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
-		    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-		      	<svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-		      	<span class="fs-4">Sidebar</span>
-		    </a>
-		    <hr>
-		    <ul class="nav nav-pills flex-column mb-auto">
-		      <li class="nav-item">
-		        <a href="#" class="nav-link active" aria-current="page">
-		          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
-		          Home
-		        </a>
-		      </li>
-		      <li>
-		        <a href="#" class="nav-link text-white">
-		          <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
-		          Dashboard
-		        </a>
-		      </li>
-		      <li>
-		        <a href="#" class="nav-link text-white">
-		          <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"/></svg>
-		          Orders
-		        </a>
-		      </li>
-		      <li>
-		        <a href="#" class="nav-link text-white">
-		          <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
-		          Products
-		        </a>
-		      </li>
-		      <li>
-		        <a href="#" class="nav-link text-white">
-		          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-		          Customers
-		        </a>
-		      </li>
-		    </ul>
-		    <hr>
-		    <div class="dropdown">
-		      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-		        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-		        <strong>mdo</strong>
-		      </a>
-		      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-		        <li><a class="dropdown-item" href="#">New project...</a></li>
-		        <li><a class="dropdown-item" href="#">Settings</a></li>
-		        <li><a class="dropdown-item" href="#">Profile</a></li>
-		        <li><hr class="dropdown-divider"></li>
-		        <li><a class="dropdown-item" href="#">Sign out</a></li>
-		      </ul>
-		    </div>
-		</div>
-		<div class="b-example-divider">
-			halo
-		</div>
+<body class="bg-gradient-primary">
+    <div class="container">
 
-	</main>
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            <div class="col-md-5 mt-5">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
 
-	<script src="assets/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="js/style.js"></script>
+						<div class="p-5">
+							<div class="text-center">
+								<h4 class="h4 text-gray-900 mb-4"><b>Login Toko Sararaholijaya</b></h4>
+							</div>
+
+							<form method="post">
+								<div class="mb-3">
+									<input type="text" class="form-control form-control-user" name="username"
+										placeholder="User ID" autofocus>
+								</div>
+								<div class="mb-3">
+									<input type="password" class="form-control form-control-user" name="password"
+										placeholder="Password">
+								</div>
+
+									<button class="btn btn-primary" name="login" type="submit">Login</button>
+							</form>
+
+							<hr>
+							<div class="text-center">
+								<a class="small" href="forgot-password.html">Forgot Password?</a>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+
 </body>
-
-
 </html>
