@@ -1,3 +1,9 @@
+<?php 
+require 'config.php';
+require 'login.php';
+
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -7,7 +13,6 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
     <title>Toko Sararaholi Jaya</title>
-
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
     
@@ -46,7 +51,7 @@
   <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="#">Sign out</a>
+      <a class="nav-link px-3" href="logout.php">Sign out</a>
     </div>
   </div>
 </header>

@@ -12,6 +12,7 @@
 
 		if($hitung>0){
 			$_SESSION['log'] = 'true';
+			//header('location:dashboard.php');
 			echo '<script>alert("Login Sukses");window.location="dashboard.php"</script>';
 		}	else {
 			echo '<script>alert("Login Gagal");history.go(-1);</script>';
@@ -23,7 +24,8 @@
 	if(!isset($_SESSION['log'])){
 
 	} else{
-		header('location:dashboard.php');
+		echo '<script>alert("Anda Sudah Login");window.location="dashboard.php"</script>';
+		//header('location:dashboard.php');
 	}
 
  ?>

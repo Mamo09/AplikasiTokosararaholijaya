@@ -1,3 +1,9 @@
+<?php 
+require 'config.php';
+require 'login.php';
+
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
