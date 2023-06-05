@@ -2,6 +2,10 @@
 require 'config.php';
 require 'login.php';
 
+//nenambahkan data barang
+
+  
+  
 ?>
 
 <!doctype html>
@@ -107,7 +111,7 @@ require 'login.php';
         <h1 class="h2">Pembelian</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"data-bs-target="#exampleModal">Tambah Data</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Data</button>
           </div>
           <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
             <span data-feather="calendar"></span>
@@ -134,7 +138,7 @@ require 'login.php';
 	            <td>random</td>
 	            <td>data</td>
 	            <td>text</td>
-	            <td>halo </td>
+
 	            <td>
 	              	<button type="button" class="btn btn-sm btn-outline-secondary">Tambah</button>
 	              	<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
@@ -145,39 +149,53 @@ require 'login.php';
         </table>
       </div>
     </main>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" tabindex="-1" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
+
+
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Barang</h5>
+                <h5 class="modal-title">Tambah Data Barang</h5>
                 <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
+
+              <form  method="post">
+
               <div class="modal-body">
-              <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="kode barang">
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Nama Barang</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="nama barang">
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Kategori</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="kategori">
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Harga Modal</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="harga modal">
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Harga Jual</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="harga jual">
-            </div>
-              
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-sm btn-outline-primary">Simpan</button>
+                <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
+                <input type="text" class="form-control" name="kode_barang" placeholder="Kode Barang" required>
               </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Nama Barang</label>
+                <input type="text" class="form-control" name="nama_barang" placeholder="Nama Barang" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Kategori</label>
+                <input type="text" class="form-control" name="kategori" placeholder="kategori" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Jumlah Stok</label>
+                <input type="text" class="form-control" name="jumlah_stok" placeholder="Stok" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Harga Modal</label>
+                <input type="text" class="form-control" name="harga_modal" placeholder="harga modal" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Harga</label>
+                <input type="text" class="form-control" name="harga_satuan"placeholder="Harga" required>
+              </div>
+
+              
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-sm btn-outline-primary" name="adddatabarang" value="adddatabarang">Simpan</button>
+              </div>
+
+              </form>
+
           </div>
         </div>
     </div>
