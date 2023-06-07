@@ -1,6 +1,7 @@
 <?php 
 require 'config.php';
 require 'login.php';
+require 'function.php';
 
 ?>
 
@@ -173,20 +174,30 @@ require 'login.php';
             </div>
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="kode barang">
+              <select name="barangnya" class="form-control" id="exampleFormControlInput1">
+                <?php 
+                  $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
+                  while($fetcharray=mysqli_fetch_array($databrg)){
+                    $kode_barang = $fetcharray["kode_barang"];
+
+                 ?>
+                 <option value= "<?=$kode_barang; ?>"><?=$kode_barang; ?> </option>
+                <?php  } ?>
+              </select>
             </div>
+            
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Jumlah</label>
               <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="jumlah">
             </div>
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Hargaa Jual</label>
+              <label for="exampleFormControlInput1" class="form-label">Harga Jual</label>
               <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="harga terjual">
             </div>
               </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-sm btn-outline-primary">Simpan</button>
+                <button type="button" class="btn btn-sm btn-outline-primary" >Simpan</button>
               </div>
           </div>
         </div>
