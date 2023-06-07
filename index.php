@@ -1,16 +1,15 @@
 <?php 
-	session_start();
-
 	require 'config.php';
 	if(isset($_POST['login'])){
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 
-		$cekdata = mysqli_query($config, "SELECT * FROM user where username='$username' and password='$password'");
-		
+		$cekdata = mysqli_query($conn, "SELECT * FROM user where username='$username' and password='$password'");
+
 		$hitung = mysqli_num_rows($cekdata);
 
 		if($hitung>0){
+
 			$_SESSION['log'] = 'true';
 			//header('location:dashboard.php');
 			echo '<script>alert("Login Sukses");window.location="dashboard.php"</script>';
@@ -24,14 +23,14 @@
 	if(!isset($_SESSION['log'])){
 
 	} else{
-		echo '<script>alert("Anda Sudah Login");window.location="dashboard.php"</script>';
+		echo '<script>window.location="dashboard.php";</script>';
 		//header('location:dashboard.php');
 	}
-
  ?>
 
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< Updated upstream
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -40,6 +39,21 @@
     <link rel="stylesheet" href = "css/login.css">
   </head>
   <body>
+=======
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Login Toko Sararaholi Jaya</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+</head>
+<body class="bg-gradient-primary">
+>>>>>>> Stashed changes
     <div class="container">
       <div class="login">
         <form action="" method="post">

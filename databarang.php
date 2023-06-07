@@ -1,10 +1,29 @@
 <?php 
 require 'config.php';
 require 'login.php';
+require 'function.php';
 
-//nenambahkan data barang
+$databarang = query("SELECT * FROM data_barang");
 
-  
+if (isset($_POST['adddatabarang'])) {
+
+  if(addbarang($_POST) > 0){
+    echo "  <script>
+          alert('data Berhasil ditambahkan');
+          window.location='databarang.php';
+        </script>
+    ";
+    
+  } else {
+    echo "  <script>
+          alert('data gagal ditambahkan');
+          indow.location='databarang.php';
+        </script>
+    ";
+  }
+
+
+}
   
 ?>
 
@@ -62,6 +81,7 @@ require 'login.php';
 
 <div class="container-fluid">
   <div class="row">
+
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
@@ -108,10 +128,10 @@ require 'login.php';
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Pembelian</h1>
+        <h1 class="h2">Data Barang</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Data</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modaltambah">Tambah Data</button>
           </div>
           <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
             <span data-feather="calendar"></span>
@@ -129,30 +149,36 @@ require 'login.php';
               <th scope="col">Kode Barang</th>
               <th scope="col">Nama Barang</th>
               <th scope="col">Kategori</th>
+              <th scope="col">Harga Satuan</th>
               <th scope="col">Aksi</th>
             </tr>
           </thead>
           <tbody>
+            <?php $i=1; ?>
+            <?php foreach($databarang as $row): ?>
             <tr>
-	            <td>1</td>
-	            <td>random</td>
-	            <td>data</td>
-	            <td>text</td>
+              <td><?= $i;  ?></td>
+	            <td> <?= $row["kode_barang"];  ?></td>
+	            <td> <?= $row["nama_barang"];  ?></td>
+	            <td> <?= $row["kategori"];  ?></td>
+	            <td> <?= $row["harga_satuan"];  ?></td>
 
 	            <td>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Tambah</button>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Hapus</button>
+	              	<a><span data-feather ="eye"></span></a>
+                  <a><span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modalubah?kode_barang=<?= $row["kode_barang"];?>"></span></a>
+	              	<a href = "hapus.php?kode_barang=<?= $row["kode_barang"];?>"><span data-feather ="trash-2"></span></a>
 	          	</td>
-       
+            </tr>
+            <?php $i++; ?>
+            <?php endforeach; ?>
           </tbody>
         </table>
       </div>
     </main>
-    <div class="modal fade" tabindex="-1" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal fade" tabindex="-1" id="modaltambah" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
           <div class="modal-content">
-
 
               <div class="modal-header">
                 <h5 class="modal-title">Tambah Data Barang</h5>
@@ -175,10 +201,6 @@ require 'login.php';
                 <input type="text" class="form-control" name="kategori" placeholder="kategori" required>
               </div>
               <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Jumlah Stok</label>
-                <input type="text" class="form-control" name="jumlah_stok" placeholder="Stok" required>
-              </div>
-              <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Harga Modal</label>
                 <input type="text" class="form-control" name="harga_modal" placeholder="harga modal" required>
               </div>
@@ -197,8 +219,54 @@ require 'login.php';
               </form>
 
           </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" id="modalubah?kode_barang=<?= $row["kode_barang"];?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title">Ubah Data Barang</h5>
+                <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <form action="" method="post">
+
+              <div class="modal-body">
+                <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
+                <input type="text" class="form-control" name="kode_barang" placeholder="Kode Barang" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Nama Barang</label>
+                <input type="text" class="form-control" name="nama_barang" placeholder="Nama Barang" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Kategori</label>
+                <input type="text" class="form-control" name="kategori" placeholder="kategori" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Harga Modal</label>
+                <input type="text" class="form-control" name="harga_modal" placeholder="harga modal" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Harga</label>
+                <input type="text" class="form-control" name="harga_satuan"placeholder="Harga" required>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-sm btn-outline-primary" name="editdatabarang" value="editdatabarang">Ubah Data</button>
+              </div>
+
+              </form>
+
+          </div>
         </div>
     </div>
+
   </div>
 </div>
 
