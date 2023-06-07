@@ -166,15 +166,15 @@ require 'function.php';
               <div class="modal-body">
                 <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Nama Pembeli</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="nama pembeli">
+              <input type="text" class="form-control" id="exampleFormControlInput1" name="nama_pembeli" placeholder="Nama Pembeli">
             </div>
             <div class="mb-3">
                 <label for="date" class="form-label">Date</label>
-                <input type="text" class="form-control" id="datepicker" placeholder="Tanggal">
+                <input type="text" class="form-control" id="datepicker" placeholder="Tanggal" name="tanggal" >
             </div>
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
-              <select name="barangnya" class="form-control" id="exampleFormControlInput1">
+              <label for="exampleFormControlInput1" class="form-label" >Kode Barang</label>
+              <select name="barangnya" class="form-control" id="exampleFormControlInput1" name="kode_barang">
                 <?php 
                   $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
                   while($fetcharray=mysqli_fetch_array($databrg)){
@@ -185,19 +185,19 @@ require 'function.php';
                 <?php  } ?>
               </select>
             </div>
-            
+
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Jumlah</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="jumlah">
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="jumlah" name="jumlah_jual">
             </div>
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Harga Jual</label>
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="harga terjual">
+              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="harga terjual" name="harga_jual">
             </div>
               </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-sm btn-outline-primary" >Simpan</button>
+                <button type="submit" class="btn btn-sm btn-outline-primary" name="addpenjualan" value="addpenjualan">Simpan</button>
               </div>
           </div>
         </div>
