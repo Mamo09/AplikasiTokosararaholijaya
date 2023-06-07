@@ -166,7 +166,9 @@ if (isset($_POST['adddatabarang'])) {
 	            <td>
 	              	<a><span data-feather ="eye"></span></a>
                   <a><span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modalubah?kode_barang=<?= $row["kode_barang"];?>"></span></a>
-	              	<a href = "hapus.php?kode_barang=<?= $row["kode_barang"];?>"><span data-feather ="trash-2"></span></a>
+	              	<a href="hapus.php?kode_barang=<?= $row['kode_barang']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')">
+            <span data-feather="trash-2"></span>
+          </a>
 	          	</td>
             </tr>
             <?php $i++; ?>
@@ -220,6 +222,51 @@ if (isset($_POST['adddatabarang'])) {
 
           </div>
       </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" id="modalubah?kode_barang=<?= $row["kode_barang"];?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title">Ubah Data Barang</h5>
+                <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <form action="" method="post">
+
+              <div class="modal-body">
+                <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
+                <input type="text" class="form-control" name="kode_barang" placeholder="Kode Barang" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Nama Barang</label>
+                <input type="text" class="form-control" name="nama_barang" placeholder="Nama Barang" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Kategori</label>
+                <input type="text" class="form-control" name="kategori" placeholder="kategori" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Harga Modal</label>
+                <input type="text" class="form-control" name="harga_modal" placeholder="harga modal" required>
+              </div>
+              <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Harga</label>
+                <input type="text" class="form-control" name="harga_satuan"placeholder="Harga" required>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-sm btn-outline-primary" name="editdatabarang" value="editdatabarang">Ubah Data</button>
+              </div>
+
+              </form>
+
+          </div>
+        </div>
     </div>
 
   </div>

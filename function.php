@@ -24,7 +24,7 @@ function addbarang($data){
 
     $query = "INSERT INTO data_barang (kode_barang,nama_barang,kategori,harga_modal,harga_satuan)
     			VALUES 
-    			('$kode_barang','$nama_barang','kategori','$harga_modal','$harga_satuan')
+    			('$kode_barang','$nama_barang','$kategori','$harga_modal','$harga_satuan')
     			";
 
     mysqli_query($conn, $query);
