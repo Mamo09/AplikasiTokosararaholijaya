@@ -1,6 +1,9 @@
 <?php 
 require 'config.php';
 require 'login.php';
+require 'function.php';
+
+$databarang = query("SELECT * FROM data_barang");
 
 ?>
 
@@ -105,7 +108,7 @@ require 'login.php';
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Pembelian</h1>
+        <h1 class="h2">Stok Barang</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"data-bs-target="#exampleModal">Tambah Data</button>
@@ -124,25 +127,31 @@ require 'login.php';
             <tr>
               <th scope="col">No.</th>
               <th scope="col">Kode Barang</th>
-              <th scope="col">jumlah</th>
-              <th scope="col">kategori</th>
+              <th scope="col">Nama Barang</th>
+              <th scope="col">Kategori</th>
+              <th scope="col">Jumlah Stok</th>
               <th scope="col">Aksi</th>
             </tr>
           </thead>
+          
           <tbody>
+            <?php $i=1; ?>
+            <?php foreach($databarang as $row): ?>
             <tr>
-	            <td>1</td>
-	            <td>random</td>
-	            <td>data</td>
-	            <td>placeholder</td>
-	            <td>text</td>
-	            <td>halo </td>
-	            <td>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Tambah</button>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Hapus</button>
-	          	</td>
-       
+              <td><?= $i;  ?></td>
+              <td> <?= $row["kode_barang"];  ?></td>
+              <td> <?= $row["nama_barang"];  ?></td>
+              <td> <?= $row["kategori"];  ?></td>
+              <td> <?= $row["jumlah_stok"];  ?></td>
+
+              <td>
+                  <a><span data-feather ="edit"></span></a>
+                  <a><span data-feather ="plus-square"></span></a>
+                  <a><span data-feather ="minus-square"></span></a>
+              </td>
+            </tr>
+            <?php $i++; ?>
+            <?php endforeach; ?>
           </tbody>
         </table>
       </div>
