@@ -3,6 +3,29 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
+$query_check_barang = addpenjualan ("SELECT * FROM data_barang WHERE kode_barang = '$kode_barang'");
+$result_check_barang = mysqli_query($conn, $query_check_barang);
+
+if (isset($_POST['addpenjualan'])) {
+
+  if(addpenjualan($_POST) > 0){
+    echo "  <script>
+          alert('data Berhasil ditambahkan');
+          window.location='penjualan.php';
+        </script>
+    ";
+    
+  } else {
+    echo "  <script>
+          alert('data gagal ditambahkan');
+          indow.location='penjualan.php';
+        </script>
+    ";
+  }
+
+
+}
+
 ?>
 
 
@@ -174,7 +197,7 @@ require 'function.php';
             </div>
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label" >Kode Barang</label>
-              <select name="barangnya" class="form-control" id="exampleFormControlInput1" name="kode_barang">
+              <select class="form-control" id="exampleFormControlInput1" name="kode_barang">
                 <?php 
                   $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
                   while($fetcharray=mysqli_fetch_array($databrg)){
