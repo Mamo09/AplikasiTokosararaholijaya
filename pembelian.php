@@ -3,6 +3,45 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
+$datapembelian = query("SELECT * FROM pembelian");
+
+if (isset($_POST['addpembelian'])) {
+
+  if(addpembelian($_POST) > 0){
+    echo "  <script>
+          alert('data Berhasil ditambahkan');
+          window.location='pembelian.php';
+        </script>
+    ";
+    
+  } else {
+    echo "  <script>
+          alert('data gagal ditambahkan');
+          indow.location='pembelian.php';
+        </script>
+    ";
+  }
+}
+
+if (isset($_GET['id_pembelian'])) {
+    $id_pembelian = $_GET['id_pembelian'];
+
+    if(hapuspembelian($id_pembelian) > 0){
+
+      echo "  <script>
+              alert('data Berhasil dihapus');
+              window.location='pembelian.php';
+            </script>
+        ";
+        
+    } else {
+      echo "  <script>
+              alert('data Gagal dihapus');
+              window.location='pembelian.php';
+            </script>
+        ";
+    }
+}
 ?>
 
 <!doctype html>
@@ -131,24 +170,33 @@ require 'function.php';
               <th scope="col">tanggal</th>
               <th scope="col">Nama Barang</th>
               <th scope="col">Harga Beli</th>
-              <th scope="col">jumlah</th>
+              <th scope="col">jumlah Beli</th>
               <th scope="col">kwitansi</th>
               <th scope="col">Aksi</th>
             </tr>
           </thead>
           <tbody>
+            <form method="post">
+            <?php $i=1; ?>
+            <?php foreach($datapembelian as $row): ?>
             <tr>
-	            <td>1</td>
-	            <td>random</td>
-	            <td>data</td>
-	            <td>placeholder</td>
-	            <td>text</td>
-	            <td>halo </td>
-	            <td>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Hapus</button>
-	          	</td>
+              <td><?= $i;  ?></td>
+              <td> <?= $row["tanggal_pembelian"]; ?></td>
+              <td> <?= $row["nama_barang"];  ?></td>
+              <td> <?= $row["harga_beli"];  ?></td>
+              <td> <?= $row["jumlah_beli"];  ?></td>
+              <td> <?= $row["kwitansi"];  ?></td>
+              <td>
+                  <a><span data-feather ="eye"></span></a>
+                  <a><span data-feather ="edit" ></span></a>
+                  <a href="?id_pembelian=<?= $row['id_pembelian']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapuspenjualan">
+            <span data-feather="trash-2"></span></a>
+              </td>
+            </tr>
+            <?php $i++; ?>
+            <?php endforeach; ?>
+
+            </form>
           </tbody>
         </table>
       </div>
@@ -182,9 +230,11 @@ require 'function.php';
             <form method="post">
 
             <div class="modal-body">
+
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Pilih Kode Barang</label>
               <select name="kode_barang" class="form-control" id="exampleFormControlInput1">
+
                 <?php 
                   $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
                   
@@ -200,11 +250,17 @@ require 'function.php';
 
             <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Jumlah Beli</label>
-              <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Jumlah Beli">
+              <input type="number" class="form-control" id="exampleFormControlInput1" name="jumlah_beli" placeholder="Jumlah Beli" required>
+            </div> 
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Harga Beli</label>
+              <input type="number" class="form-control" id="exampleFormControlInput1" name="harga_beli" placeholder="harga Beli" required>
             </div>
+
             <div class="mb-3">
                 <label for="date" class="form-label">Date</label>
-                <input type="date" class="form-control" id="datepicker" placeholder="Tanggal">
+                <input type="date" class="form-control" id="datepicker" placeholder="Tanggal" name="tanggal_pembelian" required>
             </div>
 
                 <div class="mb-3">
@@ -215,10 +271,12 @@ require 'function.php';
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-sm btn-outline-primary">Simpan</button>
+                <button type="submit" class="btn btn-sm btn-outline-primary" name="addpembelian" value="addpembelian">Simpan</button>
               </div>
           </div>
+
         </form>
+
         </div>
     </div>
 </html>

@@ -86,11 +86,46 @@ function hapuspenjualan($id_penjualan){
 
 
 
+function addpembelian($data){
+	global $conn;
+
+	$query = "SELECT kode_barang, nama_barang FROM data_barang";
+	$result = mysqli_query($conn, $query);
+
+	$kode_barang = htmlspecialchars($data["kode_barang"]);
+    $tanggal_pembelian = htmlspecialchars($data["tanggal_pembelian"]);
+    $jumlah_beli = htmlspecialchars($data["jumlah_beli"]);
+    $harga_beli = htmlspecialchars($data["harga_beli"]);
+    $kwitansi = htmlspecialchars($data["kwitansi"]);
+
+    $select_barang_query = "SELECT nama_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+
+
+    $barang = mysqli_fetch_assoc($select_barang_result);
+    $nama_barang = $barang['nama_barang'];
+
+    $queryaddpembelian = "INSERT INTO pembelian (id_pembelian, kode_barang, nama_barang, tanggal_pembelian, jumlah_beli, harga_beli, kwitansi)
+    			VALUES
+    			('','$kode_barang','$nama_barang','$tanggal_pembelian',$jumlah_beli,$harga_beli,'$kwitansi')
+    			";
+
+    mysqli_query($conn, $queryaddpembelian);
+
+    return mysqli_affected_rows($conn);
+}
 
 
 
 
+function hapuspembelian($id_penjualan){
 
+	global $conn;
+
+	mysqli_query($conn, "DELETE FROM pembelian WHERE id_pembelian = '$id_pembelian'");
+
+	return mysqli_affected_rows($conn);
+}
 
 
 

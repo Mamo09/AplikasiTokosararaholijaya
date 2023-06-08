@@ -3,7 +3,6 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
-
 $datapenjualan = query("SELECT * FROM penjualan");
 
 if (isset($_POST['addpenjualan'])) {
@@ -238,11 +237,11 @@ if (isset($_GET['id_penjualan'])) {
               <div class="modal-body">
                 <div class="mb-3">
                   <label for="nama_pembeli" class="form-label">Nama Pembeli</label>
-                  <input type="text" class="form-control" id="nama_pembeli" name="nama_pembeli" placeholder="Nama Pembeli">
+                  <input type="text" class="form-control" id="nama_pembeli" name="nama_pembeli" placeholder="Nama Pembeli" >
                 </div>
                 <div class="mb-3">
                   <label for="datepicker" class="form-label">Date</label>
-                  <input type="date" class="form-control" id="datepicker" placeholder="Tanggal" name="tanggal_penjualan" >
+                  <input type="date" class="form-control" id="datepicker" placeholder="Tanggal" name="tanggal_penjualan" required>
                 </div>
 
                 <div class="mb-3">
@@ -264,12 +263,12 @@ if (isset($_GET['id_penjualan'])) {
 
                 <div class="mb-3">
                   <label for="jumalah" class="form-label">Jumlah</label>
-                  <input type="number" class="form-control" id="jumlah" placeholder="jumlah" name="jumlah_jual">
+                  <input type="number" class="form-control" id="jumlah" placeholder="jumlah" name="jumlah_jual" required>
                 </div>
 
                 <div class="mb-3">
                   <label for="harga_jual" class="form-label">Harga Jual</label>
-                  <input type="number" class="form-control" id="harga_jual" placeholder="harga terjual" name="harga_jual">
+                  <input type="number" class="form-control" id="harga_jual" placeholder="harga terjual" name="harga_jual" required>
                 </div>
 
               </div>
