@@ -227,7 +227,7 @@ if (isset($_GET['id_pembelian'])) {
                 <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
 
             <div class="modal-body">
 
@@ -266,6 +266,7 @@ if (isset($_GET['id_pembelian'])) {
                 <div class="mb-3">
                 <label for="formFile" class="form-label">Masukkan Kwitansi</label>
                 <input class="form-control" type="file" name="kwitansi" id="formFile">
+                <label for="formFile" class="form-label">Max. 2MB</label>
             </div>
           </div>
 

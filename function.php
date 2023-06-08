@@ -96,7 +96,15 @@ function addpembelian($data){
     $tanggal_pembelian = htmlspecialchars($data["tanggal_pembelian"]);
     $jumlah_beli = htmlspecialchars($data["jumlah_beli"]);
     $harga_beli = htmlspecialchars($data["harga_beli"]);
-    $kwitansi = htmlspecialchars($data["kwitansi"]);
+
+	// upload gambar 
+    $kwitansi = upload();
+    if(!$kwitansi){
+    	return false;
+    }
+
+
+
 
     $select_barang_query = "SELECT nama_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
@@ -113,6 +121,54 @@ function addpembelian($data){
     mysqli_query($conn, $queryaddpembelian);
 
     return mysqli_affected_rows($conn);
+}
+
+function upload(){
+
+	$namaFile = $_FILES['kwitansi']['name'];
+	$ukuranFile = $_FILES['kwitansi']['size'];
+	$error = $_FILES['kwitansi']['error'];
+	$tmpName = $_FILES['kwitansi']['tmp_name'];
+
+	//cek gambar ada atau tidak
+	if( $error === 4){
+		echo "  <script>
+              alert('Pilih Gambar Terlebih Dahulu');
+            </script>
+        ";
+        return false;
+	}
+
+	//cek upload kalau itu gambar
+	$ekstensiGambarValid = ['jpg','jpeg','png'];
+	$ekstensiGambar = explode('.',$namaFile);
+	$ekstensiGambar = strtolower(end($ekstensiGambar));
+
+	if(!in_array($ekstensiGambar,$ekstensiGambarValid)){
+		echo "  <script>
+              alert('File yang Masukkan Bukan Gambar');
+            </script>
+        ";
+        return false;
+	}
+
+	//cek ukuran file gambar
+	if( $ukuranFile >2000000){
+		echo "  <script>
+              alert('Ukuran Gambar Terlalu besarF');
+            </script>
+        ";
+        return false;
+	}
+
+	//upload gambar
+	$namaFileBaru = uniqid();
+	$namaFileBaru .='.' ;
+	$namaFileBaru .= $ekstensiGambar;
+	move_uploaded_file($tmpName, 'temp_img/'.$namaFileBaru);
+
+	return $namaFileBaru;
+
 }
 
 
