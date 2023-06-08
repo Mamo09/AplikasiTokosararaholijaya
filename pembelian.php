@@ -1,7 +1,7 @@
 <?php 
 require 'config.php';
 require 'login.php';
-require 'function.php'
+require 'function.php';
 
 ?>
 
@@ -154,69 +154,7 @@ require 'function.php'
       </div>
     </main>
 
-		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-		    	<div class="modal-content">
-		      		<div class="modal-header">
-		        		<h5 class="modal-title" id="exampleModalLabel">Tambah Data Pembelian</h5>
-		        		<button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-		      	</div>
-            <div class="modal-body">
-            
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
-              <select name="kode_barang" class="form-control" id="exampleFormControlInput1">
-                <?php 
-                  $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
-                  while($fetcharray=mysqli_fetch_array($databrg)){
-                    $kode_barang = $fetcharray["kode_barang"];
 
-                 ?>
-                 <option value= "<?=$kode_barang; ?>"><?=$kode_barang; ?> </option>
-                <?php  } ?>
-              </select>
-            </div>
-
-		      		
-		      	<div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Nama Barang</label>
-              <?php 
-                  $query = "SELECT nama_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
-                  $result = mysqli_query($conn, $query);
-
-                  while($row = mysqli_fetch_assoc($result)){
-                    if($kode_barang)
-                  $nama_barang = $row['nama_barang'];
-               ?>
-							<input type="text" class="form-control" id="exampleFormControlInput1" value= "<?=$nama_barang;?>" 
-              placeholder="Nama Barang" disabled>
-              <?php } ?>
-
-						</div>
-
-
-
-						<div class="mb-3">
-							<label for="exampleFormControlInput1" class="form-label">Jumlah Beli</label>
-							<input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Jumlah Beli">
-						</div>
-						<div class="mb-3">
-						   	<label for="date" class="form-label">Date</label>
-						   	<input type="text" class="form-control" id="datepicker" placeholder="Tanggal">
-						</div>
-
-			        	<div class="mb-3">
-						  	<label for="formFile" class="form-label">Masukkan Kwitansi</label>
-						  	<input class="form-control" type="file" id="formFile">
-						</div>
-		      		</div>
-		     		<div class="modal-footer">
-		        		<button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-		        		<button type="button" class="btn btn-sm btn-outline-primary">Simpan</button>
-		      		</div>
-		    	</div>
-		  	</div>
-		</div>
   </div>
 </div>
 
@@ -233,4 +171,54 @@ require 'function.php'
         });
     </script>
   </body>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Pembelian</h5>
+                <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form method="post">
+
+            <div class="modal-body">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Pilih Kode Barang</label>
+              <select name="kode_barang" class="form-control" id="exampleFormControlInput1">
+                <?php 
+                  $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
+                  
+                  while($fetcharray=mysqli_fetch_array($databrg)){
+
+                  $kode_barang = $fetcharray["kode_barang"];
+
+                 ?>
+                 <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> </option>
+                <?php } ?>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Jumlah Beli</label>
+              <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="Jumlah Beli">
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="datepicker" placeholder="Tanggal">
+            </div>
+
+                <div class="mb-3">
+                <label for="formFile" class="form-label">Masukkan Kwitansi</label>
+                <input class="form-control" type="file" name="kwitansi" id="formFile">
+            </div>
+          </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-sm btn-outline-primary">Simpan</button>
+              </div>
+          </div>
+        </form>
+        </div>
+    </div>
 </html>
