@@ -174,7 +174,7 @@ function upload(){
 
 
 
-function hapuspembelian($id_penjualan){
+function hapuspembelian($id_pembelian){
 
 	global $conn;
 

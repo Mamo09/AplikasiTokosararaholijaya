@@ -82,6 +82,16 @@ if (isset($_GET['id_pembelian'])) {
       .input-group-append {
 				cursor: pointer;
 			}
+      .gambarkotak{
+        width: 50px;
+        height: 50px;
+        background-color: #f1f1f1;
+        border: 2px solid #333;
+      }
+      .gambar{
+        width: 48px;
+        height: 48px;
+      }
     </style>
     
     <!-- Custom styles for this template -->
@@ -185,7 +195,11 @@ if (isset($_GET['id_pembelian'])) {
               <td> <?= $row["nama_barang"];  ?></td>
               <td> <?= $row["harga_beli"];  ?></td>
               <td> <?= $row["jumlah_beli"];  ?></td>
-              <td> <?= $row["kwitansi"];  ?></td>
+              <td> 
+                <div class="gambarkotak">
+                  <img src="temp_img/<?= $row["kwitansi"];?>" class="gambar">
+                </div>
+              </td>
               <td>
                   <a><span data-feather ="eye"></span></a>
                   <a><span data-feather ="edit" ></span></a>
