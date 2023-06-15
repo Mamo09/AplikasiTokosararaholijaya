@@ -39,7 +39,6 @@
     <link rel="stylesheet" href = "css/login.css">
   </head>
   <body>
-=======
 
 <head>
     <meta charset="utf-8">
@@ -53,7 +52,6 @@
 
 </head>
 <body class="bg-gradient-primary">
->>>>>>> Stashed changes
     <div class="container">
       <div class="login">
         <form action="" method="post">
