@@ -145,47 +145,52 @@ $databarang = query("SELECT * FROM data_barang");
               <td> <?= $row["jumlah_stok"];  ?></td>
 
               <td>
-                  <a><span data-feather ="edit"></span></a>
-                  <a><span data-feather ="plus-square"></span></a>
-                  <a><span data-feather ="minus-square"></span></a>
+                  <a type="button">
+                    <span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modaleditstok<?= $row["kode_barang"]; ?>"></span>
+                  </a>
+                  <a type="button">
+                    <span data-feather ="plus-square" data-bs-toggle="modal" data-bs-target="#modaltambahstok<?= $row["kode_barang"]; ?>"></span>
+                  </a>
+                  <a type="button">
+                    <span data-feather ="minus-square" data-bs-toggle="modal" data-bs-target="#modalkurangstok<?= $row["kode_barang"]; ?>"></span>
+                  </a>
               </td>
             </tr>
+
+               <div class="modal fade" id="modaleditstok<?= $row["kode_barang"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form  method="post">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Stok Barang</h5>
+                        <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
+                        <input type="text" class="form-control" placeholder="Kode Barang" name="kode_barang" value="<?= $row["kode_barang"]; ?>" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Jumlah</label>
+                        <input type="number" class="form-control"  placeholder="Jumlah Stok" name="jumlah_stok" value="<?= $row["jumlah_stok"]; ?>" required>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-sm btn-outline-primary" value="editstok" name="editstok">Simpan</button>
+                      </div>
+                    </div>     
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
             <?php $i++; ?>
             <?php endforeach; ?>
           </tbody>
         </table>
       </div>
     </main>
-   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Tambah Data Stok Barang</h5>
-              <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-
-          <form  method="post">
-
-          <div class="modal-body">
-              <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
-              <input type="text" class="form-control" placeholder="Kode Barang" name="kode_barang">
-          </div>
-          <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Jumlah</label>
-              <input type="text" class="form-control"  placeholder="Jumlah Stok" name="jumlah_stok">
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-              <button type="submit" class="btn btn-sm btn-outline-primary" value="addstok" name="addstok">Simpan</button>
-          </div>
-          </div>
-          </form>
-        </div>
-    </div>
-  </div>
-</div>
-
 
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -193,4 +198,35 @@ $databarang = query("SELECT * FROM data_barang");
 
     <script src="js/dashboard.js"></script>
   </body>
+
+   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+            <form  method="post">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Tambah Data Stok Barang</h5>
+              <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+          
+
+            <div class="modal-body">
+              <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
+              <input type="text" class="form-control" placeholder="Kode Barang" name="kode_barang">
+            </div>
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Jumlah</label>
+              <input type="text" class="form-control"  placeholder="Jumlah Stok" name="jumlah_stok">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+              <button type="submit" class="btn btn-sm btn-outline-primary" value="addstok" name="addstok">Simpan</button>
+            </div>
+          </div>     
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </html>

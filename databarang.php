@@ -175,6 +175,44 @@ if (isset($_GET['kode_barang'])) {
                       </a>
                     </td>
                   </tr>
+                    <div class="modal fade" tabindex="-1" id="modalubah<?= $row["kode_barang"]; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Ubah Data Barang</h5>
+                            <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <form method="post">
+                            <div class="modal-body">
+                              <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
+                                <input type="text" class="form-control" name="kode_barang" value="<?= $row["kode_barang"]; ?>" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Nama Barang</label>
+                                <input type="text" class="form-control" name="nama_barang" value="<?= $row["nama_barang"]; ?>" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Kategori</label>
+                                <input type="text" class="form-control" name="kategori" value="<?= $row["kategori"]; ?>" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Harga Modal</label>
+                                <input type="number" class="form-control" name="harga_modal" value="<?= $row["harga_modal"]; ?>" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">Harga</label>
+                                <input type="number" class="form-control" name="harga_satuan" value="<?= $row["harga_satuan"]; ?>" required>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                                <button type="submit" class="btn btn-sm btn-outline-primary" name="updatedatabarang" value="updatedatabarang">Simpan</button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
                   <?php $i++; ?>
                 <?php endforeach; ?>
               </form>
@@ -226,44 +264,4 @@ if (isset($_GET['kode_barang'])) {
     </div>
   </div>
 </div>
-<?php foreach ($databarang as $row): ?>
-  <div class="modal fade" tabindex="-1" id="modalubah<?= $row["kode_barang"]; ?>" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Ubah Data Barang</h5>
-          <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form method="post">
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
-              <input type="text" class="form-control" name="kode_barang" value="<?= $row["kode_barang"]; ?>" required>
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Nama Barang</label>
-              <input type="text" class="form-control" name="nama_barang" value="<?= $row["nama_barang"]; ?>" required>
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Kategori</label>
-              <input type="text" class="form-control" name="kategori" value="<?= $row["kategori"]; ?>" required>
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Harga Modal</label>
-              <input type="number" class="form-control" name="harga_modal" value="<?= $row["harga_modal"]; ?>" required>
-            </div>
-            <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Harga</label>
-              <input type="number" class="form-control" name="harga_satuan" value="<?= $row["harga_satuan"]; ?>" required>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-              <button type="submit" class="btn btn-sm btn-outline-primary" name="updatedatabarang" value="updatedatabarang">Simpan</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-<?php endforeach; ?>
 </html>
