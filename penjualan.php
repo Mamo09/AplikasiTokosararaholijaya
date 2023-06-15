@@ -277,7 +277,7 @@ if (isset($_GET['id_penjualan'])) {
                       $kode_barang = $fetcharray["kode_barang"];
 
                      ?>
-                     <option value= "<?=$kode_barang; ?>"> <?= $row["kode_barang"]; ?> </option>
+                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> </option>
                     <?php } ?>
                   </select>
                 </div>
@@ -328,7 +328,10 @@ if (isset($_GET['id_penjualan'])) {
                   <label for="datepicker" class="form-label">Date</label>
                   <input type="date" class="form-control" id="datepicker" placeholder="Tanggal" name="tanggal_penjualan" value="<?= $row["tanggal_penjualan"]; ?>" required>
                 </div>
-
+                <div class="mb-3">
+                  <label for="kodbar" class="form-label">Kode Barang Sebelumnya</label>
+                  <input type="text" class="form-control" id="kodbar" value="<?= $row["kode_barang"]; ?>" disabled>
+                </div>
                 <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Pilih Kode Barang</label>
                   <select name="kode_barang" class="form-control" id="exampleFormControlInput1" value="<?= $row["kode_barang"]; ?>">
