@@ -42,6 +42,58 @@ function hapusbarang($kode_barang){
 	return mysqli_affected_rows($conn);
 }
 
+//edit data barang
+function updatebarang($data){
+
+	global $conn;
+
+	$kode_barang = $data["kode_barang"];
+    $nama_barang = htmlspecialchars($data["nama_barang"]);
+    $kategori = htmlspecialchars($data["kategori"]);
+    $harga_modal = htmlspecialchars($data["harga_modal"]);
+    $harga_satuan = htmlspecialchars($data["harga_satuan"]);
+
+    $query = "UPDATE data_barang SET 
+    			nama_barang = '$nama_barang',
+    			kategori = '$kategori',
+    			harga_modal = $harga_modal,
+    			harga_satuan = $harga_satuan 
+    			WHERE kode_barang = '$kode_barang'
+    			"; 
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+
+}
+
+//edit stok barang
+function editstok($data){
+
+	global $conn;
+
+	$kode_barang = htmlspecialchars($data["kode_barang"]);
+    $nama_barang = htmlspecialchars($data["nama_barang"]);
+    $kategori = htmlspecialchars($data["kategori"]);
+    $harga_modal = htmlspecialchars($data["harga_modal"]);
+    $harga_satuan = htmlspecialchars($data["harga_satuan"]);
+    $jumlah_stok = htmlspecialchars($data["jumlah_stok"]);
+
+    $query = "UPDATE data_barang SET
+    			nama_barang = '$nama_barang',
+    			kategori = '$kategori',
+    			harga_modal = $harga_modal,
+    			harga_satuan = $harga_satuan,
+    			jumlah_stok	= $jumlah_stok 
+    			WHERE kode_barang = '$kode_barang'
+    			";
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+
+}
+
 //add data penjualan
 function addpenjualan($data){
 	global $conn;
@@ -108,7 +160,6 @@ function addpembelian($data){
 
     $select_barang_query = "SELECT nama_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
-
 
     $barang = mysqli_fetch_assoc($select_barang_result);
     $nama_barang = $barang['nama_barang'];

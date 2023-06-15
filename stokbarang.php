@@ -5,6 +5,20 @@ require 'function.php';
 
 $databarang = query("SELECT * FROM data_barang");
 
+if (isset($_POST['editstok'])) {
+  if (editstok($_POST) > 0) {
+    echo "
+      <script>
+        alert('Data berhasil diubah');
+        window.location='stokbarang.php';
+      </script>
+    ";
+  } else {
+    echo "
+
+    ";
+  }
+}
 ?>
 
 <!doctype html>
@@ -156,35 +170,6 @@ $databarang = query("SELECT * FROM data_barang");
                   </a>
               </td>
             </tr>
-
-               <div class="modal fade" id="modaleditstok<?= $row["kode_barang"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                      <form  method="post">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Stok Barang</h5>
-                        <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
-                        <input type="text" class="form-control" placeholder="Kode Barang" name="kode_barang" value="<?= $row["kode_barang"]; ?>" required>
-                      </div>
-                      <div class="mb-3">
-                        <label for="exampleFormControlInput1" class="form-label">Jumlah</label>
-                        <input type="number" class="form-control"  placeholder="Jumlah Stok" name="jumlah_stok" value="<?= $row["jumlah_stok"]; ?>" required>
-                      </div>
-
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-sm btn-outline-primary" value="editstok" name="editstok">Simpan</button>
-                      </div>
-                    </div>     
-                  </div>
-                  </form>
-                </div>
-              </div>
-            </div>
             <?php $i++; ?>
             <?php endforeach; ?>
           </tbody>
@@ -207,9 +192,6 @@ $databarang = query("SELECT * FROM data_barang");
               <h5 class="modal-title" id="exampleModalLabel">Tambah Data Stok Barang</h5>
               <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
-          
-
             <div class="modal-body">
               <div class="mb-3">
               <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
@@ -229,4 +211,41 @@ $databarang = query("SELECT * FROM data_barang");
       </div>
     </div>
   </div>
+
+
+<?php foreach($databarang as $row): ?>
+              <div class="modal fade" id="modaleditstok<?= $row["kode_barang"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                      <form  method="post">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Stok Barang</h5>
+                        <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Kode Barang</label>
+                        <input type="text" readonly class="form-control" placeholder="Kode Barang" name="kode_barang" value="<?= $row["kode_barang"]; ?>">
+                      </div>
+                      <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Jumlah</label>
+                        <input type="number" class="form-control"  placeholder="Jumlah Stok" name="jumlah_stok" value="<?= $row["jumlah_stok"]; ?>" required>
+                      </div>
+
+                      <input type="hidden" class="form-control" name="nama_barang" value="<?= $row["nama_barang"]; ?>" >
+                      <input type="hidden" class="form-control" name="kategori" value="<?= $row["kategori"]; ?>" >
+                      <input type="hidden" class="form-control" name="harga_modal" value="<?= $row["harga_modal"]; ?>" >
+                      <input type="hidden" class="form-control" name="harga_satuan" value="<?= $row["harga_satuan"]; ?>" >
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-sm btn-outline-primary" value="editstok" name="editstok">Simpan</button>
+                      </div>
+                    </div>     
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <?php endforeach; ?>
 </html>
