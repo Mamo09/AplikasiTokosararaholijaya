@@ -23,6 +23,23 @@ if (isset($_POST['addpenjualan'])) {
   }
 }
 
+if (isset($_POST['editpenjualan'])) {
+
+  if(editpenjualan($_POST) > 0){
+    echo "  <script>
+          alert('data Berhasil diubah');
+          window.location='penjualan.php';
+        </script>
+    ";
+    
+  } else {
+    echo "  <script>
+          alert('data gagal diubah');
+          indow.location='penjualan.php';
+        </script>
+    ";
+  }
+}
 
 if (isset($_GET['id_penjualan'])) {
     $id_penjualan = $_GET['id_penjualan'];
@@ -192,8 +209,12 @@ if (isset($_GET['id_penjualan'])) {
               <td> <?= $row["harga_jual"];  ?></td>
               <td> <?= $row["kategori"];  ?></td>
               <td>
-                  <a><span data-feather ="eye"></span></a>
-                  <a><span data-feather ="edit" ></span></a>
+                  <a>
+                    <span data-feather ="eye"></span>
+                  </a>
+                  <a>
+                    <span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modaleditpenjualan<?= $row["id_penjualan"]; ?>"></span>
+                  </a>
                   <a href="?id_penjualan=<?= $row['id_penjualan']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapuspenjualan">
             <span data-feather="trash-2"></span></a>
               </td>
@@ -256,7 +277,7 @@ if (isset($_GET['id_penjualan'])) {
                       $kode_barang = $fetcharray["kode_barang"];
 
                      ?>
-                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> </option>
+                     <option value= "<?=$kode_barang; ?>"> <?= $row["kode_barang"]; ?> </option>
                     <?php } ?>
                   </select>
                 </div>
@@ -284,4 +305,67 @@ if (isset($_GET['id_penjualan'])) {
     </div>
 
 
+<!-- modal edit -->
+<?php foreach($datapenjualan as $row): ?>
+<div class="modal fade" id="modaleditpenjualan<?= $row["id_penjualan"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+
+          <div class="modal-content">
+            <form method="post">
+
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Penjualan</h5>
+                <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+              <div class="modal-body">
+                <input type="hidden" name="id_penjualan" value="<?= $row["id_penjualan"]; ?>">
+                <div class="mb-3">
+                  <label for="nama_pembeli" class="form-label">Nama Pembeli</label>
+                  <input type="text" class="form-control" id="nama_pembeli" name="nama_pembeli" placeholder="Nama Pembeli" value="<?= $row["nama_pembeli"]; ?>">
+                </div>
+                <div class="mb-3">
+                  <label for="datepicker" class="form-label">Date</label>
+                  <input type="date" class="form-control" id="datepicker" placeholder="Tanggal" name="tanggal_penjualan" value="<?= $row["tanggal_penjualan"]; ?>" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">Pilih Kode Barang</label>
+                  <select name="kode_barang" class="form-control" id="exampleFormControlInput1" value="<?= $row["kode_barang"]; ?>">
+                    <?php 
+
+                      $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
+                      
+                      while($fetcharray=mysqli_fetch_array($databrg)){
+
+                      $kode_barang = $fetcharray["kode_barang"];
+
+                     ?>
+                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> </option>
+                    <?php } ?>
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="jumalah" class="form-label">Jumlah</label>
+                  <input type="number" class="form-control" id="jumlah" placeholder="jumlah" name="jumlah_jual" value="<?= $row["jumlah_jual"]; ?>"required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="harga_jual" class="form-label">Harga Jual</label>
+                  <input type="number" class="form-control" id="harga_jual" placeholder="harga terjual" name="harga_jual" value="<?= $row["harga_jual"]; ?>"required>
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                  <button type="submit" class="btn btn-sm btn-outline-primary" name="editpenjualan" value="editpenjualan">Simpan</button>
+              </div>
+          </form>
+          
+          </div>
+        </div>
+    </div>
+<?php endforeach; ?>
 </html>

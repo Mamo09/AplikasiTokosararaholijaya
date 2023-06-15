@@ -94,13 +94,14 @@ function editstok($data){
 
 }
 
+
+
 //add data penjualan
 function addpenjualan($data){
 	global $conn;
 
 	$query = "SELECT kode_barang, nama_barang, kategori FROM data_barang";
 	$result = mysqli_query($conn, $query);
-
 	$kode_barang = htmlspecialchars($data["kode_barang"]);
 	$nama_pembeli = htmlspecialchars($data["nama_pembeli"]);
     $tanggal_penjualan = htmlspecialchars($data["tanggal_penjualan"]);
@@ -125,6 +126,45 @@ function addpenjualan($data){
     return mysqli_affected_rows($conn);
 }
 
+//edit data penjualan
+function editpenjualan($data){
+	global $conn;
+
+	$query = "SELECT kode_barang, nama_barang, kategori FROM data_barang";
+	$result = mysqli_query($conn, $query);
+	
+	$id_penjualan = $data["id_penjualan"];
+	$kode_barang = htmlspecialchars($data["kode_barang"]);
+	$nama_pembeli = htmlspecialchars($data["nama_pembeli"]);
+    $tanggal_penjualan = htmlspecialchars($data["tanggal_penjualan"]);
+    $jumlah_jual = htmlspecialchars($data["jumlah_jual"]);
+    $harga_jual = htmlspecialchars($data["harga_jual"]);
+
+    $select_barang_query = "SELECT nama_barang, kategori FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+
+
+    $barang = mysqli_fetch_assoc($select_barang_result);
+    $nama_barang = $barang['nama_barang'];
+    $kategori = $barang['kategori'];
+
+    $queryeditpenjualan = "UPDATE penjualan SET 
+    			kode_barang = '$kode_barang',
+    			nama_pembeli = '$nama_pembeli',
+    			nama_barang = '$nama_barang',
+    			kategori = '$kategori',
+    			tanggal_penjualan = '$tanggal_penjualan',
+    			jumlah_jual = $jumlah_jual,
+    			harga_jual = $harga_jual
+    			WHERE id_penjualan = '$id_penjualan'
+    			"; 	
+
+    mysqli_query($conn, $queryeditpenjualan);
+
+    return mysqli_affected_rows($conn);
+}
+
+
 //hapus data penjualan
 
 function hapuspenjualan($id_penjualan){
@@ -137,8 +177,9 @@ function hapuspenjualan($id_penjualan){
 }
 
 
-
+//add data pembelian
 function addpembelian($data){
+	
 	global $conn;
 
 	$query = "SELECT kode_barang, nama_barang FROM data_barang";
@@ -156,8 +197,6 @@ function addpembelian($data){
     }
 
 
-
-
     $select_barang_query = "SELECT nama_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
 
@@ -173,6 +212,7 @@ function addpembelian($data){
 
     return mysqli_affected_rows($conn);
 }
+
 
 function upload(){
 
@@ -220,6 +260,49 @@ function upload(){
 
 	return $namaFileBaru;
 
+}
+
+function editpembelian($data){
+	global $conn;
+
+	$query = "SELECT kode_barang, nama_barang FROM data_barang";
+	$result = mysqli_query($conn, $query);
+
+	$id_pembelian = $data["id_pembelian"];
+	$kode_barang = htmlspecialchars($data["kode_barang"]);
+    $tanggal_pembelian = htmlspecialchars($data["tanggal_pembelian"]);
+    $jumlah_beli = htmlspecialchars($data["jumlah_beli"]);
+    $harga_beli = htmlspecialchars($data["harga_beli"]);
+    $kwitansiLama = $data["kwitansi"];
+
+    if($_FILES['kwitansi']['error']==4){
+    	$kwitansi = $kwitansiLama;
+
+    }else{
+    	$kwitansi = upload();
+    }
+
+
+
+    $select_barang_query = "SELECT nama_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+
+    $barang = mysqli_fetch_assoc($select_barang_result);
+    $nama_barang = $barang['nama_barang'];
+
+    $queryeditpembelian = " UPDATE pembelian SET
+		    			kode_barang = '$kode_barang',
+		    			nama_barang = '$nama_barang',
+		    			tanggal_pembelian = '$tanggal_pembelian',
+		    			jumlah_beli = $jumlah_beli,
+		    			harga_beli = $harga_beli,
+		    			kwitansi = '$kwitansi'
+		    			WHERE id_pembelian = $id_pembelian	
+    					";
+
+    mysqli_query($conn, $queryeditpembelian);
+
+    return mysqli_affected_rows($conn);
 }
 
 

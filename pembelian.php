@@ -23,6 +23,24 @@ if (isset($_POST['addpembelian'])) {
   }
 }
 
+if (isset($_POST['editpembelian'])) {
+
+  if(editpembelian($_POST) > 0){
+    echo "  <script>
+          alert('data Berhasil diubah');
+          window.location='pembelian.php';
+        </script>
+    ";
+    
+  } else {
+    echo "  <script>
+          alert('data gagal diubah');
+          indow.location='pembelian.php';
+        </script>
+    ";
+  }
+}
+
 if (isset($_GET['id_pembelian'])) {
     $id_pembelian = $_GET['id_pembelian'];
 
@@ -202,7 +220,9 @@ if (isset($_GET['id_pembelian'])) {
               </td>
               <td>
                   <a><span data-feather ="eye"></span></a>
-                  <a><span data-feather ="edit" ></span></a>
+                  <a>
+                    <span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modaleditpembelian<?= $row["id_pembelian"]; ?>" ></span>
+                  </a>
                   <a href="?id_pembelian=<?= $row['id_pembelian']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapuspenjualan">
             <span data-feather="trash-2"></span></a>
               </td>
@@ -276,9 +296,9 @@ if (isset($_GET['id_pembelian'])) {
                 <label for="date" class="form-label">Date</label>
                 <input type="date" class="form-control" id="datepicker" placeholder="Tanggal" name="tanggal_pembelian" required>
             </div>
-
                 <div class="mb-3">
                 <label for="formFile" class="form-label">Masukkan Kwitansi</label>
+                
                 <input class="form-control" type="file" name="kwitansi" id="formFile">
                 <label for="formFile" class="form-label">Max. 2MB</label>
             </div>
@@ -294,4 +314,83 @@ if (isset($_GET['id_pembelian'])) {
 
         </div>
     </div>
+
+
+
+<!-- modal edit ppembelian-->
+<?php foreach($datapembelian as $row): ?>
+    <div class="modal fade" id="modaleditpembelian<?= $row["id_pembelian"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Pembelian</h5>
+                <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form method="post" enctype="multipart/form-data">
+
+            <div class="modal-body">
+
+            <input type="hidden" name="id_pembelian" value="<?= $row["id_pembelian"]; ?>">
+            <input type="hidden" name="kwitansiLama" value="<?= $row["kwitansi"]; ?>">
+
+            <div class="mb-3">
+              <label for="sebelum" class="form-label"> Kode Barang Sebelumnya </label>
+
+              <input type="text" class="form-control" id="sebelum" value="<?= $row["kode_barang"]; ?>" disabled>
+            </div>
+
+              <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">Pilih Kode Barang</label>
+
+              <select name="kode_barang" class="form-control" id="exampleFormControlInput1" value="<?= $row["kode_barang"]; ?>">
+
+                <?php 
+                  $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
+                  
+                  while($fetcharray=mysqli_fetch_array($databrg)){
+
+                  $kode_barang = $fetcharray["kode_barang"];
+
+                 ?>
+                 <option value= "<?=$kode_barang; ?>" > <?=$kode_barang; ?> </option>
+                <?php } ?>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="jumlah_beli" class="form-label">Jumlah Beli</label>
+              <input type="number" class="form-control" id="jumlah_beli" name="jumlah_beli" placeholder="Jumlah Beli" value="<?= $row["jumlah_beli"]; ?>"required>
+            </div> 
+
+            <div class="mb-3">
+              <label for="harga_beli" class="form-label">Harga Beli</label>
+              <input type="number" class="form-control" id="harga_beli" name="harga_beli" placeholder="harga Beli" value="<?= $row["harga_beli"]; ?>"required>
+            </div>
+
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="datepicker" placeholder="Tanggal" name="tanggal_pembelian" value="<?= $row["tanggal_pembelian"]; ?>"required>
+            </div>
+
+            <div class="mb-3">
+
+                <label for="formFile" class="form-label">Masukkan Kwitansi</label> <br>
+                <img src="temp_img/<?= $row["kwitansi"];?>" class="gambar" >
+                <input class="form-control" type="file" name="kwitansi" id="formFile">             
+                <label for="formFile" class="form-label">Max. 2MB</label>
+            </div>
+          </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-sm btn-outline-primary" name="editpembelian" value="editpembelian">Simpan</button>
+              </div>
+          </div>
+
+        </form>
+
+        </div>
+    </div>
+<?php endforeach; ?>
 </html>
