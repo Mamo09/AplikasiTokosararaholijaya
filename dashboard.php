@@ -2,6 +2,52 @@
 require 'config.php';
 require 'login.php';
 
+
+    // Mendapatkan tahun yang dipilih
+    $selectedYear = date('Y');
+    if (isset($_GET['year'])) {
+        $selectedYear = $_GET['year'];
+    }
+
+    // Query untuk mendapatkan data penjualan dengan harga jual dan harga modal berdasarkan tahun yang dipilih
+    $sql = "SELECT DATE_FORMAT(p.tanggal_penjualan, '%m') AS bulan, SUM(p.jumlah_jual * p.harga_jual) - SUM(p.jumlah_jual * b.harga_modal) AS keuntungan, b.nama_barang FROM penjualan p INNER JOIN data_barang b ON p.kode_barang = b.kode_barang WHERE YEAR(p.tanggal_penjualan) = $selectedYear GROUP BY bulan, b.nama_barang";
+    $result = mysqli_query($conn, $sql);
+
+    // Inisialisasi array untuk menyimpan data
+    $labels = array();
+    $data = array();
+    $soldItems = array();
+
+    // Memproses hasil query
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $monthNumber = $row['bulan'];
+            $monthName = date("F", mktime(0, 0, 0, $monthNumber, 10));
+            $labels[] = $monthName;
+            $data[] = $row['keuntungan'];
+
+            $itemName = $row['nama_barang'];
+            if (!isset($soldItems[$monthName])) {
+                $soldItems[$monthName] = array();
+            }
+            $soldItems[$monthName][] = $itemName;
+        }
+    }
+
+    // Mengisi array dengan nama bulan yang hilang
+    $fullLabels = array();
+    $fullData = array();
+    for ($i = 1; $i <= 12; $i++) {
+        $monthName = date("F", mktime(0, 0, 0, $i, 10));
+        $fullLabels[] = $monthName;
+        $key = array_search($monthName, $labels);
+        if ($key !== false) {
+            $fullData[] = $data[$key];
+        } else {
+            $fullData[] = 0;
+        }
+    }
+
 ?>
 
 <!doctype html>
@@ -14,6 +60,7 @@ require 'login.php';
     <meta name="generator" content="Hugo 0.84.0">
     <title>Toko Sararaholi Jaya</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     
 
@@ -106,14 +153,18 @@ require 'login.php';
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            Tahun Ini
-          </button>
+          <form method="GET" action="">
+              <select name="year" id="year" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                <?php
+                $currentYear = date('Y');
+                for ($i = $currentYear; $i >= 2000; $i--) {
+                    echo "<option value='$i'>$i</option>";
+                }
+                ?>
+              </select>
+            <button type="submit" class="btn btn-sm btn-outline-secondary" >Filter</button>
+          </form>
+
         </div>
       </div>
 
@@ -132,5 +183,31 @@ require 'login.php';
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
 
     <script src="js/dashboard.js"></script>
+
+    <script>
+        // Membuat chart menggunakan data dari PHP
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: <?php echo json_encode($fullLabels); ?>,
+                datasets: [{
+                    label: 'Keuntungan',
+                    data: <?php echo json_encode($fullData); ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+    </script>
   </body>
 </html>

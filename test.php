@@ -1,87 +1,121 @@
-<?php
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chart Penjualan</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <form method="GET" action="">
+        <label for="year">Pilih Tahun:</label>
+        <select name="year" id="year">
+            <?php
+            $currentYear = date('Y');
+            for ($i = $currentYear; $i >= 2000; $i--) {
+                echo "<option value='$i'>$i</option>";
+            }
+            ?>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
 
-	$servername = "localhost"; // ganti dengan nama server database Anda
-	$username = "root"; // ganti dengan username database Anda
-	$password = ""; // ganti dengan password database Anda
-	$dbname = "toko_sararaholijaya"; // ganti dengan nama database Anda
+    <canvas id="myChart"></canvas>
 
-	// Membuat koneksi
-	$conn = new mysqli($servername, $username, $password, $dbname);
+    <?php
+    // Koneksi ke database
+    $host = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "toko_sararaholijaya";
 
-// Langkah-langkah sebelumnya untuk menghubungkan ke database
-
-// Mengambil data dari tabel data_barang
-$query = "SELECT kode_barang, nama_barang, kategori FROM data_barang";
-$result = mysqli_query($conn, $query);
-
-
-// Form submit
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Menyimpan data dari form
-    $nama_pembeli = $_POST['nama_pembeli'];
-    $tanggal_penjualan = $_POST['tanggal_penjualan'];
-    $jumlah_jual = $_POST['jumlah_jual'];
-    $harga_jual = $_POST['harga_jual'];
-    $kode_barang = $_POST['kode_barang'];
-
-    // Mengambil informasi barang dari tabel data_barang
-    $select_barang_query = "SELECT nama_barang, kategori FROM data_barang WHERE kode_barang = '$kode_barang'";
-    $select_barang_result = mysqli_query($conn, $select_barang_query);
-
-    $barang = mysqli_fetch_assoc($select_barang_result);
-    $nama_barang = $barang['nama_barang'];
-    $kategori = $barang['kategori'];
-
-    // Memasukkan data ke tabel penjualan
-    $insert_query = "INSERT INTO penjualan (id_penjualan, nama_pembeli, tanggal_penjualan, jumlah_jual, harga_jual, kode_barang, nama_barang, kategori) VALUES ('','$nama_pembeli', '$tanggal_penjualan', $jumlah_jual, $harga_jual, '$kode_barang', '$nama_barang', '$kategori')";
-    $insert_result = mysqli_query($conn, $insert_query);
-
-
-    echo 'Data penjualan berhasil dimasukkan.';
-
-    // Menampilkan data penjualan terakhir
-    $last_insert_id = mysqli_insert_id($conn);
-    $select_query = "SELECT * FROM penjualan WHERE id_penjualan = $last_insert_id";
-    $select_result = mysqli_query($conn, $select_query);
-    if (!$select_result) {
-        die('Error: ' . mysqli_error($conn));
+    $conn = mysqli_connect($host, $username, $password, $database);
+    if (!$conn) {
+        die("Koneksi database gagal: " . mysqli_connect_error());
     }
 
-    $row = mysqli_fetch_assoc($select_result);
-    echo 'Data penjualan terakhir:';
-    echo '<br>Nama Pembeli: ' . $row['nama_pembeli'];
-    echo '<br>Tanggal Penjualan: ' . $row['tanggal_penjualan'];
-    echo '<br>Jumlah Jual: ' . $row['jumlah_jual'];
-    echo '<br>Harga Jual: ' . $row['harga_jual'];
-    echo '<br>Kode Barang: ' . $row['kode_barang'];
-    echo '<br>Nama Barang: ' . $row['nama_barang'];
-    echo '<br>Kategori: ' . $row['kategori'];
+    // Mendapatkan tahun yang dipilih
+    $selectedYear = date('Y');
+    if (isset($_GET['year'])) {
+        $selectedYear = $_GET['year'];
+    }
 
+    // Query untuk mendapatkan data penjualan dengan harga jual dan harga modal berdasarkan tahun yang dipilih
+    $sql = "SELECT DATE_FORMAT(p.tanggal_penjualan, '%m') AS bulan, SUM(p.jumlah_jual * p.harga_jual) - SUM(p.jumlah_jual * b.harga_modal) AS keuntungan, b.nama_barang FROM penjualan p INNER JOIN data_barang b ON p.kode_barang = b.kode_barang WHERE YEAR(p.tanggal_penjualan) = $selectedYear GROUP BY bulan, b.nama_barang";
+    $result = mysqli_query($conn, $sql);
+
+    // Inisialisasi array untuk menyimpan data
+    $labels = array();
+    $data = array();
+    $soldItems = array();
+
+    // Memproses hasil query
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $monthNumber = $row['bulan'];
+            $monthName = date("F", mktime(0, 0, 0, $monthNumber, 10));
+            $labels[] = $monthName;
+            $data[] = $row['keuntungan'];
+
+            $itemName = $row['nama_barang'];
+            if (!isset($soldItems[$monthName])) {
+                $soldItems[$monthName] = array();
+            }
+            $soldItems[$monthName][] = $itemName;
+        }
+    }
+
+    // Mengisi array dengan nama bulan yang hilang
+    $fullLabels = array();
+    $fullData = array();
+    for ($i = 1; $i <= 12; $i++) {
+        $monthName = date("F", mktime(0, 0, 0, $i, 10));
+        $fullLabels[] = $monthName;
+        $key = array_search($monthName, $labels);
+        if ($key !== false) {
+            $fullData[] = $data[$key];
+        } else {
+            $fullData[] = 0;
+        }
+    }
+
+    // Tutup koneksi database
     mysqli_close($conn);
-}
-?>
+    ?>
 
-<!-- Form input data penjualan -->
-<form method="POST" action="">
-    <label for="nama_pembeli">Nama Pembeli:</label>
-    <input type="text" name="nama_pembeli" id="nama_pembeli" required>
+    <script>
+        // Membuat chart menggunakan data dari PHP
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: <?php echo json_encode($fullLabels); ?>,
+                datasets: [{
+                    label: 'Keuntungan',
+                    data: <?php echo json_encode($fullData); ?>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
 
-    <label for="tanggal_penjualan">Tanggal Penjualan:</label>
-    <input type="date" name="tanggal_penjualan" id="tanggal_penjualan" required>
+        // Menampilkan daftar barang yang terjual
+        var soldItemsContainer = document.createElement('div');
+        soldItemsContainer.innerHTML = '<h3>Barang Terjual:</h3>';
 
-    <label for="jumlah_jual">Jumlah Jual:</label>
-    <input type="number" name="jumlah_jual" id="jumlah_jual" required>
+        <?php
+        foreach ($soldItems as $month => $items) {
+            echo "soldItemsContainer.innerHTML += '<p><strong>$month:</strong> " . implode(", ", $items) . "</p>';";
+        }
+        ?>
 
-    <label for="harga_jual">Harga Jual:</label>
-    <input type="number" name="harga_jual" id="harga_jual" required>
-
-    <label for="kode_barang">Kode Barang </label>
-    <select name="kode_barang" id="kode_barang">
-        <?php while ($row = mysqli_fetch_assoc($result)) : ?>
-            <option value="<?php echo $row['kode_barang']; ?>"><?php echo $row['kode_barang']; ?></option>
-        <?php endwhile; ?>
-    </select>
-
-    <input type="submit" value="Simpan">
-</form>
-
+        document.body.appendChild(soldItemsContainer);
+    </script>
+</body>
+</html>
