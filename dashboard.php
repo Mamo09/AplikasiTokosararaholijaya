@@ -187,6 +187,7 @@ require 'login.php';
     <script src="js/dashboard.js"></script>
 
     <script>
+        feather.replace({ 'aria-hidden': 'true' })
         // Membuat chart menggunakan data dari PHP
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {

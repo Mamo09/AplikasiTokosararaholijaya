@@ -238,10 +238,12 @@ if (isset($_GET['id_penjualan'])) {
     <script src="js/dashboard.js"></script>
 
     <script>
+      feather.replace({ 'aria-hidden': 'true' })
       $('#datepicker').datepicker({
             uiLibrary: 'bootstrap5'
         });
     </script>
+
   </body>
 
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
