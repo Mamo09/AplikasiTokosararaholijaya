@@ -3,7 +3,23 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
-$datapenjualan = query("SELECT * FROM penjualan");
+$datapenjualan = query("SELECT * FROM penjualan ORDER BY tanggal_penjualan DESC");
+
+if (isset($_POST["cari"])) {
+    $keyword = $_POST['keyword'];
+    $tanggalFilter = $_POST['tanggal'];
+    $sort = $_POST['sort'];
+
+    if ($keyword != '') {
+        $datapenjualan = caripenjualan($keyword, $tanggalFilter, $sort);
+    } else {
+        // Menampilkan semua data jika hanya ada filter tanggal
+        $datapenjualan = caripenjualan('', $tanggalFilter, $sort);
+    }
+} else {
+    // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
+    $datapenjualan = query("SELECT * FROM penjualan");
+}
 
 if (isset($_POST['addpenjualan'])) {
 
@@ -113,7 +129,6 @@ if (isset($_GET['id_penjualan'])) {
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
   <div class="navbar-nav">
     <div class="nav-item text-nowrap">
       <a class="nav-link px-3" href="logout.php">Sign out</a>
@@ -181,7 +196,34 @@ if (isset($_GET['id_penjualan'])) {
         </div>
       </div>
 
-      
+
+      <form method="post">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" autofocus placeholder="Cari" autocomplete="off" name="keyword">
+            </div>
+            <div class="col">
+              <input type="date" class="form-control" name="tanggal">
+            </div>
+            <div class="col">
+              <select id="sort" name="sort" class="form-control">
+                <option value="ASC">
+                  <span data-feather="arrow-down">ASC</span>
+                </option>
+                <option value="DESC">
+                  <span data-feather="arrow-up">DESC</span>
+                </option>
+              </select>
+            </div>
+            <div class="col">
+              <button class="btn btn-outline-secondary" type="submit" name="cari" >Cari</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    <div class="container">  
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -200,6 +242,7 @@ if (isset($_GET['id_penjualan'])) {
             <form method="post">
             <?php $i=1; ?>
             <?php foreach($datapenjualan as $row): ?>
+
             <tr>
               <td><?= $i;  ?></td>
               <td> <?= $row["nama_pembeli"];  ?></td>
@@ -226,6 +269,7 @@ if (isset($_GET['id_penjualan'])) {
           </tbody>
         </table>
       </div>
+     </div> 
     </main>
   </div>
 </div>

@@ -317,8 +317,47 @@ function hapuspembelian($id_pembelian){
 	return mysqli_affected_rows($conn);
 }
 
+//untuk melakukan pencarian
+function caripenjualan($keyword, $tanggalFilter, $sort){
+    $query = "SELECT * FROM penjualan
+                WHERE (nama_barang LIKE '%$keyword%' OR
+                nama_pembeli LIKE '%$keyword%' OR
+                kategori LIKE '%$keyword%')
+                ";
 
+    if ($tanggalFilter != '') {
+        $query .= "AND tanggal_penjualan = '$tanggalFilter'";
+    }
 
+    $query .= " ORDER BY tanggal_penjualan $sort";
+
+    return query($query);
+}
+
+function caribarang($keywordbarang){
+    $query = "SELECT * FROM data_barang
+                WHERE nama_barang LIKE '%$keywordbarang%' OR
+                kode_barang LIKE '%$keywordbarang%' OR
+                kategori LIKE '%$keywordbarang%'
+                ";
+
+    return query($query);
+}
+
+function caripembelian($keyword, $tanggalFilter, $sort){
+    $query = "SELECT * FROM pembelian
+                WHERE (kode_barang LIKE '%$keyword%' OR
+                nama_barang LIKE '%$keyword%')
+                ";
+
+    if ($tanggalFilter != '') {
+        $query .= "AND tanggal_pembelian = '$tanggalFilter'";
+    }
+
+    $query .= " ORDER BY tanggal_pembelian $sort";
+
+    return query($query);
+}
 
  ?>
 

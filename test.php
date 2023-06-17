@@ -18,12 +18,13 @@ require_once('tcpdf/tcpdf.php');
     }
 
 
+
 // Mendapatkan data penjualan
 $sql = "SELECT * FROM penjualan";
 $result = mysqli_query($conn, $sql);
 
 // Formulir untuk memilih penjualan
-echo "<form method='post' action='cetak_faktur.php'>";
+echo "<form method='post' action='cetak_faktur.php' id='cetak-form'>";
 echo "<label for='penjualan'>Pilih Penjualan:</label>";
 echo "<select name='penjualan' id='penjualan'>";
 while ($row = mysqli_fetch_assoc($result)) {
@@ -32,6 +33,30 @@ while ($row = mysqli_fetch_assoc($result)) {
 echo "</select>";
 echo "<input type='submit' value='Cetak Faktur'>";
 echo "</form>";
-
-
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Filter Penjualan</title>
+</head>
+<body>
+    <h2>Filter Penjualan Berdasarkan Tanggal</h2>
+    <form method="POST" action="">
+        <label for="tanggal">Tanggal:</label>
+        <input type="date" id="tanggal" name="tanggal" required>
+        <button type="submit" name="submit">Filter</button>
+    </form>
+
+    <?php
+    // Menampilkan data penjualan yang telah difilter
+    if (isset($filteredPenjualan) && !empty($filteredPenjualan)) {
+        echo "<h3>Data Penjualan pada Tanggal $tanggalFilter:</h3>";
+        foreach ($filteredPenjualan as $penjualan) {
+            echo 'ID: ' . $penjualan['id'] . ', Tanggal: ' . $penjualan['tanggal'] . ', Nama Barang: ' . $penjualan['nama_barang'] . '<br>';
+        }
+    }
+    ?>
+
+</body>
+</html>

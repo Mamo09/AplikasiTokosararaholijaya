@@ -60,7 +60,8 @@ if (isset($_POST['penjualan'])) {
     // Output PDF
     $file_name = $penjualan['kode_barang'] . '_' . $penjualan['nama_pembeli'] . '_' . $penjualan['tanggal_penjualan'] . '.pdf';
     ob_end_clean(); // Membersihkan output sebelum menghasilkan PDF
-    $pdf->Output($file_name, 'D');
+    $pdf->Output($file_name, 'I');
     exit; // Menghentikan eksekusi script setelah menghasilkan PDF
+
 }
 ?>

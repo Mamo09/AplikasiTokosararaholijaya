@@ -6,6 +6,11 @@ require 'function.php';
 
 $databarang = query("SELECT * FROM data_barang");
 
+if (isset($_POST["caribarang"])) {
+    $databarang = caribarang($_POST["keywordbarang"]);
+}
+
+
 if (isset($_POST['adddatabarang'])) {
   if (addbarang($_POST) > 0) {
     echo "
@@ -97,7 +102,7 @@ if (isset($_POST['updatebarang'])) {
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    
     <div class="navbar-nav">
       <div class="nav-item text-nowrap">
         <a class="nav-link px-3" href="logout.php">Sign out</a>
@@ -161,6 +166,21 @@ if (isset($_POST['updatebarang'])) {
             </button>
           </div>
         </div>
+
+      <form method="post">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" autofocus placeholder="Cari" name="keywordbarang" autocomplete="off">
+            </div>
+            <div class="col">
+              <button class="btn btn-outline-secondary" type="submit" name="caribarang" >Cari</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="container">
         <div class="table-responsive">
           <table class="table table-striped table-sm">
             <thead>
@@ -197,6 +217,7 @@ if (isset($_POST['updatebarang'])) {
             </tbody>
           </table>
         </div>
+      </div>
       </main>
     </div>
   </div>
