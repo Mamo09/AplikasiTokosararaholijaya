@@ -3,8 +3,16 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
+//pagination
+$jumlahdataperhalaman = 2;
+$jumlahdata = count(query("SELECT * FROM data_barang"));
+$jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
+$halamanaktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
+$awaldata = ($jumlahdataperhalaman * $halamanaktif) - $jumlahdataperhalaman;
 
-$databarang = query("SELECT * FROM data_barang");
+$databarang = query("SELECT * FROM data_barang LIMIT $awaldata, $jumlahdataperhalaman");
+
+
 
 if (isset($_POST["caribarang"])) {
     $databarang = caribarang($_POST["keywordbarang"]);
@@ -180,7 +188,7 @@ if (isset($_POST['updatebarang'])) {
         </div>
       </form>
 
-      <div class="container">
+      <div class="container" style="height: 350px;">
         <div class="table-responsive">
           <table class="table table-striped table-sm">
             <thead>
@@ -217,6 +225,50 @@ if (isset($_POST['updatebarang'])) {
             </tbody>
           </table>
         </div>
+      </div>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <?php if ($halamanaktif > 1): ?>
+              <li class="page-item">
+                <a class="page-link" href="?page=<?= $halamanaktif - 1; ?>">&laquo;</a>
+              </li>
+            <?php else: ?>
+              <li class="page-item disabled">
+                <span class="page-link">&laquo;</span>
+              </li>
+            <?php endif; ?>
+
+            <?php
+            $awalHalaman = max(1, $halamanaktif - 1);
+            $akhirHalaman = min($awalHalaman + 2, $jumlahhalaman);
+
+            if ($akhirHalaman - $awalHalaman < 2) {
+              $awalHalaman = max(1, $akhirHalaman - 2);
+            }
+
+            for ($i = $awalHalaman; $i <= $akhirHalaman; $i++) {
+              if ($i == $halamanaktif) {
+                echo "<li class='page-item active'><a class='page-link' href='?page=$i'>$i</a></li>";
+              } else {
+                echo "<li class='page-item'><a class='page-link' href='?page=$i'>$i</a></li>";
+              }
+            }
+            ?>
+
+            <?php if ($halamanaktif < $jumlahhalaman): ?>
+              <li class="page-item">
+                <a class="page-link" href="?page=<?= $halamanaktif + 1; ?>">&raquo;</a>
+              </li>
+            <?php else: ?>
+              <li class="page-item disabled">
+                <span class="page-link">&raquo;</span>
+              </li>
+            <?php endif; ?>
+          </ul>
+        </nav>
+
+
       </div>
       </main>
     </div>

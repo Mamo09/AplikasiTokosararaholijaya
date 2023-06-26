@@ -3,22 +3,43 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
-$datapenjualan = query("SELECT * FROM penjualan ORDER BY tanggal_penjualan DESC");
+// Variabel-variabel pagination
+$jumlahdataperhalaman = 10;
+$halamanaktif = isset($_GET["page"]) ? $_GET["page"] : 1;
+$awaldata = ($halamanaktif - 1) * $jumlahdataperhalaman;
+
+// Variabel-variabel pencarian
+$keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
+$tanggalFilter = isset($_POST['tanggal']) ? $_POST['tanggal'] : '';
 
 if (isset($_POST["cari"])) {
-    $keyword = $_POST['keyword'];
-    $tanggalFilter = $_POST['tanggal'];
-    $sort = $_POST['sort'];
-
     if ($keyword != '') {
-        $datapenjualan = caripenjualan($keyword, $tanggalFilter, $sort);
+        $datapenjualan = caripenjualan($keyword, $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
+        $jumlahdata = count($datapenjualan);
+        $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
     } else {
         // Menampilkan semua data jika hanya ada filter tanggal
-        $datapenjualan = caripenjualan('', $tanggalFilter, $sort);
+        $datapenjualan = caripenjualan('', $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
+        $jumlahdata = count($datapenjualan);
+        $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
     }
 } else {
     // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
-    $datapenjualan = query("SELECT * FROM penjualan");
+    $jumlahdata = count(query("SELECT * FROM penjualan"));
+    $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
+}
+
+// Mendapatkan data penjualan sesuai dengan halaman aktif dan pencarian
+if (isset($_POST["cari"])) {
+    if ($keyword != '') {
+        $datapenjualan = caripenjualan($keyword, $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
+    } else {
+        // Menampilkan semua data jika hanya ada filter tanggal
+        $datapenjualan = caripenjualan('', $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
+    }
+} else {
+    // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
+    $datapenjualan = query("SELECT * FROM penjualan LIMIT $awaldata, $jumlahdataperhalaman");
 }
 
 if (isset($_POST['addpenjualan'])) {
@@ -76,6 +97,7 @@ if (isset($_GET['id_penjualan'])) {
         ";
     }
 }
+
 ?>
 
 
@@ -91,13 +113,70 @@ if (isset($_GET['id_penjualan'])) {
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
-     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    $(document).ready(function() {
+      // Fungsi untuk mengirim permintaan pencarian dan memperbarui tabel penjualan
+      function searchPenjualan(searchText, searchDate) {
+        $.ajax({
+          url: 'search_cetak_penjualan.php',
+          type: 'POST',
+          data: { search: searchText, date: searchDate },
+          success: function(response) {
+            $('#penjualan-table').html(response);
+          }
+        });
+      }
+
+      // Membuka modal saat tombol "Cetak Faktur" diklik
+      $('#cetak-btn').on('click', function() {
+        $('#myModal').modal('show');
+      });
+
+      // Event listener untuk tombol "Cetak Faktur" di dalam modal
+      $('#myModal').on('submit', '#cetak-form', function(event) {
+        event.preventDefault(); // Mencegah form melakukan submit default
+
+        var selectedItems = [];
+        $('#penjualan-table input:checked').each(function() {
+          selectedItems.push($(this).val());
+        });
+
+        // Mengirim permintaan cetak faktur ke cetak_faktur.php
+        $.ajax({
+          url: 'cetak_faktur.php',
+          type: 'POST',
+          data: { penjualan: selectedItems },
+          success: function(response) {
+            // Menampilkan hasil cetak faktur di sini
+            console.log(response);
+          }
+        });
+      });
+
+  // Event listener untuk kotak pencarian di dalam modal
+  $('#myModal').on('keyup', '#search-modal', function() {
+    var searchText = $(this).val();
+    var searchDate = $('#search-date').val();
+    searchPenjualan(searchText, searchDate);
+  });
+
+  // Event listener untuk pemilihan tanggal di dalam modal
+  $('#myModal').on('change', '#search-date', function() {
+    var searchText = $('#search-modal').val();
+    var searchDate = $(this).val();
+    searchPenjualan(searchText, searchDate);
+  });
+    });
+  </script>
+
     <!-- Bootstrap core CSS -->
-<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -207,23 +286,13 @@ if (isset($_GET['id_penjualan'])) {
               <input type="date" class="form-control" name="tanggal">
             </div>
             <div class="col">
-              <select id="sort" name="sort" class="form-control">
-                <option value="ASC">
-                  <span data-feather="arrow-down">ASC</span>
-                </option>
-                <option value="DESC">
-                  <span data-feather="arrow-up">DESC</span>
-                </option>
-              </select>
-            </div>
-            <div class="col">
               <button class="btn btn-outline-secondary" type="submit" name="cari" >Cari</button>
             </div>
           </div>
         </div>
       </form>
 
-    <div class="container">  
+    <div class="container" style="height: 350px;">  
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
@@ -270,6 +339,54 @@ if (isset($_GET['id_penjualan'])) {
         </table>
       </div>
      </div> 
+
+     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <?php if ($halamanaktif > 1): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?= $halamanaktif - 1; ?>">&laquo;</a>
+                    </li>
+                <?php else: ?>
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                <?php endif; ?>
+
+                <?php
+                $awalHalaman = max(1, $halamanaktif - 1);
+                $akhirHalaman = min($awalHalaman + 2, $jumlahhalaman);
+
+                if ($akhirHalaman - $awalHalaman < 2) {
+                    $awalHalaman = max(1, $akhirHalaman - 2);
+                }
+
+                for ($i = $awalHalaman; $i <= $akhirHalaman; $i++) {
+                    if ($i == $halamanaktif) {
+                        echo "<li class='page-item active'><a class='page-link' href='?page=$i'>$i</a></li>";
+                    } else {
+                        echo "<li class='page-item'><a class='page-link' href='?page=$i'>$i</a></li>";
+                    }
+                }
+                ?>
+
+                <?php if ($halamanaktif < $jumlahhalaman): ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?= $halamanaktif + 1; ?>">&raquo;</a>
+                    </li>
+                <?php else: ?>
+                    <li class="page-item disabled">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
+      </div>
+      <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group me-2">
+            <button type="button" id="cetak-btn">Print</button>
+          </div>
+      </div>
     </main>
   </div>
 </div>
@@ -419,4 +536,39 @@ if (isset($_GET['id_penjualan'])) {
         </div>
     </div>
 <?php endforeach; ?>
+
+
+
+<div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+
+          <div class="modal-content">
+
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cetak Faktur</h5>
+                <button type="button" class="btn-sm btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+
+                <div class="modal-body" id="modal-body">
+                  <input type="text" id="search-modal" placeholder="Cari penjualan...">
+                  <input type="date" id="search-date">
+                  <table class="table">
+                    <tr>
+                      <th>Nama Pembeli</th>
+                      <th>Kode Barang</th>
+                      <th>Nama Barang</th>
+                      <th>Tanggal Penjualan</th>
+                      <th>Pilih</th>
+                    </tr>
+                    <tbody id="penjualan-table">
+                      <!-- Tabel penjualan akan diperbarui dengan hasil pencarian -->
+                    </tbody>
+                  </table>
+              </div>
+              <div class="modal-footer">
+                  <button type="submit" class="btn btn-sm btn-outline-primary" value="Cetak Faktur" id='cetak-faktur'>Cetak Faktur</button>
+              </div>       
+          </div>
+        </div>
+    </div>
 </html>

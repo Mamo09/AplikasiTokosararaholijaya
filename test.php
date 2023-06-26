@@ -26,7 +26,7 @@ $result = mysqli_query($conn, $sql);
 // Formulir untuk memilih penjualan
 echo "<form method='post' action='cetak_faktur.php' id='cetak-form'>";
 echo "<label for='penjualan'>Pilih Penjualan:</label>";
-echo "<select name='penjualan' id='penjualan'>";
+echo "<select name='penjualan[]' id='penjualan' multiple>";
 while ($row = mysqli_fetch_assoc($result)) {
     echo "<option value='" . $row['id_penjualan'] . "'>" . $row['id_penjualan'] . "</option>";
 }
