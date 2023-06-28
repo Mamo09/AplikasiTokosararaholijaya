@@ -61,23 +61,27 @@ if (isset($_POST['addpenjualan'])) {
   }
 }
 
-if (isset($_POST['editpenjualan'])) {
 
-  if(editpenjualan($_POST) > 0){
-    echo "  <script>
-          alert('data Berhasil diubah');
-          window.location='penjualan.php';
-        </script>
-    ";
-    
-  } else {
-    echo "  <script>
-          alert('data gagal diubah');
-          window.location='penjualan.php';
-        </script>
-    ";
-  }
+if (isset($_POST['editpenjualan'])) {
+    $result = editpenjualan($_POST);
+    if ($result > 0) {
+        echo "<script>
+            alert('Data berhasil diubah');
+            window.location='penjualan.php';
+        </script>";
+    } else if ($result === -1) {
+        echo "<script>
+            alert('Gagal mengubah data. Terjadi kesalahan pada query.');
+            window.location='penjualan.php';
+        </script>";
+    } else {
+        echo "<script>
+            alert('Gagal mengubah data. Tidak ada baris yang terpengaruh.');
+            window.location='penjualan.php';
+        </script>";
+    }
 }
+
 
 if (isset($_GET['id_penjualan'])) {
     $id_penjualan = $_GET['id_penjualan'];
@@ -120,6 +124,7 @@ if (isset($_GET['id_penjualan'])) {
     <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <script>
   $(document).ready(function() {
     // Fungsi untuk mengirim permintaan pencarian dan memperbarui tabel penjualan
