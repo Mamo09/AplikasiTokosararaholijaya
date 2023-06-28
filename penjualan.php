@@ -3,6 +3,7 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
+
 // Variabel-variabel pagination
 $jumlahdataperhalaman = 10;
 $halamanaktif = isset($_GET["page"]) ? $_GET["page"] : 1;

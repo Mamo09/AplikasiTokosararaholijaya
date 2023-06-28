@@ -34,7 +34,7 @@ if (isset($_POST['addpembelian'])) {
   } else {
     echo "  <script>
           alert('data gagal ditambahkan');
-          indow.location='pembelian.php';
+          window.location='pembelian.php';
         </script>
     ";
   }
@@ -45,14 +45,14 @@ if (isset($_POST['editpembelian'])) {
   if(editpembelian($_POST) > 0){
       echo "  <script>
           alert('data Berhasil diubah');
-          indow.location='pembelian.php';
+          window.location='pembelian.php';
         </script>
     ";
     
   } else {
     echo "  <script>
           alert('data gagal diubah');
-          indow.location='pembelian.php';
+          window.location='pembelian.php';
         </script>
     ";
   }
@@ -65,14 +65,14 @@ if (isset($_GET['id_pembelian'])) {
 
       echo "<script>
           alert('data berhasil dihapus');
-          indow.location='pembelian.php';
+          window.location='pembelian.php';
         </script>  
         ";
         
     } else {
       echo " <script>
           alert('data gagal dihapus');
-          indow.location='pembelian.php';
+          window.location='pembelian.php';
         </script>  
         ";
     }
