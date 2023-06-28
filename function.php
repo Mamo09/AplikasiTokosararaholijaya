@@ -145,11 +145,11 @@ function editpenjualan($data){
     $result = mysqli_query($conn, $query);
 
     $id_penjualan = $data["id_penjualan"];
-    $kode_barang = htmlspecialchars($data["kode_barang"]);
-    $nama_pembeli = htmlspecialchars($data["nama_pembeli"]);
-    $tanggal_penjualan = htmlspecialchars($data["tanggal_penjualan"]);
-    $jumlah_jual = htmlspecialchars($data["jumlah_jual"]);
-    $harga_jual = htmlspecialchars($data["harga_jual"]);
+    $kode_barang = $data["kode_barang"];
+    $nama_pembeli = $data["nama_pembeli"];
+    $tanggal_penjualan = $data["tanggal_penjualan"];
+    $jumlah_jual = $data["jumlah_jual"];
+    $harga_jual = $data["harga_jual"];
 
     $select_barang_query = "SELECT nama_barang, kategori FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
@@ -195,6 +195,7 @@ function editpenjualan($data){
     } else {
         return -1;
     }
+
 }
 
 // Hapus data penjualan
