@@ -72,7 +72,7 @@ if (isset($_POST['editpenjualan'])) {
   } else {
     echo "  <script>
           alert('data gagal diubah');
-          indow.location='penjualan.php';
+          window.location='penjualan.php';
         </script>
     ";
   }
