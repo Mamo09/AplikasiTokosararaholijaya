@@ -63,11 +63,17 @@ if (isset($_GET['id_pembelian'])) {
 
     if(hapuspembelian($id_pembelian) > 0){
 
-      echo "  
+      echo "<script>
+          alert('data berhasil dihapus');
+          indow.location='pembelian.php';
+        </script>  
         ";
         
     } else {
-      echo "  
+      echo " <script>
+          alert('data gagal dihapus');
+          indow.location='pembelian.php';
+        </script>  
         ";
     }
 }

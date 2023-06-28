@@ -118,62 +118,60 @@ if (isset($_GET['id_penjualan'])) {
     <script src="https://unpkg.com/gijgo@1.9.14/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.14/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-    $(document).ready(function() {
-      // Fungsi untuk mengirim permintaan pencarian dan memperbarui tabel penjualan
-      function searchPenjualan(searchText, searchDate) {
-        $.ajax({
-          url: 'search_cetak_penjualan.php',
-          type: 'POST',
-          data: { search: searchText, date: searchDate },
-          success: function(response) {
-            $('#penjualan-table').html(response);
-          }
-        });
-      }
-
-      // Membuka modal saat tombol "Cetak Faktur" diklik
-      $('#cetak-btn').on('click', function() {
-        $('#myModal').modal('show');
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Fungsi untuk mengirim permintaan pencarian dan memperbarui tabel penjualan
+    function searchPenjualan(searchText, searchDate) {
+      $.ajax({
+        url: 'search_cetak_penjualan.php',
+        type: 'POST',
+        data: { search: searchText, date: searchDate },
+        success: function(response) {
+          $('#penjualan-table').html(response);
+        }
       });
+    }
 
-      // Event listener untuk tombol "Cetak Faktur" di dalam modal
-      $('#myModal').on('submit', '#cetak-form', function(event) {
-        event.preventDefault(); // Mencegah form melakukan submit default
-
-        var selectedItems = [];
-        $('#penjualan-table input:checked').each(function() {
-          selectedItems.push($(this).val());
-        });
-
-        // Mengirim permintaan cetak faktur ke cetak_faktur.php
-        $.ajax({
-          url: 'cetak_faktur.php',
-          type: 'POST',
-          data: { penjualan: selectedItems },
-          success: function(response) {
-            // Menampilkan hasil cetak faktur di sini
-            console.log(response);
-          }
-        });
-      });
-
-  // Event listener untuk kotak pencarian di dalam modal
-  $('#myModal').on('keyup', '#search-modal', function() {
-    var searchText = $(this).val();
-    var searchDate = $('#search-date').val();
-    searchPenjualan(searchText, searchDate);
-  });
-
-  // Event listener untuk pemilihan tanggal di dalam modal
-  $('#myModal').on('change', '#search-date', function() {
-    var searchText = $('#search-modal').val();
-    var searchDate = $(this).val();
-    searchPenjualan(searchText, searchDate);
-  });
+    // Membuka modal saat tombol "Cetak Faktur" diklik
+    $('#cetak-btn').on('click', function() {
+      $('#myModal').modal('show');
     });
-  </script>
+
+    // Event listener untuk tombol "Cetak Faktur" di dalam modal
+    $('#myModal').on('click', '#cetak-faktur', function() {
+      var selectedItems = [];
+      $('#penjualan-table input:checked').each(function() {
+        selectedItems.push($(this).val());
+      });
+
+      // Mengirim permintaan cetak faktur ke cetak_faktur.php
+      $.ajax({
+        url: 'cetak_faktur.php',
+        type: 'POST',
+        data: { penjualan: selectedItems },
+        success: function(response) {
+          // Menampilkan hasil cetak faktur di sini
+          console.log(response);
+        }
+      });
+    });
+
+    // Event listener untuk kotak pencarian di dalam modal
+    $('#myModal').on('keyup', '#search-modal', function() {
+      var searchText = $(this).val();
+      var searchDate = $('#search-date').val();
+      searchPenjualan(searchText, searchDate);
+    });
+
+    // Event listener untuk pemilihan tanggal di dalam modal
+    $('#myModal').on('change', '#search-date', function() {
+      var searchText = $('#search-modal').val();
+      var searchDate = $(this).val();
+      searchPenjualan(searchText, searchDate);
+    });
+  });
+</script>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -565,7 +563,7 @@ if (isset($_GET['id_penjualan'])) {
                   </table>
               </div>
               <div class="modal-footer">
-                  <button type="submit" class="btn btn-sm btn-outline-primary" value="Cetak Faktur" id='cetak-faktur'>Cetak Faktur</button>
+                  <button type="submit" class="btn btn-sm btn-outline-primary" id='cetak-faktur'>Cetak Faktur</button>
               </div>       
           </div>
         </div>
