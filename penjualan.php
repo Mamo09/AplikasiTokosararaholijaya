@@ -538,7 +538,6 @@ if (isset($_GET['id_penjualan'])) {
 <?php endforeach; ?>
 
 
-
 <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
 

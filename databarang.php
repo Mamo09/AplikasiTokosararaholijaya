@@ -4,7 +4,7 @@ require 'login.php';
 require 'function.php';
 
 //pagination
-$jumlahdataperhalaman = 2;
+$jumlahdataperhalaman = 10;
 $jumlahdata = count(query("SELECT * FROM data_barang"));
 $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
 $halamanaktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
