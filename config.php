@@ -1,6 +1,9 @@
 <?php
 
-session_start();
+if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
 	
 	$servername = "localhost"; // ganti dengan nama server database Anda
 	$username = "root"; // ganti dengan username database Anda

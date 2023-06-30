@@ -61,7 +61,7 @@
           <input type="password" name="password" placeholder="Password" />
           <button type= "submit" name="login">Login</button>
           <p>
-            <a href="register.html">Reset Password</a>
+            <a href="reset_password.php">Reset Password</a>
           </p>
         </form>
       </div>
