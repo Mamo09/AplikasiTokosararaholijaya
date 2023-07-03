@@ -11,15 +11,15 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($cekdata) > 0) {
         $row = mysqli_fetch_assoc($cekdata);
         $storedPassword = $row['password'];
-        $userType = $row['user_type'];
+        $userType = $row['username'];
 
         // Verifikasi password
         if ($password === $storedPassword) {
             // Membuat session berdasarkan jenis pengguna
             if ($userType === 'admin') {
-                $_SESSION['user_type'] = 'admin';
+                $_SESSION['username'] = 'admin';
             } elseif ($userType === 'owner') {
-                $_SESSION['user_type'] = 'owner';
+                $_SESSION['username'] = 'owner';
             }
 
             $_SESSION['username'] = $username;
@@ -44,13 +44,12 @@ if (isset($_POST['login'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Login Toko Sararaholi Jaya</title>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Login Toko Sararaholi Jaya</title>
+    <link rel="stylesheet" href = "css/login.css">
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
