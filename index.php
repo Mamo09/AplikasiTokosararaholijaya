@@ -1,24 +1,38 @@
 <?php 
 	require 'config.php';
-	if(isset($_POST['login'])){
-		$username = $_POST['username'];
-		$password = $_POST['password'];
 
-		$cekdata = mysqli_query($conn, "SELECT * FROM user where username='$username' and password='$password'");
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-		$hitung = mysqli_num_rows($cekdata);
+    // Mengambil data pengguna dari database berdasarkan username
+    $cekdata = mysqli_query($conn, "SELECT * FROM user WHERE username='$username'");
 
-		if($hitung>0){
+    if (mysqli_num_rows($cekdata) > 0) {
+        $row = mysqli_fetch_assoc($cekdata);
+        $storedPassword = $row['password'];
+        $userType = $row['user_type'];
 
-			$_SESSION['log'] = 'true';
-			//header('location:dashboard.php');
-			echo '<script>alert("Login Sukses");window.location="dashboard.php"</script>';
-		}	else {
-			echo '<script>alert("Login Gagal");history.go(-1);</script>';
-		}
+        // Verifikasi password
+        if ($password === $storedPassword) {
+            // Membuat session berdasarkan jenis pengguna
+            if ($userType === 'admin') {
+                $_SESSION['user_type'] = 'admin';
+            } elseif ($userType === 'owner') {
+                $_SESSION['user_type'] = 'owner';
+            }
 
+            $_SESSION['username'] = $username;
+            $_SESSION['log'] = true;
 
-	}
+            echo '<script>alert("Login Sukses");window.location="dashboard.php"</script>';
+        } else {
+            echo '<script>alert("Login Gagal");history.go(-1);</script>';
+        }
+    } else {
+        echo '<script>alert("Login Gagal");history.go(-1);</script>';
+    }
+}
 
 	if(!isset($_SESSION['log'])){
 

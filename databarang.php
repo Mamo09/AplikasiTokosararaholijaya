@@ -111,11 +111,17 @@ if (isset($_POST['updatebarang'])) {
       <span class="navbar-toggler-icon"></span>
     </button>
     
-    <div class="navbar-nav">
-      <div class="nav-item text-nowrap">
-        <a class="nav-link px-3" href="logout.php">Sign out</a>
-      </div>
-    </div>
+<div class="btn-group" style="padding-right: 5px;">
+  <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Settings
+  </button>
+  <ul class="dropdown-menu dropdown-menu-lg-end">
+      <li><a class="dropdown-item" ><?php echo ucfirst($_SESSION['username']); ?></a></li>
+      <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="nav-link px-3" href="logout.php">Sign Out</a></li>
+  </ul>
+</div>
   </header>
   <div class="container-fluid">
     <div class="row">

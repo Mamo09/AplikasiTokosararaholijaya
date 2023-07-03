@@ -90,16 +90,24 @@ require 'login.php';
   <body>
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Toko Sararaholi Jaya</a>
+
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3">Toko Sararaholi Jaya</a>
   
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="navbar-nav">
-    <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="logout.php">Sign out</a>
-    </div>
-  </div>
+
+<div class="btn-group" style="padding-right: 5px;">
+  <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Settings
+  </button>
+  <ul class="dropdown-menu dropdown-menu-lg-end">
+      <li><a class="dropdown-item" ><?php echo ucfirst($_SESSION['username']); ?></a></li>
+      <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="nav-link px-3" href="logout.php">Sign Out</a></li>
+  </ul>
+</div>
 </header>
 
 <div class="container-fluid">
@@ -143,9 +151,7 @@ require 'login.php';
               Riwayat
             </a>
           </li>
-        </ul>
-
-        
+        </ul>   
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -157,7 +163,7 @@ require 'login.php';
               <select name="year" id="year" type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                 <?php
                 $currentYear = date('Y');
-                for ($i = $currentYear; $i >= 2000; $i--) {
+                for ($i = $currentYear; $i >= 2018; $i--) {
                     echo "<option value='$i'>$i</option>";
                 }
                 ?>

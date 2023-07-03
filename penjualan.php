@@ -59,6 +59,7 @@ if (isset($_POST['addpenjualan'])) {
         </script>
     ";
   }
+  catatRiwayat('Tambah', $data);
 }
 
 
@@ -66,12 +67,7 @@ if (isset($_POST['editpenjualan'])) {
     $result = editpenjualan($_POST);
     if ($result > 0) {
         echo "<script>
-            alert('Data berhasil diubah');
-            window.location='penjualan.php';
-        </script>";
-    } else if ($result === -1) {
-        echo "<script>
-            alert('Gagal mengubah data. Terjadi kesalahan pada query.');
+            alert('Data berhasil diubah.');
             window.location='penjualan.php';
         </script>";
     } else {
@@ -80,6 +76,7 @@ if (isset($_POST['editpenjualan'])) {
             window.location='penjualan.php';
         </script>";
     }
+    catatRiwayat('Edit', $data);
 }
 
 
@@ -101,6 +98,7 @@ if (isset($_GET['id_penjualan'])) {
             </script>
         ";
     }
+    catatRiwayat('Hapus', $data);
 }
 
 ?>
@@ -212,11 +210,17 @@ if (isset($_GET['id_penjualan'])) {
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="navbar-nav">
-    <div class="nav-item text-nowrap">
-      <a class="nav-link px-3" href="logout.php">Sign out</a>
-    </div>
-  </div>
+<div class="btn-group" style="padding-right: 5px;">
+  <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Settings
+  </button>
+  <ul class="dropdown-menu dropdown-menu-lg-end">
+      <li><a class="dropdown-item" ><?php echo ucfirst($_SESSION['username']); ?></a></li>
+      <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="nav-link px-3" href="logout.php">Sign Out</a></li>
+  </ul>
+</div>
 </header>
 
 <div class="container-fluid">

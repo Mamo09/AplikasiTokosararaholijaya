@@ -135,21 +135,21 @@ function addpenjualan($data){
         // Stok tidak mencukupi
         return -1;
     }
+    catatRiwayat('Tambah', $data);
 }
 
-// Edit data penjualan
-function editpenjualan($data){
+function editpenjualan($data) {
     global $conn;
 
     $query = "SELECT kode_barang, nama_barang, kategori FROM data_barang";
     $result = mysqli_query($conn, $query);
 
     $id_penjualan = $data["id_penjualan"];
-    $kode_barang = $data["kode_barang"];
-    $nama_pembeli = $data["nama_pembeli"];
-    $tanggal_penjualan = $data["tanggal_penjualan"];
-    $jumlah_jual = $data["jumlah_jual"];
-    $harga_jual = $data["harga_jual"];
+    $kode_barang = htmlspecialchars($data["kode_barang"]);
+    $nama_pembeli = htmlspecialchars($data["nama_pembeli"]);
+    $tanggal_penjualan = htmlspecialchars($data["tanggal_penjualan"]);
+    $jumlah_jual = htmlspecialchars($data["jumlah_jual"]);
+    $harga_jual = htmlspecialchars($data["harga_jual"]);
 
     $select_barang_query = "SELECT nama_barang, kategori FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
@@ -195,7 +195,7 @@ function editpenjualan($data){
     } else {
         return -1;
     }
-
+    catatRiwayat('Edit', $data);
 }
 
 // Hapus data penjualan
@@ -228,6 +228,7 @@ function hapuspenjualan($id_penjualan){
     } else {
         return -1;
     }
+    catatRiwayat('Hapus', $data);
 }
 
 
@@ -472,6 +473,41 @@ function caripembelian($keyword, $tanggalFilter, $sort){
 
     return query($query);
 }
+
+// Fungsi untuk mencatat riwayat perubahan data
+function catatRiwayat($action, $data) {
+    // Koneksi ke database
+    global $conn;
+
+    // Mengambil waktu saat ini
+    $tanggalRiwayat = date('Y-m-d H:i:s');
+
+    // Membuat deskripsi perubahan
+    $deskripsi = $action . " data pada tabel penjualan:\n";
+    $deskripsi .= "ID Penjualan: " . $data['id_penjualan'] . "\n";
+    $deskripsi .= "Kode Barang: " . $data['kode_barang'] . "\n";
+    $deskripsi .= "Nama Pembeli: " . $data['nama_pembeli'] . "\n";
+    $deskripsi .= "Nama Barang: " . $data['nama_barang'] . "\n";
+    $deskripsi .= "Kategori: " . $data['kategori'] . "\n";
+    $deskripsi .= "Tanggal Penjualan: " . $data['tanggal_penjualan'] . "\n";
+    $deskripsi .= "Jumlah Jual: " . $data['jumlah_jual'] . "\n";
+    $deskripsi .= "Harga Jual: " . $data['harga_jual'];
+
+    // Menyimpan riwayat perubahan ke tabel riwayat
+    $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
+    if (mysqli_query($conn, $sql)) {
+        echo "Riwayat perubahan berhasil dicatat";
+    } else {
+        echo "Terjadi kesalahan: " . mysqli_error($conn);
+    }
+}
+
+
+
+
+
+
+
 
  ?>
 
