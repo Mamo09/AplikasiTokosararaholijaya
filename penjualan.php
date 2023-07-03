@@ -72,7 +72,7 @@ if (isset($_POST['editpenjualan'])) {
         </script>";
     } else {
         echo "<script>
-            alert('Gagal mengubah data. Tidak ada baris yang terpengaruh.');
+            alert('Data gagal diubah');
             window.location='penjualan.php';
         </script>";
     }
