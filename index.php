@@ -49,30 +49,29 @@ if (isset($_POST['login'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Login Toko Sararaholi Jaya</title>
-    <link rel="stylesheet" href = "css/login.css">
+    <link rel="stylesheet" href = "css/loginn.css">
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-
-</head>
-<body class="bg-gradient-primary">
-    <div class="container">
-      <div class="login">
+<body>
+  <header>
+    <h1>Login</h1>
+  </header>
+  <div class="container">
+    <div class="form-container">
         <form action="" method="post">
-          <h1>Login</h1>
-          <hr />
-          <label for="">Username</label>
+          <label for="">Username:</label>
           <input type="text" name="username" placeholder="Username" />
-          <label for="">Password</label>
+          <label for="">Password:</label>
           <input type="password" name="password" placeholder="Password" />
           <button type= "submit" name="login">Login</button>
-          <p>
-            <a href="reset_password.php">Reset Password</a>
-          </p>
-        </form>
+        </form>   
       </div>
+
       <div class="right">
         <img src="img/logo.jpg" alt="" />
       </div>
     </div>
+    <p>
+            <a href="reset_password.php">Reset Password</a>
+          </p>
   </body>
 </html>
