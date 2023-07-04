@@ -56,20 +56,20 @@ if (isset($_POST['login'])) {
     <h1>Login</h1>
   </header>
   <div class="container">
-    <div class="form-container">
-        <form action="" method="post">
-          <label for="">Username:</label>
-          <input type="text" name="username" placeholder="Username" />
-          <label for="">Password:</label>
-          <input type="password" name="password" placeholder="Password" />
-          <button type= "submit" name="login">Login</button>
-        </form>   
-      </div>
+  <div class="form-container">
+    <form action="" method="post">
+      <label for="">Username:</label>
+      <input type="text" name="username" placeholder="Username" />
+      <label for="">Password:</label>
+      <input type="password" name="password" placeholder="Password" />
+      <button type="submit" name="login">Login</button>
+    </form>   
+  </div>
 
-      <div class="right">
-        <img src="img/logo.jpg" alt="" />
-      </div>
-    </div>
+  <div class="right">
+    <img src="img/logo.jpg" alt="" />
+  </div>
+</div>
     <p>
             <a href="reset_password.php">Reset Password</a>
           </p>

@@ -1,3 +1,11 @@
+body {
+  background-color: #fff;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  font-family: Inter;
+  font-style: normal;
+}
 * {
   margin: 0;
   padding: 0;
@@ -5,28 +13,30 @@
 }
 
 header {
+  width: 100%;
+  margin: 0 auto;
   text-align: center;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  background-color: #dcdcdc;
 }
 
 header h1 {
-  margin: 0;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: #333;
+  color: #000;
+  font-size: 30px;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .container {
+  background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 850px;
-  background: #fff;
+  border: 1px solid black;
   border-radius: 15px;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   margin-top: 200px;
   padding: 20px;
@@ -51,14 +61,14 @@ label {
 }
 
 input {
-  width: 100%;
+  width: 111%;
   padding: 8px;
   border-radius: 5px;
   border: 1px solid gray;
 }
 
 button {
-  width: 100%;
+  width: 340%;
   padding: 8px;
   color: #fff;
   font-size: 16px;
@@ -82,15 +92,16 @@ button:hover {
 .right {
   display: flex;
   align-items: flex-end;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .right img {
   flex: 1;
   width: 100%;
   height: auto;
-  max-width: 400px; /* Ubah ukuran sesuai kebutuhan */
-  max-height: 200px; /* Ubah ukuran sesuai kebutuhan */
+  max-width: 400px;
+  max-height: 200px;
   border-radius: 10%;
   object-fit: contain;
+  margin-right: 30px;
 }

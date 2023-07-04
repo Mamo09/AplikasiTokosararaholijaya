@@ -54,39 +54,38 @@ if (isset($_POST['reset'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password - Toko Sararaholi Jaya</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href = "css/login.css">
+    <link rel="stylesheet" href = "css/loginn.css">
     
 </head>
 <body>
-    <div class="container">
-        <div class="reset-password">
-            <form action="" method="post">
-                <h1>Reset Password</h1>
-                <hr />
-
-                <label for="username">Username</label>
+  <header>
+    <h1>Reset Password</h1>
+  </header>
+  <div class="container">
+  <div class="form-container">
+  <form action="" method="post">
+                <label for="username">Username :</label>
                 <input type="text" name="username" placeholder="Username" required />
 
-                <label for="last_password">Last Password</label>
+                <label for="last_password">Last Password :</label>
                 <input type="password" name="last_password" placeholder="Last Password" required />
 
-                <label for="new_password">New Password</label>
+                <label for="new_password">New Password :</label>
                 <input type="password" name="new_password" placeholder="New Password" required />
 
-                <label for="confirm_password">Confirm Password</label>
+                <label for="confirm_password">Confirm Password :</label>
                 <input type="password" name="confirm_password" placeholder="Confirm Password" required />
 
                 <button type="submit" name="reset">Reset Password</button>
-
-                <p>
-                    <a href="login.php">Back to Login</a>
-                </p>
             </form>
         </div>
         <div class="right">
         <img src="img/logo.jpg" alt="" />
       </div>
+  </div>
+      <p>
+                    <a href="login.php">Back to Login</a>
+                </p>
     </div>
 </body>
 </html>
