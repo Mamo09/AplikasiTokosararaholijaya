@@ -1,7 +1,29 @@
 <?php 
 require 'config.php';
 require 'login.php';
+require 'function.php';
 
+$datariwayat = query("SELECT * FROM riwayat ORDER BY id_riwayat DESC");
+
+if (isset($_GET['id_riwayat'])) {
+    $id_penjualan = $_GET['id_riwayat'];
+
+    if(hapuspenjualan($id_penjualan) > 0){
+      echo "  <script>
+              alert('data Berhasil dihapus');
+              window.location='penjualan.php';
+            </script>
+        ";
+        
+    } else {
+      echo "  <script>
+              alert('data Gagal dihapus');
+              window.location='penjualan.php';
+            </script>
+        ";
+    }
+
+}
 ?>
 
 <!doctype html>
@@ -129,28 +151,33 @@ require 'login.php';
           <thead>
             <tr>
               <th scope="col">No.</th>
-              <th scope="col">tanggal</th>
-              <th scope="col">Nama Barang</th>
-              <th scope="col">Harga Beli</th>
-              <th scope="col">jumlah</th>
-              <th scope="col">kwitansi</th>
+              <th scope="col">Tanggal</th>
+              <th scope="col">Deskripsi</th>
               <th scope="col">Aksi</th>
             </tr>
           </thead>
           <tbody>
+            <form method="post">
+            <?php $i=1; ?>
+            <?php foreach($datariwayat as $row): ?>
+
             <tr>
-	            <td>1</td>
-	            <td>random</td>
-	            <td>data</td>
-	            <td>placeholder</td>
-	            <td>text</td>
-	            <td>halo </td>
-	            <td>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Tambah</button>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-	              	<button type="button" class="btn btn-sm btn-outline-secondary">Hapus</button>
-	          	</td>
-       
+              <td><?= $i;  ?></td>
+              <td> <?= $row["tanggal_riwayat"];  ?></td>
+              <td> <?= $row["deskripsi"]; ?></td>
+
+              <td>
+                  <a>
+                    <span data-feather ="eye"></span>
+                  </a>
+                  <a href="?id_riwayat=<?= $row['id_riwayat']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapusriwayat">
+            <span data-feather="trash-2"></span></a>
+              </td>
+            </tr>
+            <?php $i++; ?>
+            <?php endforeach; ?>
+
+            </form>
           </tbody>
         </table>
       </div>
