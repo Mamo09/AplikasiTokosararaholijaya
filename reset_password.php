@@ -36,16 +36,6 @@ if (isset($_POST['reset'])) {
 }
 ?>
 
-<?php
-require 'config.php';
-
-if (isset($_POST['reset'])) {
-    // Kode reset password
-
-    // ...
-
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
