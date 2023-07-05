@@ -6,5 +6,4 @@ globals Chart:false
 
   feather.replace({ 'aria-hidden': 'true' })
 
-  
 })()

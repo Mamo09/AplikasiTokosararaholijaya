@@ -12,87 +12,120 @@ function query($query) {
 	return $rows;
 }
 
-//tambah data barang
 function addbarang($data){
-	global $conn;
+    global $conn;
 
-	$kode_barang = htmlspecialchars($data["kode_barang"]);
+    $kode_barang = htmlspecialchars($data["kode_barang"]);
     $nama_barang = htmlspecialchars($data["nama_barang"]);
     $kategori = htmlspecialchars($data["kategori"]);
     $harga_modal = htmlspecialchars($data["harga_modal"]);
     $harga_satuan = htmlspecialchars($data["harga_satuan"]);
 
-    $query = "INSERT INTO data_barang (kode_barang,nama_barang,kategori,harga_modal,harga_satuan)
-    			VALUES 
-    			('$kode_barang','$nama_barang','$kategori',$harga_modal,$harga_satuan)
-    			";
+    // Periksa apakah kode_barang sudah ada dalam tabel data_barang
+    $check_query = "SELECT kode_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $check_result = mysqli_query($conn, $check_query);
 
-    mysqli_query($conn, $query);
+    if (mysqli_num_rows($check_result) > 0) {
+        // Kode_barang sudah ada, kirim peringatan dan kembali ke halaman sebelumnya
+        return -1;
+    } else {
+        // Kode_barang belum ada, lanjutkan proses penambahan
+        $query = "INSERT INTO data_barang (kode_barang, nama_barang, kategori, harga_modal, harga_satuan)
+                    VALUES 
+                    ('$kode_barang', '$nama_barang', '$kategori', $harga_modal, $harga_satuan)
+                    ";
 
-    return mysqli_affected_rows($conn);
+        mysqli_query($conn, $query);
+
+
+        catatRiwayatDataBarang('menambah', $data);
+
+        return mysqli_affected_rows($conn);
+    }
 }
 
-//hapus data barang
+
 function hapusbarang($kode_barang){
+    global $conn;
 
-	global $conn;
+    // Ambil data barang sebelum dihapus
+    $select_barang_query = "SELECT kode_barang, nama_barang, kategori, harga_modal, harga_satuan FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+    $barang = mysqli_fetch_assoc($select_barang_result);
 
-	mysqli_query($conn, "DELETE FROM data_barang WHERE kode_barang = '$kode_barang'");
+    // Hapus data barang
+    mysqli_query($conn, "DELETE FROM data_barang WHERE kode_barang = '$kode_barang'");
 
-	return mysqli_affected_rows($conn);
+
+    catatRiwayatDataBarang('menghapus', $data);
+
+    return mysqli_affected_rows($conn);
 }
 
-//edit data barang
 function updatebarang($data){
+    global $conn;
 
-	global $conn;
-
-	$kode_barang = $data["kode_barang"];
+    $kode_barang = $data["kode_barang"];
     $nama_barang = htmlspecialchars($data["nama_barang"]);
     $kategori = htmlspecialchars($data["kategori"]);
     $harga_modal = htmlspecialchars($data["harga_modal"]);
     $harga_satuan = htmlspecialchars($data["harga_satuan"]);
 
-    $query = "UPDATE data_barang SET 
-    			nama_barang = '$nama_barang',
-    			kategori = '$kategori',
-    			harga_modal = $harga_modal,
-    			harga_satuan = $harga_satuan 
-    			WHERE kode_barang = '$kode_barang'
-    			"; 
+    // Ambil data barang sebelum diupdate
+    $select_barang_query = "SELECT kode_barang, nama_barang, kategori, harga_modal, harga_satuan FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+    $barang_lama = mysqli_fetch_assoc($select_barang_result);
+
+    $query = "UPDATE data_barang SET
+                nama_barang = '$nama_barang',
+                kategori = '$kategori',
+                harga_modal = $harga_modal,
+                harga_satuan = $harga_satuan
+                WHERE kode_barang = '$kode_barang'
+                ";
 
     mysqli_query($conn, $query);
+
+
+    catatRiwayatDataBarang('mengedit', $data);
 
     return mysqli_affected_rows($conn);
 
 }
 
-//edit stok barang
 function editstok($data){
+    global $conn;
 
-	global $conn;
-
-	$kode_barang = htmlspecialchars($data["kode_barang"]);
+    $kode_barang = htmlspecialchars($data["kode_barang"]);
     $nama_barang = htmlspecialchars($data["nama_barang"]);
     $kategori = htmlspecialchars($data["kategori"]);
     $harga_modal = htmlspecialchars($data["harga_modal"]);
     $harga_satuan = htmlspecialchars($data["harga_satuan"]);
     $jumlah_stok = htmlspecialchars($data["jumlah_stok"]);
 
+    // Ambil data barang sebelum diupdate
+    $select_barang_query = "SELECT kode_barang, nama_barang, kategori, harga_modal, harga_satuan, jumlah_stok FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+    $barang_lama = mysqli_fetch_assoc($select_barang_result);
+
     $query = "UPDATE data_barang SET
-    			nama_barang = '$nama_barang',
-    			kategori = '$kategori',
-    			harga_modal = $harga_modal,
-    			harga_satuan = $harga_satuan,
-    			jumlah_stok	= $jumlah_stok 
-    			WHERE kode_barang = '$kode_barang'
-    			";
+                nama_barang = '$nama_barang',
+                kategori = '$kategori',
+                harga_modal = $harga_modal,
+                harga_satuan = $harga_satuan,
+                jumlah_stok = $jumlah_stok
+                WHERE kode_barang = '$kode_barang'
+                ";
 
     mysqli_query($conn, $query);
+
+
+    catatRiwayatstokbarang('mengedit', $data);
 
     return mysqli_affected_rows($conn);
 
 }
+
 
 
 
@@ -127,13 +160,15 @@ function addpenjualan($data){
 
         mysqli_query($conn, $queryaddpenjualan);
 
+        $id_penjualan = mysqli_insert_id($conn);
+
         // Update jumlah stok
         mysqli_query($conn, "UPDATE data_barang SET jumlah_stok = $stok_baru WHERE kode_barang = '$kode_barang'");
 
 
 		// Membuat riwayat perubahan
 		$riwayat_data = array(
-		    'id_penjualan' => mysqli_insert_id($conn),
+		    'id_penjualan' => $id_penjualan,
 		    'kode_barang' => $kode_barang,
 		    'nama_pembeli' => $nama_pembeli,
 		    'nama_barang' => $nama_barang,
@@ -345,9 +380,22 @@ function addpembelian($data){
 					";
 
 		mysqli_query($conn, $queryaddpembelian);
+		$id_pembelian = mysqli_insert_id($conn);
 
 		// Update jumlah_stok pada data_barang
 		updateJumlahStok($kode_barang, $jumlah_beli, $jumlah_stok);
+
+		$riwayat_data = array(
+			'id_pembelian' => $id_pembelian,
+			'kode_barang' => $kode_barang,
+			'nama_barang' => $nama_barang,
+			'tanggal_pembelian' => $tanggal_pembelian,
+			'jumlah_beli' => $jumlah_beli,
+			'harga_beli' => $harga_beli,
+			'kwitansi' => $kwitansi
+		);
+
+		catatRiwayatPembelian('menambah', $riwayat_data);
 
 		return mysqli_affected_rows($conn);
 	} else {
@@ -417,6 +465,8 @@ function editpembelian($data){
 		$selisih_jumlah_beli = $jumlah_beli - $jumlah_beli_lama;
 		updateJumlahStok($kode_barang, $selisih_jumlah_beli, $jumlah_stok);
 
+		catatRiwayatPembelian('mengedit', $data);
+
 		return mysqli_affected_rows($conn);
 	} else {
 		return false; // Barang tidak ditemukan
@@ -446,6 +496,8 @@ function hapuspembelian($id_pembelian){
 
 			// Update jumlah_stok pada data_barang
 			updateJumlahStok($kode_barang, -$jumlah_beli, $jumlah_stok);
+
+			catatRiwayatPembelian('menghapus', $data);
 
 			return mysqli_affected_rows($conn);
 		} else {
@@ -534,12 +586,105 @@ function catatRiwayatpenjualan($action, $data) {
     $deskripsi .= "Kategori: " . $kategori . "\n";
     $deskripsi .= "Tanggal Penjualan: " . $data['tanggal_penjualan'] . "\n";
     $deskripsi .= "Jumlah Jual: " . $data['jumlah_jual'] . "\n";
-    $deskripsi .= "Harga Jual: " . $data['harga_jual'];
+    $deskripsi .= "Harga Jual: " . $data['harga_jual']. "\n";
+    $deskripsi .= "Tanggal Perubahan: " . $tanggalRiwayat;
 
     // Menyimpan riwayat perubahan ke tabel riwayat
     $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
-
+	mysqli_query($conn, $sql);
 }
+
+function catatRiwayatDataBarang($action, $data) {
+    // Koneksi ke database
+    global $conn;
+    // Mengambil waktu saat ini
+    $tanggalRiwayat = date('Y-m-d H:i:s');
+
+    $kode_barang = $data['kode_barang'];
+    $nama_barang = $data['nama_barang'];
+    $kategori = $data['kategori'];
+    $harga_modal = $data['harga_modal'];
+    $harga_satuan = $data['harga_satuan'];
+
+    $session_login = ucfirst($_SESSION['username']);
+
+    // Membuat deskripsi perubahan
+    $deskripsi = $session_login . " ";
+    $deskripsi .= $action . " data pada tabel data_barang:\n";
+    $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
+    $deskripsi .= "Nama Barang: " . $nama_barang . "\n";
+    $deskripsi .= "Kategori: " . $kategori . "\n";
+    $deskripsi .= "Harga Modal: " . $harga_modal . "\n";
+    $deskripsi .= "Harga Satuan: " . $harga_satuan . "\n";
+    $deskripsi .= "Tanggal Perubahan: " . $tanggalRiwayat;
+
+    // Menyimpan riwayat perubahan ke tabel riwayat
+    $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
+    mysqli_query($conn, $sql);
+}
+
+function catatRiwayatstokbarang($action, $data) {
+    // Koneksi ke database
+    global $conn;
+	
+    // Mengambil waktu saat ini
+    $tanggalRiwayat = date('Y-m-d H:i:s');
+
+    $kode_barang = $data['kode_barang'];
+    $nama_barang = $data['nama_barang'];
+    $jumlah_stok = $data['jumlah_stok'];
+    $session_login = ucfirst($_SESSION['username']);
+
+    // Membuat deskripsi perubahan
+    $deskripsi = $session_login . " ";
+    $deskripsi .= $action . " data pada tabel stok barang:\n";
+    $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
+    $deskripsi .= "Nama Barang: " . $nama_barang . "\n";
+    $deskripsi .= "Jumlah Stok: " . $jumlah_stok . "\n";
+    $deskripsi .= "Tanggal Perubahan: " . $tanggalRiwayat;
+
+    // Menyimpan riwayat perubahan ke tabel riwayat
+    $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
+	mysqli_query($conn, $sql);
+}
+function catatRiwayatPembelian($action , $data) {
+    // Koneksi ke database
+    global $conn;
+	
+    // Mengambil waktu saat ini
+    $tanggalRiwayat = date('Y-m-d H:i:s');
+
+    $id_pembelian = $data['id_pembelian'];
+    $kode_barang = $data['kode_barang'];
+
+    // Mendapatkan informasi kode_barang dan nama_barang dari tabel data_barang
+    $select_barang_query = "SELECT nama_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+    $barang = mysqli_fetch_assoc($select_barang_result);
+    $nama_barang = $barang['nama_barang'];
+
+    $tanggal_pembelian = $data['tanggal_pembelian'];
+    $jumlah_beli = $data['jumlah_beli'];
+    $harga_beli = $data['harga_beli'];
+    $kwitansi = $data['kwitansi'];
+    $session_login = ucfirst($_SESSION['username']);
+
+    // Membuat deskripsi perubahan
+    $deskripsi = $session_login . " melakukan pembelian:\n";
+    $deskripsi .= "ID Pembelian: " . $id_pembelian . "\n";
+    $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
+    $deskripsi .= "Nama Barang: " . $nama_barang . "\n";
+    $deskripsi .= "Tanggal Pembelian: " . $tanggal_pembelian . "\n";
+    $deskripsi .= "Jumlah Beli: " . $jumlah_beli . "\n";
+    $deskripsi .= "Harga Beli: " . $harga_beli . "\n";
+    $deskripsi .= "Kwitansi: " . $kwitansi . "\n";
+    $deskripsi .= "Tanggal Perubahan: " . $tanggalRiwayat;
+
+    // Menyimpan riwayat perubahan ke tabel riwayat
+    $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
+    mysqli_query($conn, $sql);
+}
+
 
 
 

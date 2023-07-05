@@ -3,45 +3,46 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
+$datapenjualan = query("SELECT * FROM penjualan ORDER BY id_penjualan DESC");
 
-// Variabel-variabel pagination
-$jumlahdataperhalaman = 10;
-$halamanaktif = isset($_GET["page"]) ? $_GET["page"] : 1;
-$awaldata = ($halamanaktif - 1) * $jumlahdataperhalaman;
+// // Variabel-variabel pagination
+// $jumlahdataperhalaman = 10;
+// $halamanaktif = isset($_GET["page"]) ? $_GET["page"] : 1;
+// $awaldata = ($halamanaktif - 1) * $jumlahdataperhalaman;
 
-// Variabel-variabel pencarian
-$keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
-$tanggalFilter = isset($_POST['tanggal']) ? $_POST['tanggal'] : '';
+// // Variabel-variabel pencarian
+// $keyword = isset($_POST['keyword']) ? $_POST['keyword'] : '';
+// $tanggalFilter = isset($_POST['tanggal']) ? $_POST['tanggal'] : '';
 
-if (isset($_POST["cari"])) {
-    if ($keyword != '') {
-        $datapenjualan = caripenjualan($keyword, $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
-        $jumlahdata = count($datapenjualan);
-        $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
-    } else {
-        // Menampilkan semua data jika hanya ada filter tanggal
-        $datapenjualan = caripenjualan('', $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
-        $jumlahdata = count($datapenjualan);
-        $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
-    }
-} else {
-    // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
-    $jumlahdata = count(query("SELECT * FROM penjualan"));
-    $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
-}
+// if (isset($_POST["cari"])) {
+//     if ($keyword != '') {
+//         $datapenjualan = caripenjualan($keyword, $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
+//         $jumlahdata = count($datapenjualan);
+//         $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
+//     } else {
+//         // Menampilkan semua data jika hanya ada filter tanggal
+//         $datapenjualan = caripenjualan('', $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
+//         $jumlahdata = count($datapenjualan);
+//         $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
+//     }
+// } else {
+//     // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
+//     $jumlahdata = count(query("SELECT * FROM penjualan"));
+//     $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
+// }
 
-// Mendapatkan data penjualan sesuai dengan halaman aktif dan pencarian
-if (isset($_POST["cari"])) {
-    if ($keyword != '') {
-        $datapenjualan = caripenjualan($keyword, $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
-    } else {
-        // Menampilkan semua data jika hanya ada filter tanggal
-        $datapenjualan = caripenjualan('', $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
-    }
-} else {
-    // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
-    $datapenjualan = query("SELECT * FROM penjualan LIMIT $awaldata, $jumlahdataperhalaman");
-}
+// // Mendapatkan data penjualan sesuai dengan halaman aktif dan pencarian
+// if (isset($_POST["cari"])) {
+//     if ($keyword != '') {
+//         $datapenjualan = caripenjualan($keyword, $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
+//     } else {
+//         // Menampilkan semua data jika hanya ada filter tanggal
+//         $datapenjualan = caripenjualan('', $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
+//     }
+// } else {
+//     // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
+//     $datapenjualan = query("SELECT * FROM penjualan LIMIT $awaldata, $jumlahdataperhalaman");
+// }
 
 if (isset($_POST['addpenjualan'])) {
 
@@ -349,7 +350,7 @@ if (isset($_GET['id_penjualan'])) {
      </div> 
 
      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <nav aria-label="Page navigation example">
+        <!-- <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <?php if ($halamanaktif > 1): ?>
                     <li class="page-item">
@@ -389,7 +390,7 @@ if (isset($_GET['id_penjualan'])) {
                 <?php endif; ?>
             </ul>
         </nav>
-      </div>
+      </div> -->
       <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group me-2">
             <button type="button" id="cetak-btn">Print</button>
