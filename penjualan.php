@@ -59,7 +59,7 @@ if (isset($_POST['addpenjualan'])) {
         </script>
     ";
   }
-  catatRiwayat('Tambah', $data);
+
 }
 
 
@@ -76,7 +76,7 @@ if (isset($_POST['editpenjualan'])) {
             window.location='penjualan.php';
         </script>";
     }
-    catatRiwayat('Edit', $data);
+
 }
 
 
@@ -98,7 +98,7 @@ if (isset($_GET['id_penjualan'])) {
             </script>
         ";
     }
-    catatRiwayat('Hapus', $data);
+
 }
 
 ?>
