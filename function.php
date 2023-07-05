@@ -96,7 +96,7 @@ function editstok($data){
 
 
 
-// Tambah data penjualan
+// Fungsi untuk menambah data penjualan
 function addpenjualan($data){
     global $conn;
 
@@ -130,12 +130,26 @@ function addpenjualan($data){
         // Update jumlah stok
         mysqli_query($conn, "UPDATE data_barang SET jumlah_stok = $stok_baru WHERE kode_barang = '$kode_barang'");
 
+
+		// Membuat riwayat perubahan
+		$riwayat_data = array(
+		    'id_penjualan' => mysqli_insert_id($conn),
+		    'kode_barang' => $kode_barang,
+		    'nama_pembeli' => $nama_pembeli,
+		    'nama_barang' => $nama_barang,
+		    'kategori' => $kategori,
+		    'tanggal_penjualan' => $tanggal_penjualan,
+		    'jumlah_jual' => $jumlah_jual,
+		    'harga_jual' => $harga_jual
+		);
+
+        catatRiwayatpenjualan('menambah', $riwayat_data);
+
         return mysqli_affected_rows($conn);
     } else {
         // Stok tidak mencukupi
         return -1;
     }
-    catatRiwayat('Tambah', $data);
 }
 
 function editpenjualan($data) {
@@ -190,12 +204,15 @@ function editpenjualan($data) {
             $selisih_jumlah_jual = $jumlah_jual_sebelumnya - $jumlah_jual;
             mysqli_query($conn, "UPDATE data_barang SET jumlah_stok = jumlah_stok + $selisih_jumlah_jual WHERE kode_barang = '$kode_barang'");
         }
-        
+
         $affected_rows = mysqli_affected_rows($conn);
         if ($affected_rows > 0) {
+            // Panggil fungsi catatRiwayat
+            catatRiwayatpenjualan('mengubah', $data);
+
             return $affected_rows;
         } else {
-            return +1;
+            return 1;
         }
     } 
 }
@@ -204,13 +221,16 @@ function editpenjualan($data) {
 function hapuspenjualan($id_penjualan){
     global $conn;
 
-    $query = "SELECT kode_barang, jumlah_jual FROM penjualan WHERE id_penjualan = '$id_penjualan'";
+    $query = "SELECT kode_barang, jumlah_jual, nama_pembeli, tanggal_penjualan, harga_jual FROM penjualan WHERE id_penjualan = '$id_penjualan'";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) == 1) {
         $penjualan = mysqli_fetch_assoc($result);
         $kode_barang = $penjualan['kode_barang'];
         $jumlah_jual = $penjualan['jumlah_jual'];
+        $nama_pembeli = $penjualan['nama_pembeli'];
+        $tanggal_penjualan = $penjualan['tanggal_penjualan'];
+        $harga_jual = $penjualan['harga_jual'];
 
         $select_barang_query = "SELECT jumlah_stok FROM data_barang WHERE kode_barang = '$kode_barang'";
         $select_barang_result = mysqli_query($conn, $select_barang_query);
@@ -226,11 +246,22 @@ function hapuspenjualan($id_penjualan){
         // Update jumlah stok
         mysqli_query($conn, "UPDATE data_barang SET jumlah_stok = $stok_baru WHERE kode_barang = '$kode_barang'");
 
+        // Catat riwayat penghapusan
+        $data = array(
+            'id_penjualan' => $id_penjualan,
+            'kode_barang' => $kode_barang,
+            'jumlah_jual' => $jumlah_jual,
+            'jumlah_stok' => $stok_baru,
+            'nama_pembeli' => $nama_pembeli,
+            'tanggal_penjualan' => $tanggal_penjualan,
+            'harga_jual' => $harga_jual
+        );
+        catatRiwayatpenjualan('menghapus', $data);
+
         return mysqli_affected_rows($conn);
     } else {
         return -1;
     }
-    catatRiwayat('Hapus', $data);
 }
 
 
@@ -476,33 +507,39 @@ function caripembelian($keyword, $tanggalFilter, $sort){
     return query($query);
 }
 
-// // Fungsi untuk mencatat riwayat perubahan data
-// function catatRiwayat($action, $data) {
-//     // Koneksi ke database
-//     global $conn;
+function catatRiwayatpenjualan($action, $data) {
+    // Koneksi ke database
+    global $conn;
 
-//     // Mengambil waktu saat ini
-//     $tanggalRiwayat = date('Y-m-d H:i:s');
+    // Mengambil waktu saat ini
+    $tanggalRiwayat = date('Y-m-d H:i:s');
 
-//     // Membuat deskripsi perubahan
-//     $deskripsi = $action . " data pada tabel penjualan:\n";
-//     $deskripsi .= "ID Penjualan: " . $data['id_penjualan'] . "\n";
-//     $deskripsi .= "Kode Barang: " . $data['kode_barang'] . "\n";
-//     $deskripsi .= "Nama Pembeli: " . $data['nama_pembeli'] . "\n";
-//     $deskripsi .= "Nama Barang: " . $data['nama_barang'] . "\n";
-//     $deskripsi .= "Kategori: " . $data['kategori'] . "\n";
-//     $deskripsi .= "Tanggal Penjualan: " . $data['tanggal_penjualan'] . "\n";
-//     $deskripsi .= "Jumlah Jual: " . $data['jumlah_jual'] . "\n";
-//     $deskripsi .= "Harga Jual: " . $data['harga_jual'];
+    // Ambil data barang dari tabel data_barang berdasarkan kode_barang
+    $kode_barang = $data['kode_barang'];
+    $select_barang_query = "SELECT nama_barang, kategori FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+    $barang = mysqli_fetch_assoc($select_barang_result);
+    $nama_barang = $barang['nama_barang'];
+    $kategori = $barang['kategori'];
 
-//     // Menyimpan riwayat perubahan ke tabel riwayat
-//     $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
-//     if (mysqli_query($conn, $sql)) {
-//         echo "Riwayat perubahan berhasil dicatat";
-//     } else {
-//         echo "Terjadi kesalahan: " 
-//     }
-// }
+	$session_login = ucfirst($_SESSION['username']);
+
+    // Membuat deskripsi perubahan
+    $deskripsi = $session_login . " ";
+    $deskripsi .= $action . " data pada tabel penjualan:\n";
+    $deskripsi .= "ID Penjualan: " . $data['id_penjualan'] . "\n";
+    $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
+    $deskripsi .= "Nama Pembeli: " . $data['nama_pembeli'] . "\n";
+    $deskripsi .= "Nama Barang: " . $nama_barang . "\n";
+    $deskripsi .= "Kategori: " . $kategori . "\n";
+    $deskripsi .= "Tanggal Penjualan: " . $data['tanggal_penjualan'] . "\n";
+    $deskripsi .= "Jumlah Jual: " . $data['jumlah_jual'] . "\n";
+    $deskripsi .= "Harga Jual: " . $data['harga_jual'];
+
+    // Menyimpan riwayat perubahan ke tabel riwayat
+    $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
+
+}
 
 
 
