@@ -610,7 +610,7 @@ function catatRiwayatDataBarang($action, $data) {
 
     // Membuat deskripsi perubahan
     $deskripsi = $session_login . " ";
-    $deskripsi .= $action . " data pada tabel data_barang:\n";
+    $deskripsi .= $action . " data pada tabel data barang:\n";
     $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
     $deskripsi .= "Nama Barang: " . $nama_barang . "\n";
     $deskripsi .= "Kategori: " . $kategori . "\n";

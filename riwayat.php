@@ -3,22 +3,25 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
+// Query untuk mengambil opsi bulan dan tahun unik dari tabel riwayat
+$queryBulanTahun = "SELECT DISTINCT DATE_FORMAT(tanggal_riwayat, '%Y-%m') AS bulan_tahun FROM riwayat";
+$resultBulanTahun = mysqli_query($conn, $queryBulanTahun);
 $datariwayat = query("SELECT * FROM riwayat ORDER BY id_riwayat DESC");
 
 if (isset($_GET['id_riwayat'])) {
-    $id_penjualan = $_GET['id_riwayat'];
+    $id_riwayat = $_GET['id_riwayat'];
 
-    if(hapuspenjualan($id_penjualan) > 0){
+    if(hapusriwayat($id_riwayat) > 0){
       echo "  <script>
               alert('data Berhasil dihapus');
-              window.location='penjualan.php';
+              window.location='riwayat.php';
             </script>
         ";
         
     } else {
       echo "  <script>
               alert('data Gagal dihapus');
-              window.location='penjualan.php';
+              window.location='riwayat.php';
             </script>
         ";
     }
@@ -35,8 +38,10 @@ if (isset($_GET['id_riwayat'])) {
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
     <title>Toko Sararaholi Jaya</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css">
+
 
     
 
@@ -133,66 +138,168 @@ if (isset($_GET['id_riwayat'])) {
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Pembelian</h1>
+        <h1 class="h2">Riwayat</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Tambah Data</button>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            Tahun Ini
-          </button>
         </div>
       </div>
 
-      
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">No.</th>
-              <th scope="col">Tanggal</th>
-              <th scope="col">Deskripsi</th>
-              <th scope="col">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <form method="post">
-            <?php $i=1; ?>
-            <?php foreach($datariwayat as $row): ?>
+      <div class="container">
+    <form method="post" id="search-form">
+    <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalcetak">
+        <a data-feather="printer" style="vertical-align: middle"></a>
+        <span class="fs-6" style="vertical-align: middle"> Cetak</span>
+      </button>
+    </div>
 
-            <tr>
-              <td><?= $i;  ?></td>
-              <td> <?= $row["tanggal_riwayat"];  ?></td>
-              <td> <?= $row["deskripsi"]; ?></td>
-
-              <td>
-                  <a>
-                    <span data-feather ="eye"></span>
-                  </a>
-                  <a href="?id_riwayat=<?= $row['id_riwayat']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapusriwayat">
-            <span data-feather="trash-2"></span></a>
-              </td>
-            </tr>
-            <?php $i++; ?>
-            <?php endforeach; ?>
-
-            </form>
-          </tbody>
-        </table>
+      <div class="col">
       </div>
+      <div class="col">
+        <input type="text" class="form-control" autofocus placeholder="Cari" autocomplete="off" name="keyword" id="keyword">
+      </div>
+      <div class="col">
+        <select class="form-control" name="bulan_tahun" id="bulan-tahun">
+          <option value="">Pilih Bulan dan Tahun</option>
+          <!-- Opsi bulan dan tahun -->
+            <?php while ($rowBulanTahun = mysqli_fetch_assoc($resultBulanTahun)) : ?>
+              <?php
+              // Konversi format bulan dan tahun menjadi nama bulan
+              $bulanTahun = strtotime($rowBulanTahun['bulan_tahun']);
+              $namaBulanTahun = date('F Y', $bulanTahun);
+              ?>
+              <option value="<?= $rowBulanTahun['bulan_tahun']; ?>"><?= $namaBulanTahun; ?></option>
+            <?php endwhile; ?>
+
+        </select>
+      </div>
+    </div>
+  </form>
+
+  <div class="table-responsive" style="max-height: 500px; overflow-y: scroll;">
+    <table class="table table-striped table-sm" id="riwayat-table">
+      <thead>
+        <tr>
+          <th scope="col">No.</th>
+          <th scope="col">Tanggal</th>
+          <th scope="col">Deskripsi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php $i = 1; ?>
+        <?php foreach ($datariwayat as $row) : ?>
+          <tr>
+            <td><?= $i; ?></td>
+            <td> <?= $row["tanggal_riwayat"]; ?></td>
+            <td> <?= $row["deskripsi"]; ?></td>
+          </tr>
+          <?php $i++; ?>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+    <p id="no-data" style="display: none; text-align: center;">Data tidak ditemukan</p>
+  </div>
+</div>
     </main>
   </div>
 </div>
 
 
+<!-- Tambahkan kode modal -->
+    <div class="modal fade" id="modalcetak" tabindex="-1" role="dialog" aria-labelledby="modalcetakLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Cetak Riwayat</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+                <form method="POST" action="cetak_riwayat.php">
+                    <div class="modal-body">
+                        <label for="tanggal_mulai" class="form-label">Tanggal Mulai:</label>
+                        <input type="date" class="form-control" name="tanggal_mulai" required>
+                        <br>
+                        <label for="tanggal_akhir" class="form-label">Tanggal Akhir:</label>
+                        <input type="date" class="form-control" name="tanggal_akhir" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-secondary">Cetak Riwayat</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.min.js"></script>
+
 
     <script src="js/dashboard.js"></script>
+
     <script>
       feather.replace({ 'aria-hidden': 'true' })
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  // Meng-handle perubahan pada input keyword
+  $('#keyword').on('input', function() {
+    var keyword = $(this).val().toLowerCase();
+    filterRows(keyword);
+  });
+
+  // Meng-handle perubahan pada select bulan dan tahun
+  $('#bulan-tahun').on('change', function() {
+    var bulanTahun = $(this).val();
+    filterRows(bulanTahun);
+  });
+
+  // Fungsi untuk memfilter baris berdasarkan keyword atau bulan dan tahun
+  function filterRows(filter) {
+    var noData = true;
+    $('#riwayat-table tbody tr').each(function() {
+      var rowText = $(this).text().toLowerCase();
+      if (rowText.includes(filter)) {
+        $(this).show();
+        noData = false;
+      } else {
+        $(this).hide();
+      }
+    });
+
+    if (noData) {
+      $('#no-data').show();
+    } else {
+      $('#no-data').hide();
+    }
+  }
+});
+
+// $(document).ready(function() {
+//   $('#btncetakriwayat').click(function() {
+//     $.ajax({
+//       url: 'cetak_riwayat.php', // Ganti dengan URL ke skrip PHP yang akan menghasilkan PDF menggunakan mpdf
+//       method: 'POST',
+//       success: function(response) {
+//         // Response berisi hasil yang dikirimkan dari skrip PHP
+//         // Anda dapat melakukan penanganan lebih lanjut, misalnya menampilkan pesan atau tindakan lainnya
+//         console.log(response);
+//       },
+//       error: function(xhr, status, error) {
+//         // Tangani kesalahan jika ada
+//         console.log(xhr.responseText);
+//       }
+//     });
+//   });
+// });
+
+</script>
+
   </body>
+
 </html>

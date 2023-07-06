@@ -285,8 +285,9 @@ if (isset($_GET['id_penjualan'])) {
       </div>
 
 
-      <form method="post">
-        <div class="container">
+      
+      <div class="container">
+        <form method="post">
           <div class="row">
             <div class="col">
               <input type="text" class="form-control" autofocus placeholder="Cari" autocomplete="off" name="keyword">
@@ -298,11 +299,9 @@ if (isset($_GET['id_penjualan'])) {
               <button class="btn btn-outline-secondary" type="submit" name="cari" >Cari</button>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
 
-    <div class="container" style="height: 350px;">  
-      <div class="table-responsive">
+      <div class="table-responsive" style="max-height: 400px; overflow-y: scroll;">
         <table class="table table-striped table-sm">
           <thead>
             <tr>
@@ -389,22 +388,22 @@ if (isset($_GET['id_penjualan'])) {
                     </li>
                 <?php endif; ?>
             </ul>
-        </nav>
-      </div> -->
-      
-      <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" id="cetak-btn">Print</button>
-          </div>
+        </nav> -->
       </div>
+
+      <div class="col">
+      <button type="button" class="btn btn-outline-secondary" id="cetak-btn">
+        <a data-feather="printer" style="vertical-align: middle"></a> <span class="fs-6" style="vertical-align: middle">Cetak</span>
+      </button>
+    </div>
     </main>
   </div>
 </div>
 
 
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
 
     <script src="js/dashboard.js"></script>
 
@@ -575,7 +574,7 @@ if (isset($_GET['id_penjualan'])) {
                   </table>
               </div>
               <div class="modal-footer">
-                  <button type="submit" class="btn btn-sm btn-outline-primary" id='cetak-faktur'>Cetak Faktur</button>
+                  <button type="submit" class="btn btn-outline-secondary" id='cetak-faktur' target='_blank'>Cetak Faktur</button>
               </div>       
           </div>
         </div>
