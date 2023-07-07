@@ -15,9 +15,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                    <td style="width: 30%;"><img src="img/logo.jpg" alt="Logo" width="100" height="100"></td>
-                    <td style="width: 70%; text-align: left;">
-                        <h1>Toko Sararaholijaya</h1>
+                    <td style="width: 20%;">
+                    <img src="img/logo.jpg" alt="Logo" width="70" height="70" >
+
+                    </td>
+                    <td style="width: 80%; text-align: left;">
+                        <h1>Toko Sararaholi jaya</h1>
+                        <p>jl. Sirao No. 14 Kel. Pasar, Gunungsitoli, Sumatera Utara</p>
+                    </td>
+                </tr>
+            </table>
+            <hr style="border: 1px solid #000; margin-top: 10px;">
+
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 100%; text-align: left;">
                         <h2>Riwayat Periode Tanggal</h2>
                         <p>Periode: ' . $tanggalMulai . ' - ' . $tanggalAkhir . '</p>
                     </td>

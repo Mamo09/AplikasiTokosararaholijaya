@@ -31,18 +31,21 @@ $datapenjualan = query("SELECT * FROM penjualan ORDER BY id_penjualan DESC");
 //     $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
 // }
 
-// // Mendapatkan data penjualan sesuai dengan halaman aktif dan pencarian
-// if (isset($_POST["cari"])) {
-//     if ($keyword != '') {
-//         $datapenjualan = caripenjualan($keyword, $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
-//     } else {
-//         // Menampilkan semua data jika hanya ada filter tanggal
-//         $datapenjualan = caripenjualan('', $tanggalFilter, $jumlahdataperhalaman, $halamanaktif);
-//     }
-// } else {
-//     // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
-//     $datapenjualan = query("SELECT * FROM penjualan LIMIT $awaldata, $jumlahdataperhalaman");
-// }
+// Mendapatkan data penjualan sesuai dengan halaman aktif dan pencarian
+if (isset($_POST["cari"])) {
+    $keyword = $_POST['keyword'];
+    $tanggalFilter = $_POST['tanggal'];
+
+    if ($keyword != '') {
+        $datapenjualan = caripenjualan($keyword, $tanggalFilter);
+    } else {
+        // Menampilkan semua data jika hanya ada filter tanggal
+        $datapenjualan = caripenjualan('', $tanggalFilter);
+    }
+} else {
+    // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
+    $datapenjualan = query("SELECT * FROM penjualan");
+}
 
 if (isset($_POST['addpenjualan'])) {
 
@@ -396,6 +399,7 @@ if (isset($_GET['id_penjualan'])) {
         <a data-feather="printer" style="vertical-align: middle"></a> <span class="fs-6" style="vertical-align: middle">Cetak</span>
       </button>
     </div>
+    
     </main>
   </div>
 </div>

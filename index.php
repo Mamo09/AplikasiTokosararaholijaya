@@ -50,6 +50,7 @@ if (isset($_POST['login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Login Toko Sararaholi Jaya</title>
     <link rel="stylesheet" href = "css/loginn.css">
+    
 
 <body>
   <header>
@@ -71,7 +72,7 @@ if (isset($_POST['login'])) {
   </div>
 </div>
     <p>
-            <a href="reset_password.php">Reset Password</a>
-          </p>
+        <a href="lupa_password.php">Reset Password</a>
+    </p>
   </body>
 </html>

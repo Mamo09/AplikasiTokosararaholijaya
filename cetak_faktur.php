@@ -1,24 +1,19 @@
 <?php
 
 
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Mpdf\Mpdf;
+
 require 'config.php';
-require_once('tcpdf/tcpdf.php');
 
 // Cetak faktur
 if (isset($_POST['penjualan'])) {
     $penjualan_ids = $_POST['penjualan'];
 
     // Generate PDF
-    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8');
-    $pdf->SetCreator('Your Company');
-    $pdf->SetAuthor('Your Name');
-    $pdf->SetTitle('Faktur Penjualan');
-    $pdf->SetMargins(10, 10, 10);
-    $pdf->AddPage();
-
-    // Header
-    $pdf->SetFont('helvetica', 'B', 14);
-    $pdf->Cell(0, 10, 'Faktur Penjualan', 0, 1, 'C');
+    $mpdf = new Mpdf();
+    $mpdf->SetTitle('Faktur Penjualan');
 
     // Array untuk menggabungkan data penjualan dengan nama pembeli dan tanggal yang sama
     $merged_penjualan = array();
@@ -29,8 +24,8 @@ if (isset($_POST['penjualan'])) {
                 FROM penjualan AS p
                 INNER JOIN data_barang AS b ON p.kode_barang = b.kode_barang
                 WHERE p.id_penjualan = '$penjualan_id'";
-        $result = mysqli_query($conn, $sql);
-        $penjualan = mysqli_fetch_assoc($result);
+        $result = $conn->query($sql);
+        $penjualan = $result->fetch_assoc();
 
         // Membuat kunci berdasarkan nama pembeli dan tanggal penjualan
         $key = $penjualan['nama_pembeli'] . '-' . $penjualan['tanggal_penjualan'];
@@ -42,6 +37,7 @@ if (isset($_POST['penjualan'])) {
             $merged_penjualan[$key]['kategori'][] = $penjualan['kategori'];
             $merged_penjualan[$key]['jumlah_jual'][] = $penjualan['jumlah_jual'];
             $merged_penjualan[$key]['harga_jual'][] = $penjualan['harga_jual'];
+            $merged_penjualan[$key]['total_harga'][] = $penjualan['jumlah_jual'] * $penjualan['harga_jual'];
         } else {
             $merged_penjualan[$key] = array(
                 'nama_pembeli' => $penjualan['nama_pembeli'],
@@ -50,61 +46,98 @@ if (isset($_POST['penjualan'])) {
                 'nama_barang' => array($penjualan['nama_barang']),
                 'kategori' => array($penjualan['kategori']),
                 'jumlah_jual' => array($penjualan['jumlah_jual']),
-                'harga_jual' => array($penjualan['harga_jual'])
+                'harga_jual' => array($penjualan['harga_jual']),
+                'total_harga' => array($penjualan['jumlah_jual'] * $penjualan['harga_jual'])
             );
         }
     }
 
     foreach ($merged_penjualan as $data_penjualan) {
-        // Nomor Faktur
-        $nomor_faktur = 'INV/' . implode('-', $data_penjualan['kode_barang']) . '/' . $data_penjualan['tanggal_penjualan'];
-        $pdf->SetFont('helvetica', '', 12);
-        $pdf->Cell(0, 10, 'Nomor Faktur: ' . $nomor_faktur, 0, 1);
+        // Header
+        $mpdf->WriteHTML('
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 20%;">
+                    <img src="img/logo.jpg" alt="Logo" width="70" height="70" >
 
-        // Tanggal
-        $pdf->Cell(0, 10, 'Tanggal: ' . $data_penjualan['tanggal_penjualan'], 0, 1);
+                    </td>
+                    <td style="width: 80%; text-align: left;">
+                        <h1>Toko Sararaholi jaya</h1>
+                        <p>jl. Sirao No. 14 Kel. Pasar, Gunungsitoli, Sumatera Utara</p>
+                    </td>
+                
+                </tr>
+
+            </table>
+            <hr style="border: 1px solid #000; margin-top: 10px;">');
+
+        // Nomor Faktur
+        $nomor_faktur = 'INV/' . rand(1000000000, 9999999999) . '/' . str_replace('-', '', $data_penjualan['tanggal_penjualan']);
+        $mpdf->WriteHTML('<p>Nomor Faktur: ' . $nomor_faktur . '</p>');
+
 
         // Nama Pembeli
-        $pdf->Cell(0, 10, 'Nama Pembeli: ' . $data_penjualan['nama_pembeli'], 0, 1);
+        $mpdf->WriteHTML('<p>Nama Pembeli: ' . $data_penjualan['nama_pembeli'] . '</p>');
+        // Tanggal
+        $tanggal_penjualan = date('d F Y', strtotime($data_penjualan['tanggal_penjualan']));
+        $mpdf->WriteHTML('<p>Tanggal: ' . $tanggal_penjualan . '</p>');
+
+        
 
         // Item yang dibeli
-        $pdf->Cell(0, 10, 'Item yang dibeli:', 0, 1);
+        $mpdf->WriteHTML('<p>Item yang dibeli:</p>');
 
         // Tabel
-        $pdf->SetFont('helvetica', 'B', 11);
-        $pdf->Cell(30, 10, 'Kode Barang', 1, 0, 'C');
-        $pdf->Cell(40, 10, 'Nama Barang', 1, 0, 'C');
-        $pdf->Cell(30, 10, 'Kategori', 1, 0, 'C');
-        $pdf->Cell(25, 10, 'Jumlah', 1, 0, 'C');
-        $pdf->Cell(30, 10, 'Harga', 1, 0, 'C');
-        $pdf->Cell(35, 10, 'Total Harga', 1, 1, 'C');
+        $html = '<table border="1" cellpadding="5">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Kode Barang</th>
+                            <th>Nama Barang</th>
+                            <th>Kategori</th>
+                            <th>Jumlah</th>
+                            <th>Harga</th>
+                            <th>Total Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
 
-        $pdf->SetFont('helvetica', '', 11);
         $total_harga = 0;
+        $nomor_item = 1;
 
-        // Menampilkan data penjualan yang digabungkan
         for ($i = 0; $i < count($data_penjualan['kode_barang']); $i++) {
-            $pdf->Cell(30, 10, $data_penjualan['kode_barang'][$i], 1, 0, 'C');
-            $pdf->Cell(40, 10, $data_penjualan['nama_barang'][$i], 1, 0, 'C');
-            $pdf->Cell(30, 10, $data_penjualan['kategori'][$i], 1, 0, 'C');
-            $pdf->Cell(25, 10, $data_penjualan['jumlah_jual'][$i], 1, 0, 'C');
-            $pdf->Cell(30, 10, $data_penjualan['harga_jual'][$i], 1, 0, 'C');
-            $total_harga += $data_penjualan['jumlah_jual'][$i] * $data_penjualan['harga_jual'][$i];
-            $pdf->Cell(35, 10, $data_penjualan['jumlah_jual'][$i] * $data_penjualan['harga_jual'][$i], 1, 1, 'C');
+            $html .= '<tr>
+                        <td>' . $nomor_item . '</td>
+                        <td>' . $data_penjualan['kode_barang'][$i] . '</td>
+                        <td>' . $data_penjualan['nama_barang'][$i] . '</td>
+                        <td>' . $data_penjualan['kategori'][$i] . '</td>
+                        <td>' . $data_penjualan['jumlah_jual'][$i] . '</td>
+                        <td>' . $data_penjualan['harga_jual'][$i] . '</td>
+                        <td>' . $data_penjualan['total_harga'][$i] . '</td>
+                    </tr>';
+
+            $total_harga += $data_penjualan['total_harga'][$i];
+            $nomor_item++;
         }
 
-        $pdf->Cell(155, 10, 'Total Harga', 1, 0, 'R');
-        $pdf->Cell(35, 10, $total_harga, 1, 1, 'C');
+        $html .= '</tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">Total Harga</td>
+                            <td>' . $total_harga . '</td>
+                        </tr>
+                    </tfoot>
+                </table>';
+
+        $mpdf->WriteHTML($html);
+        $mpdf->AddPage();
     }
 
     // Output PDF
-        $nama_pembeli = str_replace(' ', '_', $data_penjualan['nama_pembeli']);
-        $tanggal_penjualan = str_replace(' ', '_', $data_penjualan['tanggal_penjualan']);
-        $file_name = $nama_pembeli . '_' . $tanggal_penjualan . '.pdf';
-
-        ob_end_clean(); // Membersihkan output sebelum menghasilkan PDF
-        $pdf->Output($file_name, 'I');
-        exit; // Menghentikan eksekusi script setelah selesai mencetak
+    $mpdf->Output();
+    exit; // Menghentikan eksekusi script setelah selesai mencetak
 }
+
+
 
 ?>

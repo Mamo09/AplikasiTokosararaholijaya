@@ -513,24 +513,17 @@ function hapuspembelian($id_pembelian){
 //untuk melakukan pencarian
 function caripenjualan($keyword, $tanggalFilter){
 
-	global $awaldata, $jumlahdataperhalaman,$halamanaktif;
-
-	$awaldata = ($halamanaktif - 1) * $jumlahdataperhalaman;
-
-    $sql = "SELECT * FROM penjualan 
+    $query = "SELECT * FROM penjualan 
     			WHERE (nama_barang LIKE '%$keyword%' OR 
     			nama_pembeli LIKE '%$keyword%' OR
     			kategori LIKE '%$keyword%')
     			";
 
     if ($tanggalFilter != '') {
-        $sql .= " AND tanggal_penjualan = '$tanggalFilter'";
+        $query .= " AND tanggal_penjualan = '$tanggalFilter'";
     }
 
-    $sql .= " LIMIT $awaldata, $jumlahdataperhalaman";
-
-    $result = query($sql);
-    return $result;
+	return query($query);
 
 }
 

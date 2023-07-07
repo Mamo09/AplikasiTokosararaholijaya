@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "<script>
           alert('Password gagal direset');
-          window.location='index.php';
+          window.location='lupa_password.php';
         </script>";
     }
 }
