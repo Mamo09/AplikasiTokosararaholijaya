@@ -8,13 +8,12 @@ $datapembelian = query("SELECT * FROM pembelian");
 if (isset($_POST["cari"])) {
     $keyword = $_POST['keyword'];
     $tanggalFilter = $_POST['tanggal'];
-    $sort = $_POST['sort'];
 
     if ($keyword != '') {
-        $datapembelian = caripembelian($keyword, $tanggalFilter, $sort);
+        $datapembelian = caripembelian($keyword, $tanggalFilter);
     } else {
         // Menampilkan semua data jika hanya ada filter tanggal
-        $datapembelian = caripembelian('', $tanggalFilter, $sort);
+        $datapembelian = caripembelian('', $tanggalFilter);
     }
 } else {
     // Menampilkan semua data jika tidak ada pencarian, filter tanggal, atau pengurutan
@@ -25,11 +24,17 @@ if (isset($_POST["cari"])) {
 if (isset($_POST['addpembelian'])) {
 
   if(addpembelian($_POST) > 0){
-    echo " 
+    echo "  <script>
+          alert('data Berhasil ditambahkan');
+          window.location='pembelian.php';
+        </script>
     ";
     
   } else {
-    echo " 
+    echo "  <script>
+          alert('data gagal ditambahkan');
+          window.location='pembelian.php';
+        </script>
     ";
   }
 }
@@ -37,11 +42,17 @@ if (isset($_POST['addpembelian'])) {
 if (isset($_POST['editpembelian'])) {
 
   if(editpembelian($_POST) > 0){
-      echo "  
+      echo "  <script>
+          alert('data Berhasil diubah');
+          window.location='pembelian.php';
+        </script>
     ";
     
   } else {
-    echo "  
+    echo "  <script>
+          alert('data gagal diubah');
+          window.location='pembelian.php';
+        </script>
     ";
   }
 }
@@ -210,17 +221,10 @@ if (isset($_GET['id_pembelian'])) {
               <input type="date" class="form-control" name="tanggal">
             </div>
             <div class="col">
-              <select id="sort" name="sort" class="form-control">
-                <option value="ASC">
-                  <span data-feather="arrow-down">ASC</span>
-                </option>
-                <option value="DESC">
-                  <span data-feather="arrow-up">DESC</span>
-                </option>
-              </select>
+              <button class="btn btn-outline-secondary" type="submit" name="cari" >Cari</button>
             </div>
             <div class="col">
-              <button class="btn btn-outline-secondary" type="submit" name="cari" >Cari</button>
+              
             </div>
           </div>
         </div>

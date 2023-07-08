@@ -5,6 +5,11 @@ require 'function.php';
 
 $databarang = query("SELECT * FROM data_barang");
 
+if (isset($_POST["caribarang"])) {
+    $databarang = caribarang($_POST["keywordbarang"]);
+}
+
+
 if (isset($_POST['editstok'])) {
   if (editstok($_POST) > 0) {
     echo "
@@ -14,7 +19,10 @@ if (isset($_POST['editstok'])) {
       </script>
     ";
   } else {
-    echo "
+    echo "<script>
+        alert('Data gagal diubah');
+        window.location='stokbarang.php';
+      </script>
 
     ";
   }
@@ -121,9 +129,7 @@ if (isset($_POST['editstok'])) {
               Riwayat
             </a>
           </li>
-        </ul>
-
-        
+        </ul>   
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -133,12 +139,21 @@ if (isset($_POST['editstok'])) {
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"data-bs-target="#exampleModal">Tambah Data</button>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            Tahun Ini
-          </button>
         </div>
       </div>
+
+      <form method="post">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" autofocus placeholder="Cari" name="keywordbarang" autocomplete="off">
+            </div>
+            <div class="col">
+              <button class="btn btn-outline-secondary" type="submit" name="caribarang" >Cari</button>
+            </div>
+          </div>
+        </div>
+      </form>
 
       <div class="container">
       <div class="table-responsive">

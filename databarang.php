@@ -3,14 +3,14 @@ require 'config.php';
 require 'login.php';
 require 'function.php';
 
-//pagination
-$jumlahdataperhalaman = 10;
-$jumlahdata = count(query("SELECT * FROM data_barang"));
-$jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
-$halamanaktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
-$awaldata = ($jumlahdataperhalaman * $halamanaktif) - $jumlahdataperhalaman;
+// //pagination
+// $jumlahdataperhalaman = 10;
+// $jumlahdata = count(query("SELECT * FROM data_barang"));
+// $jumlahhalaman = ceil($jumlahdata / $jumlahdataperhalaman);
+// $halamanaktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
+// $awaldata = ($jumlahdataperhalaman * $halamanaktif) - $jumlahdataperhalaman;
 
-$databarang = query("SELECT * FROM data_barang LIMIT $awaldata, $jumlahdataperhalaman");
+$databarang = query("SELECT * FROM data_barang ");
 
 
 
@@ -233,7 +233,7 @@ if (isset($_POST['updatebarang'])) {
         </div>
       </div>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <nav aria-label="Page navigation example">
+        <!-- <nav aria-label="Page navigation example">
           <ul class="pagination">
             <?php if ($halamanaktif > 1): ?>
               <li class="page-item">
@@ -272,7 +272,7 @@ if (isset($_POST['updatebarang'])) {
               </li>
             <?php endif; ?>
           </ul>
-        </nav>
+        </nav> -->
 
 
       </div>
