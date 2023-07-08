@@ -258,7 +258,7 @@ if (isset($_GET['id_pembelian'])) {
                 </div>
               </td>
               <td>
-                  <a><span data-feather ="eye"></span></a>
+                  <!-- <a><span data-feather ="eye"></span></a> -->
                   <a>
                     <span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modaleditpembelian<?= $row["id_pembelian"]; ?>" ></span>
                   </a>

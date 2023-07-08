@@ -214,7 +214,7 @@ if (isset($_POST['updatebarang'])) {
                     <td><?= $row["kategori"]; ?></td>
                     <td><?= $row["harga_satuan"]; ?></td>
                     <td>
-                      <a><span data-feather="eye"></span></a>
+                      <!-- <a><span data-feather="eye"></span></a> -->
                       <a><span data-feather="edit" data-bs-toggle="modal" data-bs-target="#modalubah<?= $row["kode_barang"]; ?>"></span></a>
                       <a href="?kode_barang=<?= $row['kode_barang']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')">
                         <span data-feather="trash-2"></span>

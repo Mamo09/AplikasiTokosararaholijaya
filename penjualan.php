@@ -328,9 +328,9 @@ if (isset($_GET['id_penjualan'])) {
               <td> <?= $row["harga_jual"];  ?></td>
               <td> <?= $row["kategori"];  ?></td>
               <td>
-                  <a>
+                  <!-- <a>
                     <span data-feather ="eye"></span>
-                  </a>
+                  </a> -->
                   <a>
                     <span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modaleditpenjualan<?= $row["id_penjualan"]; ?>"></span>
                   </a>

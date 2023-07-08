@@ -180,12 +180,12 @@ if (isset($_POST['editstok'])) {
                   <a type="button">
                     <span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modaleditstok<?= $row["kode_barang"]; ?>"></span>
                   </a>
-                  <a type="button">
+                  <!-- <a type="button">
                     <span data-feather ="plus-square" data-bs-toggle="modal" data-bs-target="#modaltambahstok<?= $row["kode_barang"]; ?>"></span>
                   </a>
                   <a type="button">
                     <span data-feather ="minus-square" data-bs-toggle="modal" data-bs-target="#modalkurangstok<?= $row["kode_barang"]; ?>"></span>
-                  </a>
+                  </a> -->
               </td>
             </tr>
             <?php $i++; ?>
