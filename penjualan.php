@@ -447,9 +447,10 @@ if (isset($_GET['id_penjualan'])) {
                       while($fetcharray=mysqli_fetch_array($databrg)){
 
                       $kode_barang = $fetcharray["kode_barang"];
+                      $nama_barang = $fetcharray["nama_barang"];
 
                      ?>
-                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> </option>
+                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> | <?=$nama_barang; ?> </option>
                     <?php } ?>
                   </select>
                 </div>
