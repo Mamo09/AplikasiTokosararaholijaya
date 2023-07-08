@@ -242,8 +242,9 @@ function editpenjualan($data) {
 
         $affected_rows = mysqli_affected_rows($conn);
         if ($affected_rows > 0) {
+
             // Panggil fungsi catatRiwayat
-            catatRiwayatpenjualan('mengubah', $data);
+            catatRiwayatpenjualan('mengedit', $data);
 
             return $affected_rows;
         } else {
@@ -465,7 +466,7 @@ function editpembelian($data){
 		$selisih_jumlah_beli = $jumlah_beli - $jumlah_beli_lama;
 		updateJumlahStok($kode_barang, $selisih_jumlah_beli, $jumlah_stok);
 
-		catatRiwayatPembelian('mengedit', $data);
+		catatRiwayateditPembelian('mengedit', $data);
 
 		return mysqli_affected_rows($conn);
 	} else {
@@ -507,7 +508,6 @@ function hapuspembelian($id_pembelian){
 		return false; // Pembelian tidak ditemukan
 	}
 }
-
 
 
 //untuk melakukan pencarian
@@ -640,6 +640,7 @@ function catatRiwayatstokbarang($action, $data) {
     $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
 	mysqli_query($conn, $sql);
 }
+
 function catatRiwayatPembelian($action , $data) {
     // Koneksi ke database
     global $conn;
@@ -659,11 +660,59 @@ function catatRiwayatPembelian($action , $data) {
     $tanggal_pembelian = $data['tanggal_pembelian'];
     $jumlah_beli = $data['jumlah_beli'];
     $harga_beli = $data['harga_beli'];
-    $kwitansi = $data['kwitansi'];
+    $kwitansi = $data["kwitansi"];
     $session_login = ucfirst($_SESSION['username']);
 
     // Membuat deskripsi perubahan
-    $deskripsi = $session_login . " melakukan pembelian:\n";
+    $deskripsi = $session_login . " ";
+    $deskripsi .= $action . " data pada tabel pembelian:\n";
+    $deskripsi .= "ID Pembelian: " . $id_pembelian . "\n";
+    $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
+    $deskripsi .= "Nama Barang: " . $nama_barang . "\n";
+    $deskripsi .= "Tanggal Pembelian: " . $tanggal_pembelian . "\n";
+    $deskripsi .= "Jumlah Beli: " . $jumlah_beli . "\n";
+    $deskripsi .= "Harga Beli: " . $harga_beli . "\n";
+    $deskripsi .= "Kwitansi: " . $kwitansi . "\n";
+    $deskripsi .= "Tanggal Perubahan: " . $tanggalRiwayat;
+
+    // Menyimpan riwayat perubahan ke tabel riwayat
+    $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
+    mysqli_query($conn, $sql);
+}
+
+
+function catatRiwayateditPembelian($action , $data) {
+    // Koneksi ke database
+    global $conn;
+	
+    // Mengambil waktu saat ini
+    $tanggalRiwayat = date('Y-m-d H:i:s');
+
+    $id_pembelian = $data['id_pembelian'];
+    $kode_barang = $data['kode_barang'];
+
+    // Mendapatkan informasi kode_barang dan nama_barang dari tabel data_barang
+    $select_barang_query = "SELECT nama_barang FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+    $barang = mysqli_fetch_assoc($select_barang_result);
+    $nama_barang = $barang['nama_barang'];
+
+    $tanggal_pembelian = $data['tanggal_pembelian'];
+    $jumlah_beli = $data['jumlah_beli'];
+    $harga_beli = $data['harga_beli'];
+	$session_login = ucfirst($_SESSION['username']);
+    $kwitansiLama = $data["kwitansiLama"];
+
+	if($_FILES['kwitansi']['error']==4){
+		$kwitansi = $kwitansiLama;
+	} else {
+		$kwitansi = upload();
+	}
+    $session_login = ucfirst($_SESSION['username']);
+
+    // Membuat deskripsi perubahan
+    $deskripsi = $session_login . " ";
+    $deskripsi .= $action . " data pada tabel pembelian:\n";
     $deskripsi .= "ID Pembelian: " . $id_pembelian . "\n";
     $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
     $deskripsi .= "Nama Barang: " . $nama_barang . "\n";

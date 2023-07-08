@@ -25,17 +25,11 @@ if (isset($_POST["cari"])) {
 if (isset($_POST['addpembelian'])) {
 
   if(addpembelian($_POST) > 0){
-    echo "  <script>
-          alert('data Berhasil ditambahkan');
-          window.location='pembelian.php';
-        </script>
+    echo " 
     ";
     
   } else {
-    echo "  <script>
-          alert('data gagal ditambahkan');
-          window.location='pembelian.php';
-        </script>
+    echo " 
     ";
   }
 }
@@ -43,17 +37,11 @@ if (isset($_POST['addpembelian'])) {
 if (isset($_POST['editpembelian'])) {
 
   if(editpembelian($_POST) > 0){
-      echo "  <script>
-          alert('data Berhasil diubah');
-          window.location='pembelian.php';
-        </script>
+      echo "  
     ";
     
   } else {
-    echo "  <script>
-          alert('data gagal diubah');
-          window.location='pembelian.php';
-        </script>
+    echo "  
     ";
   }
 }
