@@ -74,7 +74,7 @@ if (isset($_POST['reset'])) {
       </div>
   </div>
       <p>
-                    <a href="login.php">Back to Login</a>
+                    <a href="dashboard.php">Kembali ke Dashboard</a>
                 </p>
     </div>
 </body>
