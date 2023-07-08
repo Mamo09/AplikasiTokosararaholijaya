@@ -133,8 +133,12 @@ if (isset($_POST['penjualan'])) {
         $mpdf->AddPage();
     }
 
-    // Output PDF
-    $mpdf->Output();
+    // Output PDF dengan nama file yang disesuaikan
+    $nama_pembeli = str_replace(' ', '_', $data_penjualan['nama_pembeli']);
+    $tanggal_penjualan = str_replace('-', '', $data_penjualan['tanggal_penjualan']);
+    $file_name = $nama_pembeli . '-' . $tanggal_penjualan . '.pdf';
+
+    $mpdf->Output($file_name, 'D');
     exit; // Menghentikan eksekusi script setelah selesai mencetak
 }
 
