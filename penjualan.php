@@ -280,10 +280,6 @@ if (isset($_GET['id_penjualan'])) {
           <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"data-bs-target="#exampleModal">Tambah Data</button>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            Tahun Ini
-          </button>
         </div>
       </div>
 

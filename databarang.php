@@ -174,10 +174,6 @@ if (isset($_POST['updatebarang'])) {
             <div class="btn-group me-2">
               <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modaltambah">Tambah Data</button>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-              <span data-feather="calendar"></span>
-              Tahun Ini
-            </button>
           </div>
         </div>
 
