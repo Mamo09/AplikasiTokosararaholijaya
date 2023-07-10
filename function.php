@@ -139,7 +139,7 @@ function addpenjualan($data){
     $nama_pembeli = htmlspecialchars($data["nama_pembeli"]);
     $tanggal_penjualan = htmlspecialchars($data["tanggal_penjualan"]);
     $jumlah_jual = htmlspecialchars($data["jumlah_jual"]);
-    $harga_jual = htmlspecialchars($data["harga_jual"]);
+    $potongan = htmlspecialchars($data["potongan"]);
 
     $select_barang_query = "SELECT nama_barang, kategori, jumlah_stok FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
@@ -153,9 +153,9 @@ function addpenjualan($data){
     $stok_baru = $jumlah_stok - $jumlah_jual;
 
     if ($stok_baru >= 0) {
-        $queryaddpenjualan = "INSERT INTO penjualan (id_penjualan, kode_barang, nama_pembeli, nama_barang, kategori, tanggal_penjualan, jumlah_jual, harga_jual)
+        $queryaddpenjualan = "INSERT INTO penjualan (id_penjualan, kode_barang, nama_pembeli, nama_barang, kategori, tanggal_penjualan, jumlah_jual, potongan)
             VALUES
-            ('','$kode_barang','$nama_pembeli','$nama_barang','$kategori','$tanggal_penjualan',$jumlah_jual,$harga_jual)
+            ('','$kode_barang','$nama_pembeli','$nama_barang','$kategori','$tanggal_penjualan',$jumlah_jual,$potongan)
             ";
 
         mysqli_query($conn, $queryaddpenjualan);
@@ -175,7 +175,7 @@ function addpenjualan($data){
 		    'kategori' => $kategori,
 		    'tanggal_penjualan' => $tanggal_penjualan,
 		    'jumlah_jual' => $jumlah_jual,
-		    'harga_jual' => $harga_jual
+		    'potongan' => $potongan
 		);
 
         catatRiwayatpenjualan('menambah', $riwayat_data);
@@ -198,7 +198,7 @@ function editpenjualan($data) {
     $nama_pembeli = htmlspecialchars($data["nama_pembeli"]);
     $tanggal_penjualan = htmlspecialchars($data["tanggal_penjualan"]);
     $jumlah_jual = htmlspecialchars($data["jumlah_jual"]);
-    $harga_jual = htmlspecialchars($data["harga_jual"]);
+    $potongan = htmlspecialchars($data["potongan"]);
 
     $select_barang_query = "SELECT nama_barang, kategori FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
@@ -224,7 +224,7 @@ function editpenjualan($data) {
             kategori = '$kategori',
             tanggal_penjualan = '$tanggal_penjualan',
             jumlah_jual = $jumlah_jual,
-            harga_jual = $harga_jual
+            potongan = $potongan
             WHERE id_penjualan = '$id_penjualan'
             ";
 
@@ -257,7 +257,7 @@ function editpenjualan($data) {
 function hapuspenjualan($id_penjualan){
     global $conn;
 
-    $query = "SELECT kode_barang, jumlah_jual, nama_pembeli, tanggal_penjualan, harga_jual FROM penjualan WHERE id_penjualan = '$id_penjualan'";
+    $query = "SELECT kode_barang, jumlah_jual, nama_pembeli, tanggal_penjualan, potongan FROM penjualan WHERE id_penjualan = '$id_penjualan'";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) == 1) {
@@ -266,7 +266,7 @@ function hapuspenjualan($id_penjualan){
         $jumlah_jual = $penjualan['jumlah_jual'];
         $nama_pembeli = $penjualan['nama_pembeli'];
         $tanggal_penjualan = $penjualan['tanggal_penjualan'];
-        $harga_jual = $penjualan['harga_jual'];
+        $potongan = $penjualan['potongan'];
 
         $select_barang_query = "SELECT jumlah_stok FROM data_barang WHERE kode_barang = '$kode_barang'";
         $select_barang_result = mysqli_query($conn, $select_barang_query);
@@ -290,7 +290,7 @@ function hapuspenjualan($id_penjualan){
             'jumlah_stok' => $stok_baru,
             'nama_pembeli' => $nama_pembeli,
             'tanggal_penjualan' => $tanggal_penjualan,
-            'harga_jual' => $harga_jual
+            'potongan' => $potongan
         );
         catatRiwayatpenjualan('menghapus', $data);
 
@@ -579,7 +579,7 @@ function catatRiwayatpenjualan($action, $data) {
     $deskripsi .= "Kategori: " . $kategori . "\n";
     $deskripsi .= "Tanggal Penjualan: " . $data['tanggal_penjualan'] . "\n";
     $deskripsi .= "Jumlah Jual: " . $data['jumlah_jual'] . "\n";
-    $deskripsi .= "Harga Jual: " . $data['harga_jual']. "\n";
+    $deskripsi .= "Harga Potongan: " . $data['potongan']. "\n";
     $deskripsi .= "Tanggal Perubahan: " . $tanggalRiwayat;
 
     // Menyimpan riwayat perubahan ke tabel riwayat

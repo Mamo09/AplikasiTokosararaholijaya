@@ -486,8 +486,8 @@ if (isset($_GET['id_penjualan'])) {
                 </div>
 
                 <div class="mb-3">
-                  <label for="harga_jual" class="form-label">Harga Jual</label>
-                  <input type="number" class="form-control" id="harga_jual" placeholder="harga terjual" name="harga_jual" required>
+                  <label for="Potongan" class="form-label">Potongan</label>
+                  <input type="number" class="form-control" id="Potongan Harga" placeholder="Potongan" name="potongan" required>
                 </div>
 
               </div>
@@ -555,8 +555,8 @@ if (isset($_GET['id_penjualan'])) {
                 </div>
 
                 <div class="mb-3">
-                  <label for="harga_jual" class="form-label">Harga Jual</label>
-                  <input type="number" class="form-control" id="harga_jual" placeholder="harga terjual" name="harga_jual" value="<?= $row["harga_jual"]; ?>"required>
+                  <label for="Potongan" class="form-label">Potongan</label>
+                  <input type="number" class="form-control" id="Potongan" placeholder="Potongan Harga" name="potongan" value="<?= $row["potongan"]; ?>"required>
                 </div>
 
               </div>
