@@ -1,6 +1,5 @@
 <?php
 
-
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Mpdf\Mpdf;
@@ -20,7 +19,7 @@ if (isset($_POST['penjualan'])) {
 
     foreach ($penjualan_ids as $penjualan_id) {
         // Mendapatkan detail penjualan berdasarkan penjualan_id
-        $sql = "SELECT p.id_penjualan, p.kode_barang, p.nama_pembeli, b.nama_barang, b.kategori, p.tanggal_penjualan, p.jumlah_jual, p.harga_jual
+        $sql = "SELECT p.id_penjualan, p.kode_barang, p.nama_pembeli, b.nama_barang, b.kategori, p.tanggal_penjualan, p.jumlah_jual, p.potongan
                 FROM penjualan AS p
                 INNER JOIN data_barang AS b ON p.kode_barang = b.kode_barang
                 WHERE p.id_penjualan = '$penjualan_id'";
@@ -36,8 +35,7 @@ if (isset($_POST['penjualan'])) {
             $merged_penjualan[$key]['nama_barang'][] = $penjualan['nama_barang'];
             $merged_penjualan[$key]['kategori'][] = $penjualan['kategori'];
             $merged_penjualan[$key]['jumlah_jual'][] = $penjualan['jumlah_jual'];
-            $merged_penjualan[$key]['harga_jual'][] = $penjualan['harga_jual'];
-            $merged_penjualan[$key]['total_harga'][] = $penjualan['jumlah_jual'] * $penjualan['harga_jual'];
+            $merged_penjualan[$key]['potongan'][] = $penjualan['potongan'];
         } else {
             $merged_penjualan[$key] = array(
                 'nama_pembeli' => $penjualan['nama_pembeli'],
@@ -46,8 +44,7 @@ if (isset($_POST['penjualan'])) {
                 'nama_barang' => array($penjualan['nama_barang']),
                 'kategori' => array($penjualan['kategori']),
                 'jumlah_jual' => array($penjualan['jumlah_jual']),
-                'harga_jual' => array($penjualan['harga_jual']),
-                'total_harga' => array($penjualan['jumlah_jual'] * $penjualan['harga_jual'])
+                'potongan' => array($penjualan['potongan'])
             );
         }
     }
@@ -58,31 +55,26 @@ if (isset($_POST['penjualan'])) {
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="width: 20%;">
-                    <img src="img/logo.jpg" alt="Logo" width="70" height="70" >
-
+                        <img src="img/logo.jpg" alt="Logo" width="70" height="70">
                     </td>
                     <td style="width: 80%; text-align: left;">
                         <h1>Toko Sararaholi jaya</h1>
                         <p>jl. Sirao No. 14 Kel. Pasar, Gunungsitoli, Sumatera Utara</p>
                     </td>
-                
                 </tr>
-
             </table>
-            <hr style="border: 1px solid #000; margin-top: 10px;">');
+            <hr style="border: 1px solid #000; margin-top: 10px;">'
+        );
 
         // Nomor Faktur
         $nomor_faktur = 'INV/' . rand(1000000000, 9999999999) . '/' . str_replace('-', '', $data_penjualan['tanggal_penjualan']);
         $mpdf->WriteHTML('<p>Nomor Faktur: ' . $nomor_faktur . '</p>');
-
 
         // Nama Pembeli
         $mpdf->WriteHTML('<p>Nama Pembeli: ' . $data_penjualan['nama_pembeli'] . '</p>');
         // Tanggal
         $tanggal_penjualan = date('d F Y', strtotime($data_penjualan['tanggal_penjualan']));
         $mpdf->WriteHTML('<p>Tanggal: ' . $tanggal_penjualan . '</p>');
-
-        
 
         // Item yang dibeli
         $mpdf->WriteHTML('<p>Item yang dibeli:</p>');
@@ -96,8 +88,7 @@ if (isset($_POST['penjualan'])) {
                             <th>Nama Barang</th>
                             <th>Kategori</th>
                             <th>Jumlah</th>
-                            <th>Harga</th>
-                            <th>Total Harga</th>
+                            <th>Potongan</th>
                         </tr>
                     </thead>
                     <tbody>';
@@ -112,18 +103,17 @@ if (isset($_POST['penjualan'])) {
                         <td>' . $data_penjualan['nama_barang'][$i] . '</td>
                         <td>' . $data_penjualan['kategori'][$i] . '</td>
                         <td>' . $data_penjualan['jumlah_jual'][$i] . '</td>
-                        <td>' . $data_penjualan['harga_jual'][$i] . '</td>
-                        <td>' . $data_penjualan['total_harga'][$i] . '</td>
+                        <td>' . $data_penjualan['potongan'][$i] . '</td>
                     </tr>';
 
-            $total_harga += $data_penjualan['total_harga'][$i];
+            $total_harga += $data_penjualan['jumlah_jual'][$i] - $data_penjualan['potongan'][$i];
             $nomor_item++;
         }
 
         $html .= '</tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="6">Total Harga</td>
+                            <td colspan="5">Total Harga</td>
                             <td>' . $total_harga . '</td>
                         </tr>
                     </tfoot>
@@ -133,13 +123,13 @@ if (isset($_POST['penjualan'])) {
         $mpdf->AddPage();
     }
 
-    // Output PDF dengan nama file yang disesuaikan
+    // Output PDF with a customized file name
     $nama_pembeli = str_replace(' ', '_', $data_penjualan['nama_pembeli']);
     $tanggal_penjualan = str_replace('-', '', $data_penjualan['tanggal_penjualan']);
     $file_name = $nama_pembeli . '-' . $tanggal_penjualan . '.pdf';
 
     $mpdf->Output($file_name, 'D');
-    exit; // Menghentikan eksekusi script setelah selesai mencetak
+    exit; // Stop further execution after generating the PDF
 }
 
 

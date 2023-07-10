@@ -5,6 +5,8 @@ require 'function.php';
 
 $datapenjualan = query("SELECT * FROM penjualan ORDER BY id_penjualan DESC");
 
+$databarang = query("SELECT * FROM data_barang ");
+
 // // Variabel-variabel pagination
 // $jumlahdataperhalaman = 10;
 // $halamanaktif = isset($_GET["page"]) ? $_GET["page"] : 1;
@@ -303,47 +305,69 @@ if (isset($_GET['id_penjualan'])) {
       <div class="table-responsive" style="max-height: 400px; overflow-y: scroll;">
         <table class="table table-striped table-sm">
           <thead>
-            <tr>
-              <th scope="col">No.</th>
-              <th scope="col">Nama Pembeli</th>
-              <th scope="col">Tanggal</th>
-              <th scope="col">Nama Barang</th>
-              <th scope="col">Jumlah</th>
-              <th scope="col">Harga Terjual</th>
-              <th scope="col">Kategori</th>
-              <th scope="col">Aksi</th>
-            </tr>
+              <tr>
+                  <th scope="col">No.</th>
+                  <th scope="col">Nama Pembeli</th>
+                  <th scope="col">Tanggal</th>
+                  <th scope="col">Nama Barang</th>
+                  <th scope="col">Jumlah</th>
+                  <th scope="col">Harga Satuan</th>
+                  <th scope="col">Potongan</th>
+                  <th scope="col">Harga Total</th>
+                  <th scope="col">Kategori</th>
+                  <th scope="col">Aksi</th>
+              </tr>
           </thead>
           <tbody>
-            <form method="post">
-            <?php $i=1; ?>
-            <?php foreach($datapenjualan as $row): ?>
+              <form method="post">
+                  <?php $i=1; ?>
+                  <?php foreach($datapenjualan as $row): ?>
+                      <?php
+                      // Retrieve the harga_satuan from the data_barang table based on the kode_barang
+                      $hargaSatuan = "";
+                      foreach($databarang as $barang) {
+                          if ($barang["kode_barang"] == $row["kode_barang"]) {
+                              $hargaSatuan = $barang["harga_satuan"];
+                              break;
+                          }
+                      }
 
-            <tr>
-              <td><?= $i;  ?></td>
-              <td> <?= $row["nama_pembeli"];  ?></td>
-              <td> <?= $row["tanggal_penjualan"]; ?></td>
-              <td> <?= $row["nama_barang"];  ?></td>
-              <td> <?= $row["jumlah_jual"];  ?></td>
-              <td> <?= $row["harga_jual"];  ?></td>
-              <td> <?= $row["kategori"];  ?></td>
-              <td>
-                  <!-- <a>
-                    <span data-feather ="eye"></span>
-                  </a> -->
-                  <a>
-                    <span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modaleditpenjualan<?= $row["id_penjualan"]; ?>"></span>
-                  </a>
-                  <a href="?id_penjualan=<?= $row['id_penjualan']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapuspenjualan">
-            <span data-feather="trash-2"></span></a>
-              </td>
-            </tr>
-            <?php $i++; ?>
-            <?php endforeach; ?>
+                      // Calculate the Harga Total
+                      $hargaTotal = ($hargaSatuan * $row["jumlah_jual"]) - $row["potongan"];
+                      ?>
 
-            </form>
+                      <tr>
+                          <td><?= $i;  ?></td>
+                          <td><?= $row["nama_pembeli"];  ?></td>
+                          <td><?= $row["tanggal_penjualan"]; ?></td>
+                          <td><?= $row["nama_barang"];  ?></td>
+                          <td><?= $row["jumlah_jual"];  ?></td>
+                          <td><?= $hargaSatuan; ?></td>
+                          <td><?= $row["potongan"]; ?></td>
+                          <td><?= $hargaTotal; ?></td>
+                          <td><?= $row["kategori"];  ?></td>
+                          <td>
+                              <!-- <a>
+                                  <span data-feather="eye"></span>
+                              </a> -->
+                              <a>
+                                  <span data-feather="edit" data-bs-toggle="modal"
+                                      data-bs-target="#modaleditpenjualan<?= $row["id_penjualan"]; ?>"></span>
+                              </a>
+                              <a href="?id_penjualan=<?= $row['id_penjualan']; ?>"
+                                  onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapuspenjualan">
+                                  <span data-feather="trash-2"></span>
+                              </a>
+                          </td>
+                      </tr>
+                      <?php $i++; ?>
+                  <?php endforeach; ?>
+
+              </form>
           </tbody>
-        </table>
+      </table>
+
+
       </div>
      </div> 
 
@@ -448,9 +472,10 @@ if (isset($_GET['id_penjualan'])) {
 
                       $kode_barang = $fetcharray["kode_barang"];
                       $nama_barang = $fetcharray["nama_barang"];
+                      $harga_satuan = $fetcharray["harga_satuan"];
 
                      ?>
-                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> | <?=$nama_barang; ?> </option>
+                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> | <?=$nama_barang; ?> | <?=$harga_satuan; ?></option>
                     <?php } ?>
                   </select>
                 </div>

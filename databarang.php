@@ -199,6 +199,7 @@ if (isset($_POST['updatebarang'])) {
                 <th scope="col">Kode Barang</th>
                 <th scope="col">Nama Barang</th>
                 <th scope="col">Kategori</th>
+                <th scope="col">Harga Modal</th>
                 <th scope="col">Harga Satuan</th>
                 <th scope="col">Aksi</th>
               </tr>
@@ -212,6 +213,7 @@ if (isset($_POST['updatebarang'])) {
                     <td><?= $row["kode_barang"]; ?></td>
                     <td><?= $row["nama_barang"]; ?></td>
                     <td><?= $row["kategori"]; ?></td>
+                    <td><?= $row["harga_modal"]; ?></td>
                     <td><?= $row["harga_satuan"]; ?></td>
                     <td>
                       <!-- <a><span data-feather="eye"></span></a> -->

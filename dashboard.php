@@ -10,7 +10,13 @@ require 'login.php';
     }
 
     // Query untuk mendapatkan data penjualan dengan harga jual dan harga modal berdasarkan tahun yang dipilih
-    $sql = "SELECT DATE_FORMAT(p.tanggal_penjualan, '%m') AS bulan, SUM(p.jumlah_jual * p.harga_jual) - SUM(p.jumlah_jual * b.harga_modal) AS keuntungan, b.nama_barang FROM penjualan p INNER JOIN data_barang b ON p.kode_barang = b.kode_barang WHERE YEAR(p.tanggal_penjualan) = $selectedYear GROUP BY bulan, b.nama_barang";
+    $sql = "SELECT DATE_FORMAT(p.tanggal_penjualan, '%m') AS bulan, 
+        SUM(((b.harga_satuan * p.jumlah_jual) - p.potongan) - (b.harga_modal * p.jumlah_jual)) AS keuntungan, 
+        b.nama_barang 
+        FROM penjualan p 
+        INNER JOIN data_barang b ON p.kode_barang = b.kode_barang 
+        WHERE YEAR(p.tanggal_penjualan) = $selectedYear 
+        GROUP BY bulan, b.nama_barang";
     $result = mysqli_query($conn, $sql);
 
     // Inisialisasi array untuk menyimpan data
