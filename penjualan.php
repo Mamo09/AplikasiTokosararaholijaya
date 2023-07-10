@@ -533,7 +533,7 @@ if (isset($_GET['id_penjualan'])) {
                 <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Pilih Kode Barang</label>
                   <select name="kode_barang" class="form-control" id="exampleFormControlInput1" >
-                    <option selected ><?= $row["kode_barang"]; ?></option>
+                    <option selected><?= $row["kode_barang"]; ?> | <?= $row["nama_barang"]; ?> | <?= getHargaSatuan($row["kode_barang"]); ?></option>
                     <?php 
 
                       $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
@@ -541,10 +541,11 @@ if (isset($_GET['id_penjualan'])) {
                       while($fetcharray=mysqli_fetch_array($databrg)){
 
                       $kode_barang = $fetcharray["kode_barang"];
+                      $nama_barang = $fetcharray["nama_barang"];
+                      $harga_satuan = $fetcharray["harga_satuan"];
 
                      ?>
-
-                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> </option>
+                     <option value= "<?=$kode_barang; ?>"> <?=$kode_barang; ?> | <?=$nama_barang; ?> | <?=$harga_satuan; ?></option>
                     <?php } ?>
                   </select>
                 </div>

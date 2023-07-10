@@ -19,7 +19,7 @@ if (isset($_POST['penjualan'])) {
 
     foreach ($penjualan_ids as $penjualan_id) {
         // Mendapatkan detail penjualan berdasarkan penjualan_id
-        $sql = "SELECT p.id_penjualan, p.kode_barang, p.nama_pembeli, b.nama_barang, b.kategori, p.tanggal_penjualan, p.jumlah_jual, p.potongan
+        $sql = "SELECT p.id_penjualan, p.kode_barang, p.nama_pembeli, b.nama_barang, b.kategori, b.harga_satuan, p.tanggal_penjualan, p.jumlah_jual, p.potongan
                 FROM penjualan AS p
                 INNER JOIN data_barang AS b ON p.kode_barang = b.kode_barang
                 WHERE p.id_penjualan = '$penjualan_id'";
@@ -36,6 +36,7 @@ if (isset($_POST['penjualan'])) {
             $merged_penjualan[$key]['kategori'][] = $penjualan['kategori'];
             $merged_penjualan[$key]['jumlah_jual'][] = $penjualan['jumlah_jual'];
             $merged_penjualan[$key]['potongan'][] = $penjualan['potongan'];
+            $merged_penjualan[$key]['harga_satuan'][] = $penjualan['harga_satuan'];
         } else {
             $merged_penjualan[$key] = array(
                 'nama_pembeli' => $penjualan['nama_pembeli'],
@@ -44,7 +45,8 @@ if (isset($_POST['penjualan'])) {
                 'nama_barang' => array($penjualan['nama_barang']),
                 'kategori' => array($penjualan['kategori']),
                 'jumlah_jual' => array($penjualan['jumlah_jual']),
-                'potongan' => array($penjualan['potongan'])
+                'potongan' => array($penjualan['potongan']),
+                'harga_satuan' => array($penjualan['harga_satuan'])
             );
         }
     }
@@ -88,7 +90,9 @@ if (isset($_POST['penjualan'])) {
                             <th>Nama Barang</th>
                             <th>Kategori</th>
                             <th>Jumlah</th>
+                            <th>Harga Satuan</th>
                             <th>Potongan</th>
+
                         </tr>
                     </thead>
                     <tbody>';
@@ -103,18 +107,33 @@ if (isset($_POST['penjualan'])) {
                         <td>' . $data_penjualan['nama_barang'][$i] . '</td>
                         <td>' . $data_penjualan['kategori'][$i] . '</td>
                         <td>' . $data_penjualan['jumlah_jual'][$i] . '</td>
-                        <td>' . $data_penjualan['potongan'][$i] . '</td>
+                        <td>Rp ' . number_format($data_penjualan['harga_satuan'][$i], 0, ',', '.') . '</td>
+                        <td>Rp ' . number_format($data_penjualan['potongan'][$i], 0, ',', '.') . '</td>
+
                     </tr>';
 
-            $total_harga += $data_penjualan['jumlah_jual'][$i] - $data_penjualan['potongan'][$i];
+            $total_harga += $data_penjualan['harga_satuan'][$i] * $data_penjualan['jumlah_jual'][$i] - $data_penjualan['potongan'][$i];
+
+            $totalhargabarang += $data_penjualan['harga_satuan'][$i]* $data_penjualan['jumlah_jual'][$i];
+
+            $totalpotongan += $data_penjualan['potongan'][$i];
+
             $nomor_item++;
         }
 
         $html .= '</tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="5">Total Harga</td>
-                            <td>' . $total_harga . '</td>
+                            <td colspan="6">Harga Barang</td>
+                            <td colspan="1">Rp ' . number_format($totalhargabarang, 0, ',', '.') . '</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">Total potongan</td>
+                            <td colspan="1">- Rp ' . number_format($totalpotongan, 0, ',', '.') . '</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">Total Harga</td>
+                            <td colspan="1">Rp ' . number_format($total_harga, 0, ',', '.') . '</td>
                         </tr>
                     </tfoot>
                 </table>';

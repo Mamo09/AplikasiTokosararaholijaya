@@ -730,7 +730,19 @@ function catatRiwayateditPembelian($action , $data) {
 
 
 
+function getHargaSatuan($kode_barang) {
+    global $conn;
 
+    $query = "SELECT harga_satuan FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $result = mysqli_query($conn, $query);
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return $row["harga_satuan"];
+    }
+
+    return "N/A";
+}
 
 
 
