@@ -487,7 +487,7 @@ if (isset($_GET['id_penjualan'])) {
 
                 <div class="mb-3">
                   <label for="Potongan" class="form-label">Potongan</label>
-                  <input type="number" class="form-control" id="Potongan Harga" placeholder="Potongan" name="potongan" required>
+                  <input type="number" class="form-control" id="Potongan" placeholder="Potongan" name="potongan" required>
                 </div>
 
               </div>
