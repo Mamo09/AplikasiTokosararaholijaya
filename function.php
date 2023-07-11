@@ -133,6 +133,11 @@ function editstok($data){
 function addpenjualan($data){
     global $conn;
 
+	// Periksa apakah pengguna yang login adalah admin
+    if ($_SESSION['role'] !== 'admin') {
+        return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
+    }
+
     $query = "SELECT kode_barang, nama_barang, kategori, jumlah_stok FROM data_barang";
     $result = mysqli_query($conn, $query);
     $kode_barang = htmlspecialchars($data["kode_barang"]);
@@ -189,6 +194,10 @@ function addpenjualan($data){
 
 function editpenjualan($data) {
     global $conn;
+    	// Periksa apakah pengguna yang login adalah admin
+    if ($_SESSION['role'] !== 'admin') {
+        return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
+    }
 
     $query = "SELECT kode_barang, nama_barang, kategori FROM data_barang";
     $result = mysqli_query($conn, $query);
@@ -256,6 +265,11 @@ function editpenjualan($data) {
 // Hapus data penjualan
 function hapuspenjualan($id_penjualan){
     global $conn;
+
+    // Periksa apakah pengguna yang login adalah admin
+    if ($_SESSION['role'] !== 'admin') {
+        return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
+    }
 
     $query = "SELECT kode_barang, jumlah_jual, nama_pembeli, tanggal_penjualan, potongan FROM penjualan WHERE id_penjualan = '$id_penjualan'";
     $result = mysqli_query($conn, $query);
@@ -353,6 +367,12 @@ function upload(){
 function addpembelian($data){
 	global $conn;
 
+	 // Periksa apakah pengguna yang login adalah admin
+    if ($_SESSION['role'] !== 'owner') {
+        return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
+    }
+
+
 	$query = "SELECT kode_barang, nama_barang FROM data_barang";
 	$result = mysqli_query($conn, $query);
 
@@ -420,6 +440,10 @@ function updateJumlahStok($kode_barang, $selisih_jumlah_beli, $jumlah_stok){
 
 // Edit data pembelian
 function editpembelian($data){
+	// Periksa apakah pengguna yang login adalah admin
+    if ($_SESSION['role'] !== 'owner') {
+        return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
+    }
 	global $conn;
 
 	$query = "SELECT kode_barang, nama_barang FROM data_barang";
@@ -477,6 +501,11 @@ function editpembelian($data){
 // Hapus data pembelian
 function hapuspembelian($id_pembelian){
 	global $conn;
+
+	// Periksa apakah pengguna yang login adalah admin
+    if ($_SESSION['role'] !== 'owner') {
+        return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
+    }
 
 	$select_pembelian_query = "SELECT kode_barang, jumlah_beli FROM pembelian WHERE id_pembelian = '$id_pembelian'";
 	$select_pembelian_result = mysqli_query($conn, $select_pembelian_query);

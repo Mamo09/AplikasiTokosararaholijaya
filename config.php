@@ -21,10 +21,6 @@ if(!isset($_SESSION))
 	}
 
 
-// Mengelola tabel "data_barang"
-
-
-
 
 ?>
 

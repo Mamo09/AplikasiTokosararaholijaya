@@ -17,9 +17,9 @@ if (isset($_POST['login'])) {
         if ($password === $storedPassword) {
             // Membuat session berdasarkan jenis pengguna
             if ($userType === 'admin') {
-                $_SESSION['username'] = 'admin';
+                $_SESSION['role'] = 'admin';
             } elseif ($userType === 'owner') {
-                $_SESSION['username'] = 'owner';
+                $_SESSION['role'] = 'owner';
             }
 
             $_SESSION['username'] = $username;

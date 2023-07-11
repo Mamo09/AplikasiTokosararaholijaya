@@ -533,7 +533,7 @@ if (isset($_GET['id_penjualan'])) {
                 <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">Pilih Kode Barang</label>
                   <select name="kode_barang" class="form-control" id="exampleFormControlInput1" >
-                    <option selected><?= $row["kode_barang"]; ?> | <?= $row["nama_barang"]; ?> | <?= getHargaSatuan($row["kode_barang"]); ?></option>
+                    
                     <?php 
 
                       $databrg = mysqli_query($conn, "SELECT * FROM data_barang");
