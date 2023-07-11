@@ -216,8 +216,8 @@ if (isset($_POST['updatebarang'])) {
                     <td><?= $row["kode_barang"]; ?></td>
                     <td><?= $row["nama_barang"]; ?></td>
                     <td><?= $row["kategori"]; ?></td>
-                    <td><?= $row["harga_modal"]; ?></td>
-                    <td><?= $row["harga_satuan"]; ?></td>
+                    <td>Rp. <?=number_format($row["harga_modal"], 0, ',', '.');?></td>
+                    <td>Rp. <?=number_format($row["harga_satuan"], 0, ',', '.');?></td>
                     <td>
                       <!-- <a><span data-feather="eye"></span></a> -->
                       <a><span data-feather="edit" data-bs-toggle="modal" data-bs-target="#modalubah<?= $row["kode_barang"]; ?>"></span></a>

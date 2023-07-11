@@ -251,7 +251,7 @@ if (isset($_GET['id_pembelian'])) {
               <td> <?= $row["tanggal_pembelian"]; ?></td>
               <td> <?= $row["kode_barang"];  ?></td>
               <td> <?= $row["nama_barang"];  ?></td>
-              <td> <?= $row["harga_beli"];  ?></td>
+              <td>Rp. <?=number_format($row["harga_beli"], 0, ',', '.');?></td>
               <td> <?= $row["jumlah_beli"];  ?></td>
               <td> 
                 <div class="gambarkotak">

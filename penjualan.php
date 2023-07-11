@@ -311,10 +311,11 @@ if (isset($_GET['id_penjualan'])) {
                   <th scope="col">Tanggal</th>
                   <th scope="col">Nama Barang</th>
                   <th scope="col">Jumlah</th>
+                  <th scope="col">Kategori</th>
                   <th scope="col">Harga Satuan</th>
                   <th scope="col">Potongan</th>
                   <th scope="col">Harga Total</th>
-                  <th scope="col">Kategori</th>
+                  
                   <th scope="col">Aksi</th>
               </tr>
           </thead>
@@ -342,10 +343,12 @@ if (isset($_GET['id_penjualan'])) {
                           <td><?= $row["tanggal_penjualan"]; ?></td>
                           <td><?= $row["nama_barang"];  ?></td>
                           <td><?= $row["jumlah_jual"];  ?></td>
-                          <td><?= $hargaSatuan; ?></td>
-                          <td><?= $row["potongan"]; ?></td>
-                          <td><?= $hargaTotal; ?></td>
                           <td><?= $row["kategori"];  ?></td>
+                          <td>Rp. <?=number_format($hargaSatuan, 0, ',', '.');?></td>
+                          <td>Rp. <?=number_format($row["potongan"], 0, ',', '.');?></td>
+                          <td>Rp. <?=number_format($hargaTotal, 0, ',', '.');?></td>
+
+                          
                           <td>
                               <!-- <a>
                                   <span data-feather="eye"></span>
