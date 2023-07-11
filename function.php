@@ -566,7 +566,7 @@ function caribarang($keywordbarang){
     return query($query);
 }
 
-function caripembelian($keyword, $tanggalFilter, $sort){
+function caripembelian($keyword, $tanggalFilter){
     $query = "SELECT * FROM pembelian
                 WHERE (kode_barang LIKE '%$keyword%' OR
                 nama_barang LIKE '%$keyword%')
@@ -575,8 +575,6 @@ function caripembelian($keyword, $tanggalFilter, $sort){
     if ($tanggalFilter != '') {
         $query .= "AND tanggal_pembelian = '$tanggalFilter'";
     }
-
-    $query .= " ORDER BY tanggal_pembelian $sort";
 
     return query($query);
 }
