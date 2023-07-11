@@ -106,10 +106,11 @@ require 'login.php';
 
 <div class="btn-group" style="padding-right: 5px;">
   <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Settings
+    <a data-feather="user"></a>
+    <?= ucfirst($_SESSION['username']); ?>
   </button>
   <ul class="dropdown-menu dropdown-menu-lg-end">
-      <li><a class="dropdown-item" ><?php echo ucfirst($_SESSION['username']); ?></a></li>
+      <li><a class="dropdown-item" ><?= ucfirst($_SESSION['username']); ?></a></li>
       <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
       <li><hr class="dropdown-divider"></li>
       <li><a class="nav-link px-3" href="logout.php">Sign Out</a></li>
@@ -130,35 +131,36 @@ require 'login.php';
           </li>
           <li class="nav-item">
             <a class="nav-link" href="penjualan.php">
-              <span data-feather="file"></span>
+              <span data-feather="shopping-cart"></span>
               Penjualan
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="databarang.php">
-              <span data-feather="shopping-cart"></span>
+              <span data-feather="database"></span>
               Data Barang
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="stokbarang.php">
-              <span data-feather="users"></span>
+              <span data-feather="layers"></span>
               Stok Barang
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="pembelian.php">
-              <span data-feather="bar-chart-2"></span>
+              <span data-feather="shopping-bag"></span>
               Pembelian
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="riwayat.php">
-              <span data-feather="layers"></span>
+              <span data-feather="archive"></span>
               Riwayat
             </a>
           </li>
-        </ul>   
+        </ul>
+      </div>
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -180,11 +182,52 @@ require 'login.php';
 
         </div>
       </div>
+      <div class="container text-center">
+        <div class="row align-items-center">
+          <div class="col">
+            <div class="d-grid gap-2">
+                <button onclick="document.location='penjualan.php'" type="button" class="btn btn-outline-secondary">
+                  <h5 class="card-title">Penjualan</h5>
+                </button>
+            </div>
+          </div>
+          <div class="col">
+            <div class="d-grid gap-2">
+                <button onclick="document.location='databarang.php'" type="button" class="btn btn-outline-secondary">
+                  <h5 class="card-title">Data Barang</h5>
+                </button>
+            </div>
+          </div>
+          <div class="col">
+            <div class="d-grid gap-2">
+                <button onclick="document.location='stokbarang.php'" type="button" class="btn btn-outline-secondary">
+                  <h5 class="card-title">Stok Barang</h5>
+                </button>
+            </div>
+          </div>
+          <div class="col">
+            <div class="d-grid gap-2">
+                <button onclick="document.location='pembelian.php'" type="button" class="btn btn-outline-secondary">
+                  <h5 class="card-title">Pembelian</h5>
+                </button>
+            </div>
+          </div>
+          <div class="col">
+            <div class="d-grid gap-2">
+                <button onclick="document.location='riwayat.php'" type="button" class="btn btn-outline-secondary">
+                  <h5 class="card-title">Riwayat</h5>
+                </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Grafik Keuntungan</h2>
+        
+      </div>
       <canvas id="myChart" width="900" height="380" ></canvas>
 
-      <h2>Grafik Keuntungan</h2>
-      <div class="table-responsive">
       </div>
     </main>
   </div>

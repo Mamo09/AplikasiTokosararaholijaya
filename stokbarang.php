@@ -77,15 +77,15 @@ if (isset($_POST['editstok'])) {
   </button>
 <div class="btn-group" style="padding-right: 5px;">
   <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Settings
+    <a data-feather="user"></a>
+    <?= ucfirst($_SESSION['username']); ?>
   </button>
   <ul class="dropdown-menu dropdown-menu-lg-end">
-      <li><a class="dropdown-item" ><?php echo ucfirst($_SESSION['username']); ?></a></li>
+      <li><a class="dropdown-item" ><?= ucfirst($_SESSION['username']); ?></a></li>
       <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
       <li><hr class="dropdown-divider"></li>
       <li><a class="nav-link px-3" href="logout.php">Sign Out</a></li>
   </ul>
-</div>
 </header>
 
 <div class="container-fluid">
@@ -101,35 +101,36 @@ if (isset($_POST['editstok'])) {
           </li>
           <li class="nav-item">
             <a class="nav-link" href="penjualan.php">
-              <span data-feather="file"></span>
+              <span data-feather="shopping-cart"></span>
               Penjualan
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="databarang.php">
-              <span data-feather="shopping-cart"></span>
+              <span data-feather="database"></span>
               Data Barang
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="stokbarang.php">
-              <span data-feather="users"></span>
+              <span data-feather="layers"></span>
               Stok Barang
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="pembelian.php">
-              <span data-feather="bar-chart-2"></span>
+              <span data-feather="shopping-bag"></span>
               Pembelian
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"  href="riwayat.php">
-              <span data-feather="layers"></span>
+            <a class="nav-link" href="riwayat.php">
+              <span data-feather="archive"></span>
               Riwayat
             </a>
           </li>
-        </ul>   
+        </ul>
+      </div>
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
@@ -153,7 +154,7 @@ if (isset($_POST['editstok'])) {
       </form>
 
       <div class="container">
-      <div class="table-responsive">
+      <div class="table-responsive" style="max-height: 450px; overflow-y: scroll;">
         <table class="table table-striped table-sm">
           <thead>
             <tr>

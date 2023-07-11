@@ -113,10 +113,11 @@ if (isset($_POST['updatebarang'])) {
     
 <div class="btn-group" style="padding-right: 5px;">
   <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Settings
+    <a data-feather="user"></a>
+    <?= ucfirst($_SESSION['username']); ?>
   </button>
   <ul class="dropdown-menu dropdown-menu-lg-end">
-      <li><a class="dropdown-item" ><?php echo ucfirst($_SESSION['username']); ?></a></li>
+      <li><a class="dropdown-item" ><?= ucfirst($_SESSION['username']); ?></a></li>
       <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
       <li><hr class="dropdown-divider"></li>
       <li><a class="nav-link px-3" href="logout.php">Sign Out</a></li>
@@ -126,47 +127,49 @@ if (isset($_POST['updatebarang'])) {
   <div class="container-fluid">
     <div class="row">
       <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="position-sticky pt-3">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link" href="dashboard.php">
-                <span data-feather="home"></span>
-                Dashboard
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="penjualan.php">
-                <span data-feather="file"></span>
-                Penjualan
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="databarang.php">
-                <span data-feather="shopping-cart"></span>
-                Data Barang
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="stokbarang.php">
-                <span data-feather="users"></span>
-                Stok Barang
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="pembelian.php">
-                <span data-feather="bar-chart-2"></span>
-                Pembelian
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="riwayat.php">
-                <span data-feather="layers"></span>
-                Riwayat
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="dashboard.php">
+              <span data-feather="home"></span>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="penjualan.php">
+              <span data-feather="shopping-cart"></span>
+              Penjualan
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="databarang.php">
+              <span data-feather="database"></span>
+              Data Barang
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="stokbarang.php">
+              <span data-feather="layers"></span>
+              Stok Barang
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pembelian.php">
+              <span data-feather="shopping-bag"></span>
+              Pembelian
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="riwayat.php">
+              <span data-feather="archive"></span>
+              Riwayat
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">Data Barang</h1>
@@ -190,8 +193,8 @@ if (isset($_POST['updatebarang'])) {
         </div>
       </form>
 
-      <div class="container" style="height: 350px;">
-        <div class="table-responsive">
+      <div class="container">
+        <div class="table-responsive " style="max-height: 450px; overflow-y: scroll;">
           <table class="table table-striped table-sm">
             <thead>
               <tr>
