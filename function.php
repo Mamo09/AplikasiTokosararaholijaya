@@ -38,7 +38,16 @@ function addbarang($data){
         mysqli_query($conn, $query);
 
 
-        catatRiwayatDataBarang('menambah', $data);
+        $riwayat_data = array(
+		    'kode_barang' => $kode_barang,
+		    'nama_barang' => $nama_barang,
+		    'kategori' => $kategori,
+		    'harga_modal'=> $harga_modal,
+		    'harga_satuan'=> $harga_satuan
+
+		);
+
+    	catatRiwayatDataBarang('menambah', $riwayat_data);
 
         return mysqli_affected_rows($conn);
     }
@@ -56,8 +65,15 @@ function hapusbarang($kode_barang){
     // Hapus data barang
     mysqli_query($conn, "DELETE FROM data_barang WHERE kode_barang = '$kode_barang'");
 
+	$riwayat_data = array(
+		    'kode_barang' => $kode_barang,
+		    'nama_barang' => $nama_barang,
+		    'kategori' => $kategori,
+		    'harga_modal'=> $harga_modal,
+		    'harga_satuan'=> $harga_satuan
 
-    catatRiwayatDataBarang('menghapus', $data);
+		);
+    catatRiwayatDataBarang('menghapus', $riwayat_data);
 
     return mysqli_affected_rows($conn);
 }
