@@ -49,7 +49,7 @@ if (isset($_POST['reset'])) {
 </head>
 <body>
   <header>
-    <h1>Reset Password</h1>
+    <h1>Ganti Password</h1>
   </header>
   <div class="container">
   <div class="form-container">
@@ -66,7 +66,7 @@ if (isset($_POST['reset'])) {
                 <label for="confirm_password">Confirm Password :</label>
                 <input type="password" name="confirm_password" placeholder="Confirm Password" required />
 
-                <button type="submit" name="reset">Reset Password</button>
+                <button type="submit" name="reset">Ganti Password</button>
             </form>
         </div>
         <div class="right">
