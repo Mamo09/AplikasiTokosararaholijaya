@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <header>
-    <h1>Lupa Password</h1>
+    <h1>Reset Password</h1>
 </header>
 <?php if (!$resetStatus) : ?>
     <div class="container">
