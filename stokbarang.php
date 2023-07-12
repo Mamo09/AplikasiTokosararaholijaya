@@ -194,6 +194,11 @@ if (isset($_POST['editstok'])) {
             </tr>
             <?php $i++; ?>
             <?php endforeach; ?>
+            <?php if(empty($databarang)): ?>
+               <tr>
+                  <td colspan="10">Data tidak ditemukan</td>
+                </tr>
+            <?php endif; ?>
           </tbody>
         </table>
         </div>

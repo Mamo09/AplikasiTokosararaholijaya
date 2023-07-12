@@ -72,9 +72,15 @@ if (isset($_POST['addpenjualan'])) {
 if (isset($_POST['editpenjualan'])) {
     $result = editpenjualan($_POST);
     if ($result > 0) {
-        echo "";
+        echo "<script>
+            alert('Data berhasil diubah.');
+            window.location='penjualan.php';
+        </script>";
     } else {
-        echo "";
+        echo "<script>
+            alert('Data gagal diubah');
+            window.location='penjualan.php';
+        </script>";
     }
 
 }
@@ -344,9 +350,6 @@ if (isset($_GET['id_penjualan'])) {
                               break;
                           }
                       }
-
-                      // Calculate the Harga Total
-                      $hargaTotal = ($hargaSatuan * $row["jumlah_jual"]) - $row["potongan"];
                       ?>
 
                       <tr>
@@ -358,7 +361,7 @@ if (isset($_GET['id_penjualan'])) {
                           <td><?= $row["kategori"];  ?></td>
                           <td>Rp. <?=number_format($hargaSatuan, 0, ',', '.');?></td>
                           <td>Rp. <?=number_format($row["potongan"], 0, ',', '.');?></td>
-                          <td>Rp. <?=number_format($hargaTotal, 0, ',', '.');?></td>
+                          <td>Rp. <?=number_format($row["harga_total"], 0, ',', '.');?></td>
 
                           
                           <td>
@@ -381,6 +384,12 @@ if (isset($_GET['id_penjualan'])) {
                       </tr>
                       <?php $i++; ?>
                   <?php endforeach; ?>
+                  
+                  <?php if(empty($datapenjualan)): ?>
+                        <tr>
+                            <td colspan="10">Data tidak ditemukan</td>
+                        </tr>
+                    <?php endif; ?>
 
               </form>
           </tbody>

@@ -284,6 +284,11 @@ if (isset($_GET['id_pembelian'])) {
             </tr>
             <?php $i++; ?>
             <?php endforeach; ?>
+            <?php if(empty($datapembelian)): ?>
+                        <tr>
+                            <td colspan="10">Data tidak ditemukan</td>
+                        </tr>
+                    <?php endif; ?>
 
             </form>
           </tbody>
