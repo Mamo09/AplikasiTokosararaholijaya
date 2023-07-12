@@ -99,10 +99,6 @@ require 'login.php';
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 
   <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="dashboard.php">Toko Sararaholi Jaya</a>
-  
-  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
 
 <div class="btn-group" style="padding-right: 5px;">
   <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -140,39 +136,39 @@ require 'login.php';
       </div>
       <div class="container text-center">
         <div class="row align-items-center">
-          <div class="col">
+          <div class="col-md">
             <div class="d-grid gap-2">
-                <button onclick="document.location='penjualan.php'" type="button" class="btn btn-outline-secondary">
-                  <h5 class="card-title">Penjualan</h5>
-                </button>
+              <button onclick="document.location='penjualan.php'" type="button" class="btn btn-outline-secondary">
+                <h5 class="card-title">Penjualan</h5>
+              </button>
             </div>
           </div>
-          <div class="col">
+          <div class="col-md">
             <div class="d-grid gap-2">
-                <button onclick="document.location='databarang.php'" type="button" class="btn btn-outline-secondary">
-                  <h5 class="card-title">Data Barang</h5>
-                </button>
+              <button onclick="document.location='databarang.php'" type="button" class="btn btn-outline-secondary">
+                <h5 class="card-title">Data Barang</h5>
+              </button>
             </div>
           </div>
-          <div class="col">
+          <div class="col-md">
             <div class="d-grid gap-2">
-                <button onclick="document.location='stokbarang.php'" type="button" class="btn btn-outline-secondary">
-                  <h5 class="card-title">Stok Barang</h5>
-                </button>
+              <button onclick="document.location='stokbarang.php'" type="button" class="btn btn-outline-secondary">
+                <h5 class="card-title">Stok Barang</h5>
+              </button>
             </div>
           </div>
-          <div class="col">
+          <div class="col-md">
             <div class="d-grid gap-2">
-                <button onclick="document.location='pembelian.php'" type="button" class="btn btn-outline-secondary">
-                  <h5 class="card-title">Pembelian</h5>
-                </button>
+              <button onclick="document.location='pembelian.php'" type="button" class="btn btn-outline-secondary">
+                <h5 class="card-title">Pembelian</h5>
+              </button>
             </div>
           </div>
-          <div class="col">
+          <div class="col-md">
             <div class="d-grid gap-2">
-                <button onclick="document.location='riwayat.php'" type="button" class="btn btn-outline-secondary">
-                  <h5 class="card-title">Riwayat</h5>
-                </button>
+              <button onclick="document.location='riwayat.php'" type="button" class="btn btn-outline-secondary">
+                <h5 class="card-title">Riwayat</h5>
+              </button>
             </div>
           </div>
         </div>
@@ -181,8 +177,9 @@ require 'login.php';
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h2>Grafik Keuntungan</h2>
         
-      </div>
-      <canvas id="myChart" width="900" height="380" ></canvas>
+      </div class="chart-container" style="position: relative; height:40vh; width:80vw">
+
+      <canvas id="myChart"></canvas>
 
       </div>
     </main>
@@ -227,6 +224,11 @@ require 'login.php';
               }
             }
         });
+        // Panggil fungsi createChart saat halaman selesai dimuat
+  document.addEventListener('DOMContentLoaded', createChart);
+  
+  // Panggil fungsi createChart saat ukuran jendela berubah
+  window.addEventListener('resize', createChart);
 
     </script>
   </body>

@@ -202,6 +202,14 @@ if (isset($_GET['id_penjualan'])) {
         .input-group-append {
         cursor: pointer;
       }
+      .input-number::after {
+        content: attr(data-value);
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
     </style>
 
     
@@ -211,66 +219,75 @@ if (isset($_GET['id_penjualan'])) {
   <body>
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="dashboard.php">
-      <span data-feather="arrow-left"> 
-      </span>
+  <div class="d-flex align-items-center">
+    <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-dark" href="dashboard.php">
+      <span data-feather="arrow-left"></span>
       Kembali
-  </a>
-  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-<div class="btn-group" style="padding-right: 5px;">
-  <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    <a data-feather="user"></a>
-    <?= ucfirst($_SESSION['username']); ?>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-lg-end">
-      <li><a class="dropdown-item" ><?= ucfirst($_SESSION['username']); ?></a></li>
-      <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
-      <li><hr class="dropdown-divider"></li>
-      <li><a class="nav-link px-3" href="logout.php">Sign Out</a></li>
-  </ul>
-</div>
+    </a>
+  </div>
+
+  <div class="ml-auto d-flex align-items-center">
+    <div class="btn-group">
+      <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <a data-feather="user"></a>
+        <?= ucfirst($_SESSION['username']); ?>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-lg-end">
+        <li><a class="dropdown-item"><?= ucfirst($_SESSION['username']); ?></a></li>
+        <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="logout.php">Sign Out</a></li>
+      </ul>
+    </div>
+  </div>
 </header>
+
+
+
 
 <div class="container-fluid">
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <div class="position-sticky pt-3">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="penjualan.php">
-              <span data-feather="shopping-cart"></span>
-              Penjualan
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="databarang.php">
-              <span data-feather="database"></span>
-              Data Barang
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="stokbarang.php">
-              <span data-feather="layers"></span>
-              Stok Barang
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pembelian.php">
-              <span data-feather="shopping-bag"></span>
-              Pembelian
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="riwayat.php">
-              <span data-feather="archive"></span>
-              Riwayat
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+  <div class="position-sticky pt-3">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="penjualan.php">
+          <span data-feather="shopping-cart"></span>
+          Penjualan
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="databarang.php">
+          <span data-feather="database"></span>
+          Data Barang
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="stokbarang.php">
+          <span data-feather="layers"></span>
+          Stok Barang
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="pembelian.php">
+          <span data-feather="shopping-bag"></span>
+          Pembelian
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="riwayat.php">
+          <span data-feather="archive"></span>
+          Riwayat
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -428,6 +445,9 @@ if (isset($_GET['id_penjualan'])) {
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+
 
     <script src="js/dashboard.js"></script>
 
@@ -436,6 +456,19 @@ if (isset($_GET['id_penjualan'])) {
       $('#datepicker').datepicker({
             uiLibrary: 'bootstrap5'
         });
+      const inputNumber = document.querySelector('.input-number input');
+      inputNumber.addEventListener('input', function(e) {
+        const value = e.target.value;
+        const formattedValue = value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        e.target.setAttribute('data-value', formattedValue);
+      });
+      function formatCurrency(input) {
+        let value = input.value;
+        value = value.replace(/\D/g, '');
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = value;
+      }
+
     </script>
 
   </body>
@@ -481,13 +514,15 @@ if (isset($_GET['id_penjualan'])) {
                 </div>
 
                 <div class="mb-3">
-                  <label for="jumalah" class="form-label">Jumlah</label>
-                  <input type="number" class="form-control" id="jumlah" placeholder="jumlah" name="jumlah_jual" required>
+                  <label for="jumlah" class="form-label">Jumlah</label>
+                  <input type="number" class="form-control" id="jumlah" placeholder="jumlah" name="jumlah_jual" required >
                 </div>
 
                 <div class="mb-3">
                   <label for="Potongan" class="form-label">Potongan</label>
-                  <input type="number" class="form-control" id="Potongan" placeholder="Potongan" name="potongan" required>
+                  <div class="input-number">
+                    <input type="number" class="form-control" id="Potongan" placeholder="Potongan" name="potongan" required>
+                  </div>
                 </div>
 
               </div>
