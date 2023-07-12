@@ -72,15 +72,9 @@ if (isset($_POST['addpenjualan'])) {
 if (isset($_POST['editpenjualan'])) {
     $result = editpenjualan($_POST);
     if ($result > 0) {
-        echo "<script>
-            alert('Data berhasil diubah.');
-            window.location='penjualan.php';
-        </script>";
+        echo "";
     } else {
-        echo "<script>
-            alert('Data gagal diubah');
-            window.location='penjualan.php';
-        </script>";
+        echo "";
     }
 
 }

@@ -154,12 +154,12 @@ function editstok($data){
 function addpenjualan($data){
     global $conn;
 
-	// Periksa apakah pengguna yang login adalah admin
+    // Periksa apakah pengguna yang login adalah admin
     if ($_SESSION['role'] !== 'admin') {
         return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
     }
 
-    $query = "SELECT kode_barang, nama_barang, kategori, jumlah_stok FROM data_barang";
+    $query = "SELECT kode_barang, nama_barang, kategori, jumlah_stok, harga_satuan FROM data_barang";
     $result = mysqli_query($conn, $query);
     $kode_barang = htmlspecialchars($data["kode_barang"]);
     $nama_pembeli = htmlspecialchars($data["nama_pembeli"]);
@@ -167,21 +167,25 @@ function addpenjualan($data){
     $jumlah_jual = htmlspecialchars($data["jumlah_jual"]);
     $potongan = htmlspecialchars($data["potongan"]);
 
-    $select_barang_query = "SELECT nama_barang, kategori, jumlah_stok FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_query = "SELECT nama_barang, kategori, jumlah_stok, harga_satuan FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
 
     $barang = mysqli_fetch_assoc($select_barang_result);
     $nama_barang = $barang['nama_barang'];
     $kategori = $barang['kategori'];
     $jumlah_stok = $barang['jumlah_stok'];
+    $harga_satuan = $barang['harga_satuan'];
 
     // Hitung jumlah stok baru
     $stok_baru = $jumlah_stok - $jumlah_jual;
 
     if ($stok_baru >= 0) {
-        $queryaddpenjualan = "INSERT INTO penjualan (id_penjualan, kode_barang, nama_pembeli, nama_barang, kategori, tanggal_penjualan, jumlah_jual, potongan)
+        // Hitung harga total
+        $harga_total = $harga_satuan * $jumlah_jual - $potongan;
+
+        $queryaddpenjualan = "INSERT INTO penjualan (id_penjualan, kode_barang, nama_pembeli, nama_barang, kategori, tanggal_penjualan, jumlah_jual, potongan, harga_total)
             VALUES
-            ('','$kode_barang','$nama_pembeli','$nama_barang','$kategori','$tanggal_penjualan',$jumlah_jual,$potongan)
+            ('','$kode_barang','$nama_pembeli','$nama_barang','$kategori','$tanggal_penjualan',$jumlah_jual,$potongan,$harga_total)
             ";
 
         mysqli_query($conn, $queryaddpenjualan);
@@ -192,17 +196,18 @@ function addpenjualan($data){
         mysqli_query($conn, "UPDATE data_barang SET jumlah_stok = $stok_baru WHERE kode_barang = '$kode_barang'");
 
 
-		// Membuat riwayat perubahan
-		$riwayat_data = array(
-		    'id_penjualan' => $id_penjualan,
-		    'kode_barang' => $kode_barang,
-		    'nama_pembeli' => $nama_pembeli,
-		    'nama_barang' => $nama_barang,
-		    'kategori' => $kategori,
-		    'tanggal_penjualan' => $tanggal_penjualan,
-		    'jumlah_jual' => $jumlah_jual,
-		    'potongan' => $potongan
-		);
+        // Membuat riwayat perubahan
+        $riwayat_data = array(
+            'id_penjualan' => $id_penjualan,
+            'kode_barang' => $kode_barang,
+            'nama_pembeli' => $nama_pembeli,
+            'nama_barang' => $nama_barang,
+            'kategori' => $kategori,
+            'tanggal_penjualan' => $tanggal_penjualan,
+            'jumlah_jual' => $jumlah_jual,
+            'potongan' => $potongan,
+            'harga_total' => $harga_total
+        );
 
         catatRiwayatpenjualan('menambah', $riwayat_data);
 
@@ -213,14 +218,16 @@ function addpenjualan($data){
     }
 }
 
+
 function editpenjualan($data) {
     global $conn;
-    	// Periksa apakah pengguna yang login adalah admin
+
+    // Periksa apakah pengguna yang login adalah admin
     if ($_SESSION['role'] !== 'admin') {
         return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
     }
 
-    $query = "SELECT kode_barang, nama_barang, kategori FROM data_barang";
+    $query = "SELECT kode_barang, nama_barang, kategori, harga_satuan FROM data_barang";
     $result = mysqli_query($conn, $query);
 
     $id_penjualan = $data["id_penjualan"];
@@ -230,12 +237,13 @@ function editpenjualan($data) {
     $jumlah_jual = htmlspecialchars($data["jumlah_jual"]);
     $potongan = htmlspecialchars($data["potongan"]);
 
-    $select_barang_query = "SELECT nama_barang, kategori FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_query = "SELECT nama_barang, kategori, harga_satuan FROM data_barang WHERE kode_barang = '$kode_barang'";
     $select_barang_result = mysqli_query($conn, $select_barang_query);
 
     $barang = mysqli_fetch_assoc($select_barang_result);
     $nama_barang = $barang['nama_barang'];
     $kategori = $barang['kategori'];
+    $harga_satuan = $barang['harga_satuan'];
 
     // Mengambil jumlah jual sebelumnya
     $query_jumlah_jual_sebelumnya = "SELECT jumlah_jual FROM penjualan WHERE id_penjualan = '$id_penjualan'";
@@ -247,6 +255,9 @@ function editpenjualan($data) {
     $result_kode_barang_sebelumnya = mysqli_query($conn, $query_kode_barang_sebelumnya);
     $kode_barang_sebelumnya = mysqli_fetch_assoc($result_kode_barang_sebelumnya)['kode_barang'];
 
+    // Hitung harga total baru
+    $harga_total_baru = $harga_satuan * $jumlah_jual - $potongan;
+
     $queryeditpenjualan = "UPDATE penjualan SET 
             kode_barang = '$kode_barang',
             nama_pembeli = '$nama_pembeli',
@@ -254,7 +265,8 @@ function editpenjualan($data) {
             kategori = '$kategori',
             tanggal_penjualan = '$tanggal_penjualan',
             jumlah_jual = $jumlah_jual,
-            potongan = $potongan
+            potongan = $potongan,
+            harga_total = $harga_total_baru
             WHERE id_penjualan = '$id_penjualan'
             ";
 
@@ -272,9 +284,9 @@ function editpenjualan($data) {
 
         $affected_rows = mysqli_affected_rows($conn);
         if ($affected_rows > 0) {
-
-            // Panggil fungsi catatRiwayat
-            catatRiwayatpenjualan('mengedit', $data);
+            // Panggil fungsi catatEditRiwayat
+            $data['harga_total'] = $harga_total_baru;
+            catatEditRiwayatpenjualan('mengedit', $data);
 
             return $affected_rows;
         } else {
@@ -282,6 +294,8 @@ function editpenjualan($data) {
         }
     } 
 }
+
+
 
 // Hapus data penjualan
 function hapuspenjualan($id_penjualan){
@@ -292,7 +306,7 @@ function hapuspenjualan($id_penjualan){
         return -1; // Jika bukan admin, return -1 sebagai indikasi akses ditolak
     }
 
-    $query = "SELECT kode_barang, jumlah_jual, nama_pembeli, tanggal_penjualan, potongan FROM penjualan WHERE id_penjualan = '$id_penjualan'";
+    $query = "SELECT kode_barang, jumlah_jual, nama_pembeli, tanggal_penjualan, potongan, harga_total FROM penjualan WHERE id_penjualan = '$id_penjualan'";
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) == 1) {
@@ -302,6 +316,7 @@ function hapuspenjualan($id_penjualan){
         $nama_pembeli = $penjualan['nama_pembeli'];
         $tanggal_penjualan = $penjualan['tanggal_penjualan'];
         $potongan = $penjualan['potongan'];
+        $harga_total = $penjualan['harga_total'];
 
         $select_barang_query = "SELECT jumlah_stok FROM data_barang WHERE kode_barang = '$kode_barang'";
         $select_barang_result = mysqli_query($conn, $select_barang_query);
@@ -325,7 +340,8 @@ function hapuspenjualan($id_penjualan){
             'jumlah_stok' => $stok_baru,
             'nama_pembeli' => $nama_pembeli,
             'tanggal_penjualan' => $tanggal_penjualan,
-            'potongan' => $potongan
+            'potongan' => $potongan,
+            'harga_total' => $harga_total
         );
         catatRiwayatpenjualan('menghapus', $data);
 
@@ -334,6 +350,7 @@ function hapuspenjualan($id_penjualan){
         return -1;
     }
 }
+
 
 
 function upload(){
@@ -644,6 +661,43 @@ function catatRiwayatpenjualan($action, $data) {
     $deskripsi .= "Tanggal Penjualan: " . $data['tanggal_penjualan'] . "\n";
     $deskripsi .= "Jumlah Jual: " . $data['jumlah_jual'] . "\n";
     $deskripsi .= "Harga Potongan: " . $data['potongan']. "\n";
+    $deskripsi .= "Harga Total: " . $data['harga_total'] . "\n";
+    $deskripsi .= "Tanggal Perubahan: " . $tanggalRiwayat;
+
+    // Menyimpan riwayat perubahan ke tabel riwayat
+    $sql = "INSERT INTO riwayat (deskripsi, tanggal_riwayat) VALUES ('$deskripsi', '$tanggalRiwayat')";
+	mysqli_query($conn, $sql);
+}
+
+function catateditRiwayatpenjualan($action, $data) {
+    // Koneksi ke database
+    global $conn;
+
+    // Mengambil waktu saat ini
+    $tanggalRiwayat = date('Y-m-d H:i:s');
+
+    // Ambil data barang dari tabel data_barang berdasarkan kode_barang
+    $kode_barang = $data['kode_barang'];
+    $select_barang_query = "SELECT nama_barang, kategori FROM data_barang WHERE kode_barang = '$kode_barang'";
+    $select_barang_result = mysqli_query($conn, $select_barang_query);
+    $barang = mysqli_fetch_assoc($select_barang_result);
+    $nama_barang = $barang['nama_barang'];
+    $kategori = $barang['kategori'];
+
+	$session_login = ucfirst($_SESSION['username']);
+
+    // Membuat deskripsi perubahan
+    $deskripsi = $session_login . " ";
+    $deskripsi .= $action . " data pada tabel penjualan:\n";
+    $deskripsi .= "ID Penjualan: " . $data['id_penjualan'] . "\n";
+    $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
+    $deskripsi .= "Nama Pembeli: " . $data['nama_pembeli'] . "\n";
+    $deskripsi .= "Nama Barang: " . $nama_barang . "\n";
+    $deskripsi .= "Kategori: " . $kategori . "\n";
+    $deskripsi .= "Tanggal Penjualan: " . $data['tanggal_penjualan'] . "\n";
+    $deskripsi .= "Jumlah Jual: " . $data['jumlah_jual'] . "\n";
+    $deskripsi .= "Harga Potongan: " . $data['potongan']. "\n";
+    $deskripsi .= "Harga Total: " . $data['harga_total'] . "\n";
     $deskripsi .= "Tanggal Perubahan: " . $tanggalRiwayat;
 
     // Menyimpan riwayat perubahan ke tabel riwayat
