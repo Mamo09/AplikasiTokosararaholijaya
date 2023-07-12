@@ -1,14 +1,13 @@
 <?php
 require '../config.php';
 
-// Ambil nilai filter bulan dan tahun
-$bulanTahun = $_POST['bulan_tahun'];
+// Ambil nilai filter tanggal awal dan akhir
+$tanggalAwal = $_POST['tanggal_awal'];
+$tanggalAkhir = $_POST['tanggal_akhir'];
 
-// Query data riwayat sesuai dengan filter bulan dan tahun
-$query = "SELECT * FROM riwayat";
-if (!empty($bulanTahun)) {
-  $query .= " WHERE DATE_FORMAT(tanggal_riwayat, '%Y-%m') = '$bulanTahun'";
-}
+// Query data riwayat sesuai dengan filter tanggal awal dan akhir
+$query = "SELECT * FROM riwayat WHERE tanggal_riwayat BETWEEN '$tanggalAwal' AND '$tanggalAkhir'";
+
 // Lakukan query ke database sesuai dengan filter
 $result = mysqli_query($conn, $query);
 
@@ -26,4 +25,6 @@ if (mysqli_num_rows($result) > 0) {
   // Tampilkan pesan jika tidak ada data riwayat yang ditemukan
   echo '<tr><td colspan="3">Tidak ada data riwayat yang ditemukan.</td></tr>';
 }
+?>
+
 ?>

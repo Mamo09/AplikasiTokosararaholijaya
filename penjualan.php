@@ -252,50 +252,54 @@ if (isset($_GET['id_penjualan'])) {
 <div class="container-fluid">
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-  <div class="position-sticky pt-3">
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="penjualan.php">
-          <span data-feather="shopping-cart"></span>
-          Penjualan
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="databarang.php">
-          <span data-feather="database"></span>
-          Data Barang
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="stokbarang.php">
-          <span data-feather="layers"></span>
-          Stok Barang
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="pembelian.php">
-          <span data-feather="shopping-bag"></span>
-          Pembelian
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="riwayat.php">
-          <span data-feather="archive"></span>
-          Riwayat
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="penjualan.php">
+              <span data-feather="shopping-cart"></span>
+              Penjualan
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="databarang.php">
+              <span data-feather="database"></span>
+              Data Barang
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="stokbarang.php">
+              <span data-feather="layers"></span>
+              Stok Barang
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pembelian.php">
+              <span data-feather="shopping-bag"></span>
+              Pembelian
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="riwayat.php">
+              <span data-feather="archive"></span>
+              Riwayat
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Penjualan</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"data-bs-target="#exampleModal">Tambah Data</button>
-          </div>
+          <?php
+          if ($_SESSION['role'] !== 'owner') {
+              echo '
+              <div class="btn-group me-2">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Data</button>
+              </div>';
+          }
+          ?>
         </div>
       </div>
 
@@ -367,14 +371,18 @@ if (isset($_GET['id_penjualan'])) {
                               <!-- <a>
                                   <span data-feather="eye"></span>
                               </a> -->
-                              <a>
-                                  <span data-feather="edit" data-bs-toggle="modal"
-                                      data-bs-target="#modaleditpenjualan<?= $row["id_penjualan"]; ?>"></span>
-                              </a>
-                              <a href="?id_penjualan=<?= $row['id_penjualan']; ?>"
-                                  onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapuspenjualan">
-                                  <span data-feather="trash-2"></span>
-                              </a>
+                              <?php
+                                if ($_SESSION['role'] !== 'owner') {
+                                    echo '<a>
+                                            <span data-feather="edit" data-bs-toggle="modal" data-bs-target="#modaleditpenjualan' . $row["id_penjualan"] . '"></span>
+                                          </a>
+                                          <a href="?id_penjualan=' . $row['id_penjualan'] . '" onclick="return confirm(\'Apakah Anda yakin ingin menghapus data?\')" name="hapuspenjualan">
+                                            <span data-feather="trash-2"></span>
+                                          </a>';
+                                }
+                                ?>
+
+
                           </td>
                       </tr>
                       <?php $i++; ?>

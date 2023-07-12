@@ -134,26 +134,31 @@ if (isset($_GET['id_pembelian'])) {
   <body>
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="dashboard.php">
-      <span data-feather="arrow-left">
-      </span>
+  <div class="d-flex align-items-center">
+    <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 bg-dark" href="dashboard.php">
+      <span data-feather="arrow-left"></span>
       Kembali
-  </a>
-  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
- 
-<div class="btn-group" style="padding-right: 5px;">
-  <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    <a data-feather="user"></a>
-    <?= ucfirst($_SESSION['username']); ?>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-lg-end">
-      <li><a class="dropdown-item" ><?= ucfirst($_SESSION['username']); ?></a></li>
-      <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
-      <li><hr class="dropdown-divider"></li>
-      <li><a class="nav-link px-3" href="logout.php">Sign Out</a></li>
-  </ul>
+    </a>
+  </div>
+
+  <div class="ml-auto d-flex align-items-center">
+    <div class="btn-group">
+      <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <a data-feather="user"></a>
+        <?= ucfirst($_SESSION['username']); ?>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-lg-end">
+        <li><a class="dropdown-item"><?= ucfirst($_SESSION['username']); ?></a></li>
+        <li><a class="dropdown-item" href="reset_password.php">Ganti Password</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="logout.php">Sign Out</a></li>
+      </ul>
+    </div>
+  </div>
 </header>
 
 <div class="container-fluid">
@@ -199,9 +204,14 @@ if (isset($_GET['id_pembelian'])) {
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Pembelian</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"data-bs-target="#exampleModal">Tambah Data</button>
-          </div>
+          <?php
+          if ($_SESSION['role'] !== 'admin') {
+              echo '
+              <div class="btn-group me-2">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Tambah Data</button>
+              </div>';
+          }
+          ?>
         </div>
       </div>
 
@@ -257,11 +267,19 @@ if (isset($_GET['id_pembelian'])) {
               </td>
               <td>
                   <!-- <a><span data-feather ="eye"></span></a> -->
-                  <a>
-                    <span data-feather ="edit" data-bs-toggle="modal" data-bs-target="#modaleditpembelian<?= $row["id_pembelian"]; ?>" ></span>
-                  </a>
-                  <a href="?id_pembelian=<?= $row['id_pembelian']; ?>" onclick="return confirm('Apakah Anda yakin ingin menghapus data?')" name="hapuspenjualan">
-            <span data-feather="trash-2"></span></a>
+                  <?php
+                  if ($_SESSION['role'] !== 'admin') {
+                      // Tombol edit pembelian
+                      echo '<a>
+                              <span data-feather="edit" data-bs-toggle="modal" data-bs-target="#modaleditpembelian' . $row["id_pembelian"] . '"></span>
+                            </a>';
+
+                      // Tombol hapus pembelian
+                      echo '<a href="?id_pembelian=' . $row['id_pembelian'] . '" onclick="return confirm(\'Apakah Anda yakin ingin menghapus data?\')" name="hapuspenjualan">
+                              <span data-feather="trash-2"></span>
+                            </a>';
+                  }
+                  ?>
               </td>
             </tr>
             <?php $i++; ?>
