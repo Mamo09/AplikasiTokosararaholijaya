@@ -321,7 +321,7 @@ if (isset($_POST['updatebarang'])) {
             <input type="number" class="form-control" name="harga_modal" placeholder="harga modal" required>
           </div>
           <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Harga</label>
+            <label for="exampleFormControlInput1" class="form-label">Harga Jual per Satuan</label>
             <input type="number" class="form-control" name="harga_satuan"placeholder="Harga" required>
           </div>
           <div class="modal-footer">
@@ -363,7 +363,7 @@ if (isset($_POST['updatebarang'])) {
               <input type="number" class="form-control" name="harga_modal" value="<?= $row["harga_modal"]; ?>" required>
             </div>
             <div class="mb-3">
-              <label for="exampleFormControlInput1" class="form-label">Harga</label>
+              <label for="exampleFormControlInput1" class="form-label">Harga Jual per Satuan</label>
               <input type="number" class="form-control" name="harga_satuan" value="<?= $row["harga_satuan"]; ?>" required>
             </div>
             <div class="modal-footer">

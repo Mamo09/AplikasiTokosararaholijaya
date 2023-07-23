@@ -296,7 +296,6 @@ function editpenjualan($data) {
 }
 
 
-
 // Hapus data penjualan
 function hapuspenjualan($id_penjualan){
     global $conn;
@@ -742,7 +741,7 @@ function catatRiwayatstokbarang($action, $data) {
 
     // Membuat deskripsi perubahan
     $deskripsi = $session_login . " ";
-    $deskripsi .= $action . " data pada tabel stok barang:\n";
+    $deskripsi .= $action . " data pada stok barang:\n";
     $deskripsi .= "Kode Barang: " . $kode_barang . "\n";
     $deskripsi .= "Nama Barang: " . $nama_barang . "\n";
     $deskripsi .= "Jumlah Stok: " . $jumlah_stok . "\n";
@@ -840,8 +839,6 @@ function catatRiwayateditPembelian($action , $data) {
 }
 
 
-
-
 function getHargaSatuan($kode_barang) {
     global $conn;
 
@@ -855,9 +852,6 @@ function getHargaSatuan($kode_barang) {
 
     return "N/A";
 }
-
-
-
 
  ?>
 

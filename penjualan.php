@@ -467,18 +467,6 @@ if (isset($_GET['id_penjualan'])) {
       $('#datepicker').datepicker({
             uiLibrary: 'bootstrap5'
         });
-      const inputNumber = document.querySelector('.input-number input');
-      inputNumber.addEventListener('input', function(e) {
-        const value = e.target.value;
-        const formattedValue = value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        e.target.setAttribute('data-value', formattedValue);
-      });
-      function formatCurrency(input) {
-        let value = input.value;
-        value = value.replace(/\D/g, '');
-        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        input.value = value;
-      }
 
     </script>
 
