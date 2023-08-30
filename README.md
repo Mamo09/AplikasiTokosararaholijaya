@@ -1,4 +1,4 @@
-# AplikasiTokosararaholijaya
+# Aplikasi Tokosararaholi jaya
 
 ### PANDUAN CARA INSTALL
 1. Copy folder AplikasiTokosararaholijaya ke localhost ( xampp/htdocs/ )
