@@ -52,6 +52,6 @@ kode pemulihan : 102030
 
 user Owner 
 
-Username : ownner
+Username : owner
 Password : 123
 kode pemulihan :302010
